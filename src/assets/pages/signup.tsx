@@ -32,7 +32,7 @@ const Signup = () => {
       });
 
       if (response.data.token && response.data.account.username) {
-        navigate("/"); // Redirection vers la page d'accueil après l'inscription
+        navigate("/profile"); // Redirection vers la page d'accueil après l'inscription
       }
     } catch (err: any) {
       if (err.response && err.response.data) {
