@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import "../styles/profile.css";
 
 const Profile: React.FC = () => {
   const [avatar, setAvatar] = useState<string>(
@@ -26,7 +27,7 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <div className="profile-container">
+    <div className="main-profile">
       <h2>Mon Profil</h2>
       <form onSubmit={handleSubmit}>
         <div className="profile-image">
@@ -40,30 +41,28 @@ const Profile: React.FC = () => {
         </div>
 
         <div className="profile-info">
-          <div>
-            <label htmlFor="address">Adresse :</label>
-            <input
-              id="address"
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              placeholder="Entrez votre adresse"
-            />
-          </div>
+          <label htmlFor="address">Adresse :</label>
+          <input
+            className="input"
+            id="address"
+            type="text"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="Entrez votre adresse"
+          />
 
-          <div>
-            <label htmlFor="phoneNumber">Numéro de téléphone :</label>
-            <input
-              id="phoneNumber"
-              type="tel"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="Entrez votre numéro de téléphone"
-            />
-          </div>
+          <label htmlFor="phoneNumber">Numéro de téléphone :</label>
+          <input
+            className="input"
+            id="phoneNumber"
+            type="tel"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            placeholder="Entrez votre numéro de téléphone"
+          />
         </div>
 
-        <button type="submit">Mettre à jour</button>
+        <button className="button-profile">Mettre à jour</button>
       </form>
     </div>
   );

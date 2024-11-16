@@ -44,13 +44,13 @@ const Signup = () => {
   };
 
   return (
-    <main className="signup-main">
+    <main className="main-signup">
       <h2>S'inscrire</h2>
-      {errorMessage && <div className="error-message">{errorMessage}</div>}{" "}
       {/* Display error message if any */}
       <form onSubmit={handleSubmit}>
         <div>
           <input
+            className="input"
             type="text"
             id="username"
             placeholder="Votre nom"
@@ -60,6 +60,7 @@ const Signup = () => {
         </div>
         <div>
           <input
+            className="input"
             type="email"
             id="email"
             placeholder="Votre Email"
@@ -69,6 +70,7 @@ const Signup = () => {
         </div>
         <div>
           <input
+            className="input"
             type="password"
             id="password"
             placeholder="Votre Mot de passe"
@@ -78,6 +80,7 @@ const Signup = () => {
         </div>
         <div>
           <input
+            className="input"
             type="password"
             id="confirmePassword"
             placeholder="Confirmer Votre Mot de passe"
@@ -85,7 +88,7 @@ const Signup = () => {
             onChange={(event) => setConfirmePassword(event.target.value)} // Update state when user types
           />
         </div>
-        <div>
+        <div className="chechbox-newsletter">
           <input
             type="checkbox"
             id="newsletter"
@@ -93,13 +96,14 @@ const Signup = () => {
             onChange={() => setNewsletter(!newsletter)} // Toggle newsletter subscription state
           />
           <span>S'abonner à la newsletter</span>
-          <p>
-            En m'inscrivant je confirme avoir lu et accepté les Termes &
-            Conditions et Politique de Confidentalité de Vinted. Je confirme
-            avoir au moins 18 ans
-          </p>
         </div>
-        <button type="submit">S'inscrire</button> {/* Submit button */}
+        <p>
+          En m'inscrivant je confirme avoir lu et accepté les Termes &
+          Conditions et Politique de Confidentalité de Vinted. Je confirme avoir
+          au moins 18 ans
+        </p>
+        <button>S'inscrire</button> {/* Submit button */}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
       </form>
     </main>
   );
