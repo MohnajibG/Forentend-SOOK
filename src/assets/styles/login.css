@@ -1,0 +1,51 @@
+.main-login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 25%;
+  gap: 50px;
+  font-size: 16px;
+  font-family: "Krub", sans-serif;
+}
+
+.main-login h2 {
+  font-size: 1.6em;
+  text-align: center;
+  font-weight: bolder;
+}
+
+.main-login form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+}
+
+.input,
+.main-login form button {
+  border: none;
+  border-radius: 3px;
+  height: 30px;
+  width: 100%;
+  padding: 5px;
+}
+
+.chechbox-newsletter {
+  display: flex;
+  align-items: center;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  font-size: 14px;
+}
+
+.main-login p {
+  font-size: 14px;
+  text-align: justify;
+}
+
+button:hover {
+  background-color: #aeaeae;
+}

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/signup.css";
 
@@ -9,6 +9,11 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmePassword, setConfirmePassword] = useState("");
+
+  // State management for password visibility
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
 
   // State management for newsletter and error messages
   const [newsletter, setNewsletter] = useState(false);
@@ -43,6 +48,11 @@ const Signup = () => {
     }
   };
 
+  // useEffect to toggle password visibility based on state
+  useEffect(() => {
+    // This effect can be used if you want to trigger actions when visibility state changes
+  }, [isPasswordVisible, isConfirmPasswordVisible]);
+
   return (
     <main className="main-signup">
       <h2>S'inscrire</h2>
@@ -68,25 +78,41 @@ const Signup = () => {
             onChange={(event) => setEmail(event.target.value)} // Update state when user types
           />
         </div>
-        <div>
+        <div className="password-input">
           <input
             className="input"
-            type="password"
+            type={isPasswordVisible ? "text" : "password"} // Toggle input type based on visibility state
             id="password"
             placeholder="Votre Mot de passe"
             value={password}
             onChange={(event) => setPassword(event.target.value)} // Update state when user types
           />
+          {/* Icon to toggle visibility */}
+          <span
+            className="toggle-visibility-icon"
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            {isPasswordVisible ? "👁️" : "🙈"}
+          </span>
         </div>
-        <div>
+        <div className="password-input">
           <input
             className="input"
-            type="password"
+            type={isConfirmPasswordVisible ? "text" : "password"} // Toggle input type based on visibility state
             id="confirmePassword"
             placeholder="Confirmer Votre Mot de passe"
             value={confirmePassword}
             onChange={(event) => setConfirmePassword(event.target.value)} // Update state when user types
           />
+          {/* Icon to toggle visibility */}
+          <span
+            className="toggle-visibility-icon"
+            onClick={() =>
+              setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
+            }
+          >
+            {isConfirmPasswordVisible ? "👁️" : "🙈"}
+          </span>
         </div>
         <div className="chechbox-newsletter">
           <input
@@ -102,7 +128,7 @@ const Signup = () => {
           Conditions et Politique de Confidentalité de Vinted. Je confirme avoir
           au moins 18 ans
         </p>
-        <button>S'inscrire</button> {/* Submit button */}
+        <button>S'inscrire</button>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
       </form>
     </main>

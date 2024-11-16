@@ -1,0 +1,17 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  padding: 20px;
+}
+.cnt-btn,
+.header input {
+  border: none;
+  width: 60px;
+  height: 30px;
+  border-radius: 3px;
+}
+.header input {
+  width: 100%;
+}
