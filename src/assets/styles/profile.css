@@ -1,9 +1,9 @@
-.main-profile {
+.main-profile,
+.main-profile form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 25%;
-  gap: 50px;
   font-size: 16px;
   font-family: "Krub", sans-serif;
 }
@@ -13,12 +13,32 @@
   text-align: center;
   font-weight: bolder;
 }
+.profile-image {
+  display: flex;
+  gap: 10px;
+}
+.profile-image label {
+  padding: 10px;
+}
+.input-img {
+  border: none;
+  border-radius: 3px;
+  height: 25px;
+  width: 100%;
+  margin-top: 15px;
+}
+.profile-image img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
 
 .profile-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 30px;
+  gap: 10px;
 }
 .input,
 .button-profile {

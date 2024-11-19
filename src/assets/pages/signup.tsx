@@ -3,7 +3,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/signup.css";
 
-const Signup = () => {
+type SignupProps = {
+  handleToken: (token: string | null) => void;
+  handleUsername: (username: string | null) => void;
+};
+
+const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
   // State management for form fields
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

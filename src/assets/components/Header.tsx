@@ -3,7 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 import "../styles/header.css";
 
-const Header = () => {
+// Propriété attendue par le composant Header
+interface HeaderProps {
+  token: string | null;
+  handleToken: (token: string | null) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ token, handleToken }) => {
   // Utilisation du hook useNavigate à l'intérieur du composant
   const navigate = useNavigate();
 
@@ -20,12 +26,26 @@ const Header = () => {
         onChange={(e) => setAddress(e.target.value)}
         placeholder="Entrez votre adresse"
       />
-      <button onClick={() => navigate("/signup")} className="cnt-btn">
-        Signup
-      </button>
-      <button onClick={() => navigate("/login")} className="cnt-btn">
-        Login
-      </button>
+      {token ? (
+        <button
+          className="deconnexion"
+          onClick={() => {
+            handleToken(null); // Déconnexion en supprimant le token
+            navigate("/");
+          }}
+        >
+          Déconnexion
+        </button>
+      ) : (
+        <div>
+          <button onClick={() => navigate("/signup")} className="cnt-btn">
+            Signup
+          </button>
+          <button onClick={() => navigate("/login")} className="cnt-btn">
+            Login
+          </button>
+        </div>
+      )}
     </div>
   );
 };
