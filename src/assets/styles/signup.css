@@ -1,6 +1,39 @@
 .main-signup {
+  color: #ffff;
+  font-family: "Krub", sans-serif;
+}
+
+.main-signup img {
+  width: 100vw;
+  height: 70hw;
+  position: absolute;
+  z-index: -2;
+}
+
+.main-signup h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  position: absolute;
+  top: 20vh;
+  left: 40vw;
+  z-index: 2;
+  text-align: center;
+  padding: 20px;
+
+  border-radius: 10px;
+}
+.main-signup form {
+  position: relative;
+  top: 20vh;
+  left: 40vw;
   display: flex;
   flex-direction: column;
+}
+.main-signup form input {
+  width: 15vw;
+}
+/* .main-signup {
+
   justify-content: center;
   gap: 50px;
   font-size: 16px;
@@ -13,7 +46,7 @@
   object-fit: cover;
   filter: blur(1.6px);
   opacity: 90%;
-  position: absolute;
+
 }
 .main-signup > div {
   border-radius: 3px;
@@ -26,6 +59,24 @@
   top: 40px;
 }
 
+.home-container h1 {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  position: absolute;
+  top: 40vh;
+  left: 40vw;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
+  background-color: rgba(249, 200, 208, 0.4);
+  border-radius: 10px;
+}
+.home-container h1:hover {
+  background-color: rgba(249, 200, 208, 0.66);
+}
 .main-signup h2 {
   padding: 30px;
   font-size: 2em;
@@ -64,4 +115,4 @@
 .main-signup p {
   font-size: 14px;
   text-align: justify;
-}
+} */

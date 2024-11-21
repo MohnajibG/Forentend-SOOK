@@ -1,47 +1,90 @@
+/* Conteneur principal de la page d'accueil */
 .home-container {
   padding: 20px;
   text-align: center;
-}
-
-.hero img {
-  padding-left: 0px;
-  width: 100vw;
   position: relative;
+  overflow: hidden;
+  width: 100vw; /* Utilise toute la largeur de l'écran */
+  height: 100vh; /* Utilise toute la hauteur de l'écran */
 }
 
+/* Section du héros avec l'image de fond */
+.hero img {
+  width: 100vw; /* Image occupe toute la largeur de l'écran */
+  height: 100vh; /* Image occupe toute la hauteur de l'écran */
+  object-fit: cover; /* Assure que l'image couvre tout en conservant son ratio */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1; /* L'image de fond reste derrière le contenu */
+}
+
+/* Titre principal de la page d'accueil */
 .home-container h1 {
-  font-size: 2rem;
+  font-size: 5rem;
   margin-bottom: 1rem;
+  position: absolute;
+  top: 40vh;
+  left: 40vw;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
+  background-color: rgba(249, 200, 208, 0.4);
+  border-radius: 10px;
+}
+.home-container h1:hover {
+  background-color: rgba(249, 200, 208, 0.66);
 }
 
+/* Sous-titre de la page d'accueil */
 .home-container h2 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  color: #ffffff;
 }
 
+/* Paragraphe général */
 .home-container p {
+  padding: 10px;
   font-size: 1rem;
   margin-bottom: 1rem;
+  color: #ffffff;
 }
 
+/* Conteneur de bienvenue */
 .welcom-container {
-  background-color: #d3b28e47;
+  color: white;
+  padding: 40px;
+  border-radius: 10px;
+  background-color: rgba(211, 178, 142, 0.3);
   width: 30%;
   position: absolute;
-  bottom: 3px;
-  left: 38%;
+  bottom: 12vw;
+  right: -4vw;
+  transform: translateX(-50%); /* Centre horizontalement */
+  box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
+  z-index: 2;
+}
+.welcom-container:hover {
+  background-color: rgba(240, 215, 190, 0.412);
 }
 
+/* Bouton sur la page d'accueil */
 .home-btn {
   margin: 0 5px;
   padding: 10px 15px;
-  background-color: #8595a65c;
+  background-color: rgba(133, 149, 166, 0.35);
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.home-btn {
-  background-color: #f9c8d0b8;
+/* Style du bouton lors du survol */
+.home-btn:hover {
+  background-color: rgba(249, 200, 208, 0.8);
 }

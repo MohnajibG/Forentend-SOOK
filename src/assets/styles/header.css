@@ -5,7 +5,7 @@
   gap: 60px;
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.662);
-  position: FIX;
+  position: static;
 }
 .cnt-btn,
 .header input {

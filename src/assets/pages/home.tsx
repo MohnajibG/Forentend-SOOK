@@ -12,7 +12,7 @@ const Home: React.FC<HomeProps> = ({ username, token }) => {
 
   return (
     <div className="home-container">
-      <h1>Bienvenue sur notre application !</h1>
+      <h1>SOOK !</h1>
       <div className="hero">
         <img src={hero} alt="image hero" />
       </div>
@@ -24,16 +24,14 @@ const Home: React.FC<HomeProps> = ({ username, token }) => {
       ) : (
         <div className="welcom-container">
           <h2>Bienvenue visiteur !</h2>
-          <p>
-            Pour accéder à plus de fonctionnalités, veuillez{" "}
-            <button className="home-btn" onClick={() => navigate("/login")}>
-              vous connecter
-            </button>
-            ou
-            <button className="home-btn" onClick={() => navigate("/signup")}>
-              créer un compte
-            </button>
-          </p>
+          <p>Pour accéder à plus de fonctionnalités, veuillez </p>
+          <button className="home-btn" onClick={() => navigate("/login")}>
+            vous connecter
+          </button>
+          ou
+          <button className="home-btn" onClick={() => navigate("/signup")}>
+            créer un compte
+          </button>
         </div>
       )}
     </div>
