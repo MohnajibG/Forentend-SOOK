@@ -4,6 +4,7 @@
     "target": "ES2022",
     "lib": ["ES2023"],
     "module": "ESNext",
+    "typeRoots": ["./node_modules/@types", "./types"],
     "skipLibCheck": true,
 
     /* Bundler mode */

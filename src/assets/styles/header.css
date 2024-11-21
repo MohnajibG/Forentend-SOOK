@@ -4,6 +4,8 @@
   justify-content: center;
   gap: 60px;
   padding: 20px;
+  background-color: rgba(0, 0, 0, 0.662);
+  position: FIX;
 }
 .cnt-btn,
 .header input {

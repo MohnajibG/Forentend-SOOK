@@ -50,35 +50,37 @@ const Login = () => {
       <h2>Connexion</h2>
       {/* Display error message if any */}
       <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            className="input"
-            type="email"
-            id="email"
-            placeholder="Votre Email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)} // Update state when user types
-          />
+        <div className="form-countiner">
+          <div>
+            <input
+              className="input"
+              type="email"
+              id="email"
+              placeholder="Votre Email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)} // Update state when user types
+            />
+          </div>
+          <div className="password-input">
+            <input
+              className="input"
+              type={isPasswordVisible ? "text" : "password"} // Toggle input type based on visibility state
+              id="password"
+              placeholder="Votre Mot de passe"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)} // Update state when user types
+            />
+            {/* Icon to toggle visibility */}
+            <span
+              className="toggle-visibility-icon"
+              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+            >
+              {isPasswordVisible ? "👁️" : "🙈"}
+            </span>
+          </div>
+          <button className="login-btn">Se connecter</button>
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
         </div>
-        <div className="password-input">
-          <input
-            className="input"
-            type={isPasswordVisible ? "text" : "password"} // Toggle input type based on visibility state
-            id="password"
-            placeholder="Votre Mot de passe"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)} // Update state when user types
-          />
-          {/* Icon to toggle visibility */}
-          <span
-            className="toggle-visibility-icon"
-            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-          >
-            {isPasswordVisible ? "👁️" : "🙈"}
-          </span>
-        </div>
-        <button>Se connecter</button>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
       </form>
     </main>
   );

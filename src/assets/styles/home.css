@@ -1,0 +1,47 @@
+.home-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.hero img {
+  padding-left: 0px;
+  width: 100vw;
+  position: relative;
+}
+
+.home-container h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.home-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.home-container p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.welcom-container {
+  background-color: #d3b28e47;
+  width: 30%;
+  position: absolute;
+  bottom: 3px;
+  left: 38%;
+}
+
+.home-btn {
+  margin: 0 5px;
+  padding: 10px 15px;
+  background-color: #8595a65c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.home-btn {
+  background-color: #f9c8d0b8;
+}

@@ -1,3 +1,10 @@
+.main-profile {
+  background-image: url("../img/backgroundsignup.jpg");
+  background-size: cover; /* Ajuste l'image pour qu'elle couvre tout le fond */
+  background-repeat: no-repeat; /* Empêche la répétition de l'image */
+  background-position: center; /* Centre l'image */
+  color: aliceblue;
+}
 .main-profile,
 .main-profile form {
   display: flex;

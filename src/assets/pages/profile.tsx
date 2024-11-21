@@ -47,90 +47,91 @@ const Profile: React.FC<ProfileProps> = ({ username, token }) => {
       postalCode,
       country,
     });
+
+    // Après la soumission du formulaire, rediriger l'utilisateur
+    navigate("/"); // Utiliser navigate pour rediriger après la mise à jour
   };
 
   return (
-    <div className="main-profile">
-      <h2>Mon Profil</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="profile-image">
-          <label>
-            Image de profil :
-            <input
-              className="input-img"
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarChange}
-            />
-          </label>
-          <div>
-            <img src={avatar} alt="Avatar" className="profile-avatar" />
-          </div>
-        </div>
-
-        <div className="profile-info">
-          <label htmlFor="username">Nom d'utilisateur</label>
-          <input
-            id="username"
-            type="text"
-            value={username || "Nom d'utilisateur non disponible"}
-            disabled
-          />
-
-          <label htmlFor="adresse">Adresse</label>
-          <div className="adress">
-            <textarea
-              id="adresse"
-              name="adresse"
-              required
-              onChange={(e) => setAddress(e.target.value)}
-            />
+    token && (
+      <div className="main-profile">
+        <h2>Mon Profil</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="profile-image">
+            <label>
+              Image de profil :
+              <input
+                className="input-img"
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange}
+              />
+            </label>
+            <div>
+              <img src={avatar} alt="Avatar" className="profile-avatar" />
+            </div>
           </div>
 
-          <label htmlFor="codepostal">Code postal</label>
-          <div>
+          <div className="profile-info">
+            <label htmlFor="username">Nom d'utilisateur</label>
             <input
-              id="codepostal"
-              name="codepostal"
+              id="username"
               type="text"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
-              required
+              value={username || "Nom d'utilisateur non disponible"}
+              disabled
             />
-          </div>
 
-          <label htmlFor="pays">Pays</label>
-          <div>
+            <label htmlFor="adresse">Adresse</label>
+            <div className="adress">
+              <textarea
+                id="adresse"
+                name="adresse"
+                required
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </div>
+
+            <label htmlFor="codepostal">Code postal</label>
+            <div>
+              <input
+                id="codepostal"
+                name="codepostal"
+                type="text"
+                value={postalCode}
+                onChange={(e) => setPostalCode(e.target.value)}
+                required
+              />
+            </div>
+
+            <label htmlFor="pays">Pays</label>
+            <div>
+              <input
+                id="pays"
+                name="pays"
+                type="text"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                required
+              />
+            </div>
+
+            <label htmlFor="phoneNumber">Numéro de téléphone :</label>
             <input
-              id="pays"
-              name="pays"
-              type="text"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              required
+              className="input"
+              id="telephone"
+              type="tel"
+              placeholder="par ex&nbsp;: +33655000000"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </div>
 
-          <label htmlFor="phoneNumber">Numéro de téléphone :</label>
-          <input
-            className="input"
-            id="telephone"
-            type="tel"
-            placeholder="par ex&nbsp;: +33655000000"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="button-profile"
-          onClick={() => navigate("/")} // Utiliser navigate pour rediriger
-        >
-          Mettre à jour
-        </button>
-      </form>
-    </div>
+          <button type="submit" className="button-profile">
+            Mettre à jour
+          </button>
+        </form>
+      </div>
+    )
   );
 };
 
