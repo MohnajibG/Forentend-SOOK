@@ -1,27 +1,36 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/login.css";
+import login from "../img/backgroudLogin.webp"; // Ajoute une image de fond pour la page login
+import Cookies from "js-cookie";
+import "../styles/signup.css"; // Réutilise le même fichier CSS pour garder une cohérence de style
 
-const Login = () => {
-  // State management for form fields
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+interface LoginProps {
+  handleToken: (token: string | null) => void;
+  handleUsername: (username: string | null) => void;
+}
 
-  // State management for password visibility
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // State management for error messages
-  const [errorMessage, setErrorMessage] = useState("");
-
-  // Initialize navigation
   const navigate = useNavigate();
 
-  // Handle form submission
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage("");
-    console.log({ email, password }); // Afficher les données envoyées
+    setIsLoading(true); // Indique que le chargement commence
+
+    // Validation simple des champs
+    if (!email || !password) {
+      setErrorMessage("Veuillez remplir tous les champs.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:3000/user/login", {
         email,
@@ -29,28 +38,37 @@ const Login = () => {
       });
 
       if (response.data.token) {
-        navigate("/profile"); // Redirection vers la page de profil après le login
+        // Enregistre le token dans les cookies
+        Cookies.set("token", response.data.token);
+        handleToken(response.data.token);
+
+        // Enregistre le nom d'utilisateur si nécessaire
+        if (response.data.account.username) {
+          Cookies.set("username", response.data.username);
+          handleUsername(response.data.account.username);
+        }
+
+        // Redirige vers la page profil après la connexion
+        navigate("/profile");
       }
-    } catch (err: any) {
-      if (err.response && err.response.data) {
-        setErrorMessage(err.response.data.message); // Affiche le message d'erreur renvoyé par le serveur
+    } catch (error: any) {
+      // Gestion des erreurs
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data.message);
       } else {
         setErrorMessage("Erreur lors de la connexion. Veuillez réessayer.");
       }
+    } finally {
+      setIsLoading(false); // Fin du chargement
     }
   };
 
-  // useEffect to toggle password visibility based on state
-  useEffect(() => {
-    // This effect can be used if you want to trigger actions when visibility state changes
-  }, [isPasswordVisible]);
-
   return (
     <main className="main-login">
-      <h2>Connexion</h2>
-      {/* Display error message if any */}
-      <form onSubmit={handleSubmit}>
-        <div className="form-countiner">
+      <img src={login} alt="image-background-signup" />
+      <div className="login-countiner">
+        <h2>Connexion</h2>
+        <form onSubmit={handleSubmit}>
           <div>
             <input
               className="input"
@@ -58,19 +76,20 @@ const Login = () => {
               id="email"
               placeholder="Votre Email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)} // Update state when user types
+              onChange={(event) => setEmail(event.target.value)}
+              required
             />
           </div>
           <div className="password-input">
             <input
               className="input"
-              type={isPasswordVisible ? "text" : "password"} // Toggle input type based on visibility state
+              type={isPasswordVisible ? "text" : "password"}
               id="password"
               placeholder="Votre Mot de passe"
               value={password}
-              onChange={(event) => setPassword(event.target.value)} // Update state when user types
+              onChange={(event) => setPassword(event.target.value)}
+              required
             />
-            {/* Icon to toggle visibility */}
             <span
               className="toggle-visibility-icon"
               onClick={() => setIsPasswordVisible(!isPasswordVisible)}
@@ -78,10 +97,12 @@ const Login = () => {
               {isPasswordVisible ? "👁️" : "🙈"}
             </span>
           </div>
-          <button className="login-btn">Se connecter</button>
+          <button className="login-btn" disabled={isLoading}>
+            {isLoading ? "Connexion en cours..." : "Se connecter"}
+          </button>
           {errorMessage && <div className="error-message">{errorMessage}</div>}
-        </div>
-      </form>
+        </form>
+      </div>
     </main>
   );
 };

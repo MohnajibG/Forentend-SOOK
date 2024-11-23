@@ -1,11 +1,10 @@
-/* Conteneur principal de la page d'accueil */
+tu peux me faire le responsive pour tablette et pour mobile//* Conteneur principal de la page d'accueil */
 .home-container {
-  padding: 20px;
   text-align: center;
   position: relative;
   overflow: hidden;
-  width: 100vw; /* Utilise toute la largeur de l'écran */
-  height: 100vh; /* Utilise toute la hauteur de l'écran */
+  width: 100vw;
+  height: 70vh;
 }
 
 /* Section du héros avec l'image de fond */
@@ -21,16 +20,17 @@
 
 /* Titre principal de la page d'accueil */
 .home-container h1 {
-  font-size: 5rem;
+  padding: 9vw;
+  font-size: 6rem;
   margin-bottom: 1rem;
   position: absolute;
-  top: 40vh;
-  left: 40vw;
+  top: 50vh;
+  left: 30vw;
   transform: translate(-50%, -50%);
   z-index: 2;
   text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
   text-align: center;
-  padding: 20px;
+  padding: 2vh;
   box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
   background-color: rgba(249, 200, 208, 0.4);
   border-radius: 10px;
@@ -57,13 +57,13 @@
 /* Conteneur de bienvenue */
 .welcom-container {
   color: white;
-  padding: 40px;
+  padding: 3vh;
   border-radius: 10px;
   background-color: rgba(211, 178, 142, 0.3);
   width: 30%;
   position: absolute;
-  bottom: 12vw;
-  right: -4vw;
+  top: 30vh;
+  left: 75vw;
   transform: translateX(-50%); /* Centre horizontalement */
   box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
   z-index: 2;
@@ -71,20 +71,91 @@
 .welcom-container:hover {
   background-color: rgba(240, 215, 190, 0.412);
 }
+.welcom-container > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: -2vh;
+}
+.welcom-container div span {
+  margin: 5px;
+}
 
 /* Bouton sur la page d'accueil */
 .home-btn {
   margin: 0 5px;
-  padding: 10px 15px;
   background-color: rgba(133, 149, 166, 0.35);
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  height: 8vh;
+  width: 20vw;
 }
 
 /* Style du bouton lors du survol */
 .home-btn:hover {
   background-color: rgba(249, 200, 208, 0.8);
+}
+.left-bar {
+  color: #ed749d;
+}
+.right-bar {
+  color: #ab6415;
+}
+
+/* MEDIA QUERIES */
+
+/* Pour les tablettes (écran entre 768px et 1024px) */
+@media (max-width: 1024px) {
+  .home-container h1 {
+    font-size: 1.8rem;
+    padding: 5vw;
+    top: 15vh;
+  }
+
+  .welcom-container {
+    width: 50%;
+    top: 25vh;
+    left: 70vw;
+  }
+
+  .home-btn {
+    width: 50vw;
+  }
+}
+
+/* Pour les mobiles (écran inférieur à 768px) */
+@media (max-width: 768px) {
+  .home-container {
+    height: 60vh;
+  }
+
+  .hero img {
+    height: 60vh;
+  }
+
+  .home-container h1 {
+    font-size: 1.5rem;
+    padding: 4vw;
+    top: 20vh;
+    left: 50%;
+  }
+
+  .home-container h2 {
+    font-size: 1.2rem;
+  }
+
+  .welcom-container {
+    width: 80%;
+    top: 30vh;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .home-btn {
+    width: 80vw;
+    height: 5vh;
+  }
 }

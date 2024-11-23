@@ -2,18 +2,123 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 60px;
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.662);
+  gap: 3vw;
+  padding: 2vw;
+  background-color: rgba(0, 0, 0, 0.008);
   position: static;
 }
-.cnt-btn,
-.header input {
-  border: none;
-  width: 60px;
-  height: 30px;
-  border-radius: 3px;
+
+.header-btn {
+  display: flex;
+  gap: 2vw;
 }
+
 .header input {
+  padding-left: 4vw;
+  border: none;
+  height: 6vh;
+  border-radius: 10px;
+  background-color: #deb9a7b9;
   width: 100%;
+}
+.header input:hover {
+  background-color: #deccc3b9;
+}
+
+.cnt-btn {
+  border: none;
+  height: 6vh;
+  border-radius: 10px;
+  color: #fff;
+  background-color: #dfa080ae;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 5vw;
+}
+
+.cnt-btn:hover {
+  color: rgba(0, 0, 0, 0.358);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.header img {
+  height: 5vw;
+  width: 5vw;
+  border-radius: 10px;
+  /* object-fit: cover; */
+}
+
+.deconnexion {
+  border: none;
+  height: 6vh;
+  width: 10vw;
+  border-radius: 3px;
+  color: #ffffffd4;
+  background-color: #da0d0ddc;
+}
+
+/* Media Queries for tablets and smaller screens */
+@media (max-width: 768px) {
+  .header {
+    gap: 5vw; /* Reduce the gap for tablets */
+    padding: 3vw; /* Adjust padding for smaller screens */
+  }
+
+  .header-btn {
+    gap: 4vw; /* Reduce the gap between buttons */
+  }
+
+  .header input {
+    padding-left: 3vw; /* Adjust padding for the input */
+    height: 5vh; /* Increase height of input on smaller screens */
+  }
+
+  .cnt-btn {
+    height: 5vh; /* Increase height of button */
+    width: 30vw; /* Make the button width more adaptable */
+  }
+
+  .deconnexion {
+    height: 5vh;
+    width: 30vw; /* Adjust width of the logout button */
+  }
+
+  .header img {
+    height: 15vw; /* Adjust image size for tablet screens */
+    width: 15vw;
+  }
+}
+
+/* Media Queries for mobile screens */
+@media (max-width: 480px) {
+  .header {
+    gap: 4vw; /* Further reduce the gap */
+    padding: 4vw; /* Increase padding for mobile */
+  }
+
+  .header-btn {
+    gap: 2vw; /* Adjust button spacing for mobile */
+  }
+
+  .header input {
+    padding-left: 2vw; /* Reduce padding for mobile */
+    height: 6vh; /* Increase input field height */
+  }
+
+  .cnt-btn {
+    height: 6vh; /* Increase button height */
+    width: 80vw; /* Make the button width 80% of the screen */
+  }
+
+  .deconnexion {
+    height: 6vh;
+    width: 80vw; /* Make the logout button full width */
+  }
+
+  .header img {
+    height: 20vw; /* Adjust image size for mobile screens */
+    width: 20vw;
+  }
 }

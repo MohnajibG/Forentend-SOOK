@@ -6,14 +6,14 @@ import {
   Navigate,
 } from "react-router-dom";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import Login from "./assets/pages/login";
-import Signup from "./assets/pages/signup";
-import Profile from "./assets/pages/profile";
+import Login from "./assets/pages/Login";
+import Signup from "./assets/pages/Signup";
+import Profile from "./assets/pages/Profile";
 import Header from "./assets/components/Header";
-import NoMatch from "./assets/pages/noMatch";
-import Home from "./assets/pages/home";
+import NoMatch from "./assets/pages/NoMatch";
+import Home from "./assets/pages/Home";
 
 function App() {
   // Gestion du token et du nom d'utilisateur avec `useState` et les cookies
@@ -23,6 +23,20 @@ function App() {
   const [username, setUsername] = useState<string | null>(
     Cookies.get("username") || null
   );
+
+  // Synchronise l'état avec les cookies si jamais ils changent
+  useEffect(() => {
+    const storedToken = Cookies.get("token");
+    const storedUsername = Cookies.get("username");
+
+    if (storedToken !== token) {
+      setToken(storedToken || null);
+    }
+
+    if (storedUsername !== username) {
+      setUsername(storedUsername || null);
+    }
+  }, []);
 
   // Gestion du token avec sauvegarde dans les cookies
   const handleToken = (newToken: string | null) => {
@@ -57,7 +71,12 @@ function App() {
           path="/home"
           element={<Home username={username} token={token} />}
         />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <Login handleToken={handleToken} handleUsername={handleUsername} />
+          }
+        />
         <Route
           path="/signup"
           element={
@@ -66,7 +85,13 @@ function App() {
         />
         <Route
           path="/profile"
-          element={<Profile username={username} token={token} />}
+          element={
+            token ? (
+              <Profile username={username} token={token} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
         />
         {/* Page par défaut si aucune route ne correspond */}
         <Route path="*" element={<NoMatch />} />

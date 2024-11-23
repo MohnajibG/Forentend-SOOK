@@ -1,55 +1,83 @@
+/* Styles for the Login Component */
 .main-login {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 25%;
-  gap: 50px;
-  font-size: 16px;
+  color: #fff;
   font-family: "Krub", sans-serif;
-  background-image: url("../img/backgroudLogin.webp");
-  background-size: cover; /* Ajuste l'image pour qu'elle couvre tout le fond */
-  background-repeat: no-repeat; /* Empêche la répétition de l'image */
-  background-position: center;
 }
 
-.main-login h2 {
-  font-size: 1.6em;
-  text-align: center;
-  font-weight: bolder;
+.main-login img {
+  position: absolute;
+  width: 1000px;
 }
 
-.main-login form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 30px;
-}
-
-.input,
-.main-login form button {
-  border: none;
-  border-radius: 3px;
-  height: 30px;
-  width: 100%;
-  padding: 5px;
-}
-
-.chechbox-newsletter {
+/* Container for the login form */
+.login-countiner {
+  position: absolute;
+  top: 10vh;
+  left: 10vw;
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 1;
 }
 
-.error-message {
-  color: red;
-  text-align: center;
-  font-size: 14px;
+/* Styling for the form title */
+.login-countiner h2 {
+  font-size: 1.5rem;
+}
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
 }
 
-.main-login p {
-  font-size: 14px;
-  text-align: justify;
+/* Styling for the input fields */
+.login-countiner .input {
+  width: 50vw;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+/* Styling for password input and visibility icon */
+.login-countiner .password-input {
+  position: relative;
+  width: 50vw;
+}
+
+.toggle-visibility-icon {
+  /* position: absolute; */
+  right: 1px;
+  top: 60%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+/* Styling for the login button */
+.login-btn {
+  border: none;
+  height: 3rem;
+  width: 100%;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #dfa080bd;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
 }
 
 .login-btn:hover {
-  background-color: #aeaeae;
+  background-color: #c87660; /* Slightly darker on hover */
+}
+
+/* Styling for the error message */
+.error-message {
+  color: #ff6b6b;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 1rem;
 }
