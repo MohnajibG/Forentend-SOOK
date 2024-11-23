@@ -3,7 +3,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import login from "../img/backgroudLogin.webp"; // Ajoute une image de fond pour la page login
 import Cookies from "js-cookie";
-import "../styles/signup.css"; // Réutilise le même fichier CSS pour garder une cohérence de style
+import "../styles/login.css"; // Réutilise le même fichier CSS pour garder une cohérence de style
+
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa6";
 
 interface LoginProps {
   handleToken: (token: string | null) => void;
@@ -65,9 +68,8 @@ const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
 
   return (
     <main className="main-login">
-      <img src={login} alt="image-background-signup" />
+      <h2>Connexion</h2>
       <div className="login-countiner">
-        <h2>Connexion</h2>
         <form onSubmit={handleSubmit}>
           <div>
             <input
@@ -94,7 +96,7 @@ const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
               className="toggle-visibility-icon"
               onClick={() => setIsPasswordVisible(!isPasswordVisible)}
             >
-              {isPasswordVisible ? "👁️" : "🙈"}
+              {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
             </span>
           </div>
           <button className="login-btn" disabled={isLoading}>
@@ -103,6 +105,11 @@ const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
           {errorMessage && <div className="error-message">{errorMessage}</div>}
         </form>
       </div>
+      <img
+        className="img-background"
+        src={login}
+        alt="image-background-signup"
+      />
     </main>
   );
 };

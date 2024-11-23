@@ -1,32 +1,40 @@
+/* Styles for the Profile Component */
 .main-profile {
   background-image: url("../img/backgroundsignup.jpg");
-  background-size: cover; /* Ajuste l'image pour qu'elle couvre tout le fond */
-  background-repeat: no-repeat; /* Empêche la répétition de l'image */
-  background-position: center; /* Centre l'image */
+  background-size: cover; /* L'image de fond couvre tout le fond */
+  background-repeat: no-repeat; /* Pas de répétition de l'image */
+  background-position: center; /* Centre l'image de fond */
   color: aliceblue;
-}
-.main-profile,
-.main-profile form {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 25%;
-  font-size: 16px;
+  align-items: center;
+  padding: 5%;
   font-family: "Krub", sans-serif;
 }
 
 .main-profile h2 {
-  font-size: 1.6em;
+  font-size: 1.6rem;
   text-align: center;
   font-weight: bolder;
+  margin-bottom: 1rem;
 }
+
+/* Profile Image Section */
 .profile-image {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 1rem;
 }
+
 .profile-image label {
   padding: 10px;
+  font-size: 1rem;
+  cursor: pointer;
 }
+
 .input-img {
   border: none;
   border-radius: 3px;
@@ -34,34 +42,103 @@
   width: 100%;
   margin-top: 15px;
 }
+
 .profile-image img {
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
 }
 
+/* Profile Information Section */
 .profile-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 10px;
+  width: 100%;
 }
+
 .input,
 .button-profile {
   border: none;
   border-radius: 3px;
-  height: 25px;
+  height: 30px;
   width: 100%;
   margin-top: 15px;
+  padding: 0.5rem;
+  font-size: 1rem;
 }
 
 .error-message {
   color: red;
   text-align: center;
-  font-size: 14 px;
+  font-size: 0.9rem;
+  margin-top: 1rem;
 }
 
+/* Button Styles */
 .button-profile {
-  width: 100px;
+  width: 120px;
+  background-color: #dfa080bd;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  align-self: center;
+}
+
+.button-profile:hover {
+  background-color: #c87660;
+}
+
+/* Media Queries for tablets and smaller screens */
+@media (max-width: 768px) {
+  .main-profile {
+    padding: 10%;
+  }
+
+  .main-profile h2 {
+    font-size: 1.4rem;
+  }
+
+  .profile-image img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .button-profile {
+    width: 100%;
+  }
+}
+
+/* Media Queries for mobile screens */
+@media (max-width: 480px) {
+  .main-profile {
+    padding: 8%;
+  }
+
+  .main-profile h2 {
+    font-size: 1.2rem;
+  }
+
+  .profile-info .input,
+  .profile-info .button-profile {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .profile-image {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-image img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .button-profile {
+    width: 100%;
+  }
 }

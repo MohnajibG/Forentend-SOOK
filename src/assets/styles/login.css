@@ -5,52 +5,76 @@
 }
 
 .main-login img {
+  width: 100vw; /* Image occupe toute la largeur de l'écran */
+  height: 100vh; /* Image occupe toute la hauteur de l'écran */
+  object-fit: cover; /* Assure que l'image couvre tout en conservant son ratio */
   position: absolute;
-  width: 1000px;
+  top: 0;
+  left: 0;
+  z-index: -1; /* L'image de fond reste derrière le contenu */
 }
 
 /* Container for the login form */
 .login-countiner {
-  position: absolute;
-  top: 10vh;
-  left: 10vw;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  z-index: 1;
+  position: relative;
+  overflow: hidden;
+  top: 20vh;
+  left: 40%;
 }
 
 /* Styling for the form title */
-.login-countiner h2 {
-  font-size: 1.5rem;
+.main-login h2 {
+  padding: 9vw;
+  font-size: 2rem;
+  margin-top: 8rem;
+  margin-bottom: 1rem;
+  position: absolute;
+  left: 53vw;
+  top: 10vh;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
+  padding: 4vh 4vw;
+  box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
+  background-color: rgba(249, 200, 208, 0.4);
+  border-radius: 10px;
 }
+/* .main-login h2:hover {
+  background-color: rgba(249, 200, 208, 0.66);
+  color: #5e463f83;
+} */
+
 .login-container form {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  /* justify-content: start; */
 }
 
 /* Styling for the input fields */
 .login-countiner .input {
-  width: 50vw;
+  width: 25vw;
   padding: 0.8rem;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.login-countiner .input:hover {
+  background-color: rgba(255, 255, 255, 0.854);
 }
 
 /* Styling for password input and visibility icon */
 .login-countiner .password-input {
   position: relative;
-  width: 50vw;
+  width: 25vw;
 }
 
 .toggle-visibility-icon {
-  /* position: absolute; */
+  position: absolute;
   right: 1px;
-  top: 60%;
-  transform: translateY(-50%);
+  /* top: 50%; */
+  /* transform: translateY(-50%); */
   cursor: pointer;
   font-size: 1.2rem;
   color: #aaa;
@@ -59,11 +83,13 @@
 /* Styling for the login button */
 .login-btn {
   border: none;
+  padding: 1vh;
   height: 3rem;
   width: 100%;
   border-radius: 5px;
   color: #fff;
   background-color: #dfa080bd;
+  font-size: 1.3rem;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -80,4 +106,47 @@
   text-align: center;
   font-size: 0.9rem;
   margin-top: 1rem;
+}
+
+/* Media Queries for tablets and smaller screens */
+@media (max-width: 768px) {
+  .login-container {
+    left: 10vw;
+    top: 15vh;
+    padding: 2vh 2vw;
+  }
+
+  .main-login h2 {
+    font-size: 1.5rem;
+    padding: 5px;
+  }
+
+  .login-container form .input {
+    width: 80vw;
+  }
+
+  .toggle-visibility-icon {
+    font-size: 1rem;
+  }
+}
+
+/* Media Queries for mobile screens */
+@media (max-width: 480px) {
+  .login-container {
+    left: 5vw;
+    top: 10vh;
+    padding: 1.5vh 1.5vw;
+  }
+
+  .main-login h2 {
+    font-size: 1.3rem;
+  }
+
+  .login-container form .input {
+    width: 90vw;
+  }
+
+  .toggle-visibility-icon {
+    font-size: 1rem;
+  }
 }

@@ -44,10 +44,11 @@
 }
 
 .header img {
-  height: 5vw;
-  width: 5vw;
+  height: 6vh;
+  width: 10vw;
   border-radius: 10px;
-  /* object-fit: cover; */
+  object-fit: cover;
+  padding: 5px;
 }
 
 .deconnexion {
@@ -86,7 +87,7 @@
   }
 
   .header img {
-    height: 15vw; /* Adjust image size for tablet screens */
+    height: 5vh; /* Adjust image size for mobile screens */
     width: 15vw;
   }
 }
@@ -109,7 +110,6 @@
 
   .cnt-btn {
     height: 6vh; /* Increase button height */
-    width: 80vw; /* Make the button width 80% of the screen */
   }
 
   .deconnexion {
@@ -118,7 +118,7 @@
   }
 
   .header img {
-    height: 20vw; /* Adjust image size for mobile screens */
+    height: 6vh; /* Adjust image size for mobile screens */
     width: 20vw;
   }
 }
