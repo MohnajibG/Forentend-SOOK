@@ -17,10 +17,10 @@
 /* Container for the login form */
 .login-countiner {
   display: flex;
+  justify-content: center;
   position: relative;
   overflow: hidden;
   top: 20vh;
-  left: 40%;
 }
 
 /* Styling for the form title */
@@ -31,29 +31,21 @@
   margin-bottom: 1rem;
   position: absolute;
   left: 53vw;
-  top: 10vh;
+  top: 5vh;
   transform: translate(-50%, -50%);
   z-index: 2;
-  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
-  padding: 4vh 4vw;
-  box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
-  background-color: rgba(249, 200, 208, 0.4);
-  border-radius: 10px;
+  text-shadow: 0px 0px 20px rgba(252, 124, 124, 0.8);
 }
-/* .main-login h2:hover {
-  background-color: rgba(249, 200, 208, 0.66);
-  color: #5e463f83;
-} */
 
 .login-container form {
   display: flex;
   flex-direction: column;
-  /* justify-content: start; */
+  justify-content: start;
 }
 
 /* Styling for the input fields */
 .login-countiner .input {
-  width: 25vw;
+  width: 60vw;
   padding: 0.8rem;
   border: none;
   border-radius: 5px;
@@ -73,8 +65,8 @@
 .toggle-visibility-icon {
   position: absolute;
   right: 1px;
-  /* top: 50%; */
-  /* transform: translateY(-50%); */
+  top: 40%;
+  transform: translateY(-50%);
   cursor: pointer;
   font-size: 1.2rem;
   color: #aaa;
@@ -102,10 +94,12 @@
 
 /* Styling for the error message */
 .error-message {
-  color: #ff6b6b;
+  color: red;
   text-align: center;
   font-size: 0.9rem;
   margin-top: 1rem;
+  font-weight: bold;
+  text-shadow: 0px 0px 10px rgb(255, 255, 255);
 }
 
 /* Media Queries for tablets and smaller screens */

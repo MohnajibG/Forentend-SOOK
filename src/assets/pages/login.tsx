@@ -47,12 +47,15 @@ const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
 
         // Enregistre le nom d'utilisateur si nécessaire
         if (response.data.account.username) {
-          Cookies.set("username", response.data.username);
+          Cookies.set("username", response.data.account.username);
           handleUsername(response.data.account.username);
         }
 
+        // Récupère le userId pour la navigation
+        const userId = response.data.userId;
+
         // Redirige vers la page profil après la connexion
-        navigate("/profile");
+        navigate(`/profile/${userId}`);
       }
     } catch (error: any) {
       // Gestion des erreurs

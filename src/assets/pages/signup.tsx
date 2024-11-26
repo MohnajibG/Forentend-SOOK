@@ -5,6 +5,7 @@ import signup from "../img/backgroundsignup.jpg";
 import Cookies from "js-cookie";
 
 import "../styles/signup.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Importation des icônes Font Awesome
 
 type SignupProps = {
   handleToken: (token: string | null) => void;
@@ -29,7 +30,8 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
     event.preventDefault();
     setErrorMessage("");
 
-    if (password.trim() !== confirmPassword.trim()) {
+    // Vérifie que les mots de passe correspondent
+    if (password !== confirmPassword) {
       setErrorMessage("Les mots de passe ne correspondent pas.");
       return;
     }
@@ -49,12 +51,15 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
         handleToken(response.data.token); // Stocke le token
         handleUsername(response.data.account.username); // Stocke le nom d'utilisateur
         console.log("Token stocké:", Cookies.get("token")); // Vérifie le cookie
-        navigate("/profile");
+
+        // Redirige vers la page profil avec l'ID de l'utilisateur
+        navigate(`/profile/${response.data.account.userId}`);
       } else {
         setErrorMessage("Erreur inattendue lors de l'inscription.");
       }
     } catch (err: any) {
-      if (err.response && err.response.data) {
+      // Vérifie si le message d'erreur existe
+      if (err.response && err.response.data && err.response.data.message) {
         setErrorMessage(err.response.data.message);
       } else {
         setErrorMessage("Erreur lors de l'inscription. Veuillez réessayer.");
@@ -67,8 +72,8 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
   return (
     <main className="main-signup">
       <img src={signup} alt="image-background-signup" />
+      <h2>S'inscrire</h2>
       <div className="signup-container">
-        <h2>S'inscrire</h2>
         <form onSubmit={handleSubmit}>
           <input
             className="input"
@@ -77,6 +82,7 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             placeholder="Votre nom"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
+            disabled={isLoading}
           />
 
           <input
@@ -86,6 +92,7 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             placeholder="Votre Email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            disabled={isLoading}
           />
 
           <input
@@ -95,12 +102,14 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             placeholder="Votre Mot de passe"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            disabled={isLoading}
           />
           <span
             className="toggle-visibility-icon"
             onClick={() => setIsPasswordVisible(!isPasswordVisible)}
           >
-            {isPasswordVisible ? "👁️" : "🙈"}
+            {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}{" "}
+            {/* Icônes de visibilité de mot de passe */}
           </span>
 
           <input
@@ -110,6 +119,7 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             placeholder="Confirmer Votre Mot de passe"
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
+            disabled={isLoading}
           />
           <span
             className="toggle-visibility-icon"
@@ -117,8 +127,10 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
               setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
             }
           >
-            {isConfirmPasswordVisible ? "👁️" : "🙈"}
+            {isConfirmPasswordVisible ? <FaEye /> : <FaEyeSlash />}{" "}
+            {/* Icônes de visibilité de mot de passe */}
           </span>
+
           <div className="nl-countainer">
             <input
               className="checkbox-newsletter"
@@ -126,7 +138,9 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
               id="newsletter"
               checked={newsletter}
               onChange={() => setNewsletter(!newsletter)}
+              disabled={isLoading}
             />
+
             <span>S'abonner à la newsletter</span>
           </div>
 
