@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import "../styles/profile.css";
+import "../assets/styles/profile.css";
+
 type ProfileProps = {
   username: string | null;
   token: string | null;
-  userId?: string | null; // Rendre userId optionnel
+  userId?: string | null;
 };
 
 const Profile: React.FC<ProfileProps> = ({ username, token }) => {
@@ -59,12 +60,12 @@ const Profile: React.FC<ProfileProps> = ({ username, token }) => {
     try {
       const formData = new FormData();
       if (file) {
-        formData.append("userId", id); // Utilise l'ID récupéré des params d'URL
         formData.append("avatar", file); // Utilise le fichier sélectionné
       }
 
-      const avatarResponse = await axios.post(
-        "http://localhost:3000/user/upload-avatar",
+      // Envoi du fichier d'avatar à la route back-end correspondante
+      const avatarResponse = await axios.put(
+        `http://localhost:3000/user/${id}/profile/avatar`, // Mise à jour de l'avatar via PUT
         formData,
         {
           headers: {
@@ -74,8 +75,9 @@ const Profile: React.FC<ProfileProps> = ({ username, token }) => {
         }
       );
 
+      // Mise à jour des autres informations de profil
       await axios.put(
-        `http://localhost:3000/user/profile/${id}`,
+        `http://localhost:3000/user/${id}/profile`,
         {
           avatar: avatarResponse.data.avatarUrl,
           address,

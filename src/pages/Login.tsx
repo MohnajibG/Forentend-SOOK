@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import login from "../img/backgroudLogin.webp"; // Ajoute une image de fond pour la page login
+import login from "../assets/img/backgroudLogin.webp"; // Ajoute une image de fond pour la page login
 import Cookies from "js-cookie";
-import "../styles/login.css"; // Réutilise le même fichier CSS pour garder une cohérence de style
+import "../assets/styles/login.css"; // Réutilise le même fichier CSS pour garder une cohérence de style
 
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
@@ -55,7 +55,7 @@ const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
         const userId = response.data.userId;
 
         // Redirige vers la page profil après la connexion
-        navigate(`/profile/${userId}`);
+        navigate(`user/${userId}/profile`);
       }
     } catch (error: any) {
       // Gestion des erreurs

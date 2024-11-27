@@ -9,18 +9,12 @@ import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"; // Import de useParams
 
-import Login from "./assets/pages/Login";
-import Signup from "./assets/pages/Signup";
-import Profile from "./assets/pages/Profile";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 import Header from "./assets/components/Header";
-import NoMatch from "./assets/pages/NoMatch";
-import Home from "./assets/pages/Home";
-
-// type ProfileProps = {
-//   username: string | null;
-//   token: string | null;
-//   userId?: string | null; // Rendre userId optionnel
-// };
+import NoMatch from "../src/pages/noMatch";
+import Home from "./pages/Home";
 
 function App() {
   // Gestion du token et du nom d'utilisateur avec `useState` et les cookies
@@ -92,7 +86,7 @@ function App() {
         />
         {/* Utilisation de useParams pour obtenir userId dans le composant App */}
         <Route
-          path="/profile/:id"
+          path="/:id/profile/"
           element={
             token ? (
               <Profile

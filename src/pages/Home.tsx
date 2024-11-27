@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import hero from "../img/hero.jpg";
-import "../styles/home.css";
+import hero from "../assets/img/hero.jpg";
+import "../assets/styles/home.css";
 
 interface HomeProps {
   username: string | null;

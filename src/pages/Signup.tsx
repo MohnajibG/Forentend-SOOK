@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import signup from "../img/backgroundsignup.jpg";
+import signup from "../assets/img/backgroundsignup.jpg";
 import Cookies from "js-cookie";
-
-import "../styles/signup.css";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Importation des icônes Font Awesome
+import "../assets/styles/signup.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Icônes de visibilité des mots de passe
+import { ClipLoader } from "react-spinners"; // Importation du Spinner
 
 type SignupProps = {
   handleToken: (token: string | null) => void;
@@ -30,9 +30,16 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
     event.preventDefault();
     setErrorMessage("");
 
-    // Vérifie que les mots de passe correspondent
+    // Validation des mots de passe
     if (password !== confirmPassword) {
       setErrorMessage("Les mots de passe ne correspondent pas.");
+      return;
+    }
+
+    // Validation de l'email
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!isValidEmail) {
+      setErrorMessage("Email invalide.");
       return;
     }
 
@@ -50,10 +57,10 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
       if (response.data.token && response.data.account.username) {
         handleToken(response.data.token); // Stocke le token
         handleUsername(response.data.account.username); // Stocke le nom d'utilisateur
-        console.log("Token stocké:", Cookies.get("token")); // Vérifie le cookie
+        Cookies.set("token", response.data.token); // Sauvegarde le token dans les cookies
 
         // Redirige vers la page profil avec l'ID de l'utilisateur
-        navigate(`/profile/${response.data.account.userId}`);
+        navigate(`/profile/${response.data.userId}`);
       } else {
         setErrorMessage("Erreur inattendue lors de l'inscription.");
       }
@@ -109,7 +116,6 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             onClick={() => setIsPasswordVisible(!isPasswordVisible)}
           >
             {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}{" "}
-            {/* Icônes de visibilité de mot de passe */}
           </span>
 
           <input
@@ -128,7 +134,6 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             }
           >
             {isConfirmPasswordVisible ? <FaEye /> : <FaEyeSlash />}{" "}
-            {/* Icônes de visibilité de mot de passe */}
           </span>
 
           <div className="nl-countainer">
@@ -140,7 +145,6 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
               onChange={() => setNewsletter(!newsletter)}
               disabled={isLoading}
             />
-
             <span>S'abonner à la newsletter</span>
           </div>
 
@@ -149,9 +153,16 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             Conditions et Politique de Confidentialité de <span>SOUK!</span>. Je
             confirme avoir au moins 18 ans.
           </p>
+
+          {/* Affichage du bouton ou du spinner */}
           <button disabled={isLoading}>
-            {isLoading ? "Chargement..." : "S'inscrire"}
+            {isLoading ? (
+              <ClipLoader size={20} color="#fff" loading={isLoading} />
+            ) : (
+              "S'inscrire"
+            )}
           </button>
+
           {errorMessage && <div className="error-message">{errorMessage}</div>}
         </form>
       </div>
