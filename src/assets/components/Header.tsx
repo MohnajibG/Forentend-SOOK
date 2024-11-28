@@ -11,7 +11,7 @@ interface HeaderProps {
   userId: string | null; // Ajout pour récupérer l'ID utilisateur
 }
 
-const Header: React.FC<HeaderProps> = ({ token, handleToken, userId }) => {
+const Header: React.FC<HeaderProps> = ({ token, handleToken }) => {
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
 
