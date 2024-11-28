@@ -79,6 +79,7 @@ const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
               className="input"
               type="email"
               id="email"
+              autoComplete="email"
               placeholder="Votre Email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
@@ -91,6 +92,7 @@ const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
               type={isPasswordVisible ? "text" : "password"}
               id="password"
               placeholder="Votre Mot de passe"
+              autoComplete="current-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               required

@@ -32,9 +32,12 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
 
     // Validation des mots de passe
     if (password !== confirmPassword) {
-      setErrorMessage("Les mots de passe ne correspondent pas.");
+      setErrorMessage("Les mots de passe ne correspondent FN.");
       return;
     }
+    console.log(password, confirmPassword);
+    console.log("Password:", password);
+    console.log("Confirm Password:", confirmPassword);
 
     // Validation de l'email avec une regex améliorée
     const isValidEmail =
@@ -57,7 +60,8 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
         username,
         email,
         password,
-        newsletter, // On ne passe pas confirmPassword ici
+        confirmPassword,
+        newsletter,
       });
 
       if (response.data.token && response.data.account.username) {
@@ -104,6 +108,7 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             type="email"
             id="email"
             placeholder="Votre Email"
+            autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             disabled={isLoading}
@@ -114,6 +119,7 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             type={isPasswordVisible ? "text" : "password"}
             id="password"
             placeholder="Votre Mot de passe"
+            autoComplete="new-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             disabled={isLoading}
@@ -130,6 +136,7 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             type={isConfirmPasswordVisible ? "text" : "password"}
             id="confirmPassword"
             placeholder="Confirmer Votre Mot de passe"
+            autoComplete="new-password"
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
             disabled={isLoading}
