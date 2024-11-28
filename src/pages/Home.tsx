@@ -11,11 +11,7 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ username, token }) => {
   const navigate = useNavigate();
-
   useEffect(() => {
-    console.log("Username récupéré depuis les props:", username);
-    console.log("Token récupéré depuis les props:", token);
-
     // Vérifie si le username est bien récupéré depuis les cookies si non défini
     if (!username) {
       const storedUsername = Cookies.get("username");
