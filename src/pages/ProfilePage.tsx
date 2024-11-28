@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie"; // Import de js-cookie
-import "../styles/ProfilePage.css";
+import "../assets/styles/profilePage.css";
 
 interface ProfileData {
   username: string;
