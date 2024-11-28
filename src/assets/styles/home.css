@@ -119,13 +119,12 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
   }
 
   .welcom-container {
-    width: 50%;
     top: 25vh;
     left: 70vw;
   }
 
   .home-btn {
-    width: 50vw;
+    width: 90%;
   }
 }
 

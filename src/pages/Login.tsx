@@ -4,16 +4,14 @@ import { useNavigate } from "react-router-dom";
 import login from "../assets/img/backgroudLogin.webp"; // Ajoute une image de fond pour la page login
 import Cookies from "js-cookie";
 import "../assets/styles/login.css"; // Réutilise le même fichier CSS pour garder une cohérence de style
-
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
 
 interface LoginProps {
-  handleToken: (token: string | null) => void;
-  handleUsername: (username: string | null) => void;
+  setUser: (userId: string, token: string, username: string) => void; // Ajouter setUser ici
 }
 
-const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
+const Login: React.FC<LoginProps> = ({ setUser }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -43,16 +41,18 @@ const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
       if (response.data.token) {
         // Enregistre le token dans les cookies
         Cookies.set("token", response.data.token);
-        handleToken(response.data.token);
 
         // Enregistre le nom d'utilisateur si nécessaire
         if (response.data.account.username) {
           Cookies.set("username", response.data.account.username);
-          handleUsername(response.data.account.username);
         }
 
         // Récupère le userId pour la navigation
         const userId = response.data.userId;
+        const username = response.data.account.username;
+
+        // Passe les trois paramètres à setUser
+        setUser(userId, response.data.token, username);
 
         // Redirige vers la page profil après la connexion
         navigate(`/${userId}/profileUpdate`);

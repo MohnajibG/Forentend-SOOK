@@ -1,13 +1,12 @@
-import "./App.css";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { UserProvider, useUser } from "./contexts/UserContext"; // Importer UserProvider et useUser
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import Cookies from "js-cookie";
-import { useState, useEffect } from "react";
-// import { useParams } from "react-router-dom"; // Import de useParams
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -18,94 +17,75 @@ import ProfileUpdate from "./pages/ProfileUpdate";
 import ProfilePage from "./pages/ProfilePage";
 
 function App() {
-  // Gestion du token et du nom d'utilisateur avec `useState` et les cookies
-  const [token, setToken] = useState<string | null>(
-    Cookies.get("token") || null
-  );
-  const [username, setUsername] = useState<string | null>(
-    Cookies.get("username") || null
-  );
+  const { setUser, token, username, userId, logout } = useUser(); // Utiliser le contexte
 
-  // Synchronise l'état avec les cookies si jamais ils changent
+  // Charger les cookies et mettre à jour le contexte lors du premier rendu
   useEffect(() => {
     const storedToken = Cookies.get("token");
     const storedUsername = Cookies.get("username");
+    const storedUserId = Cookies.get("userId"); // Récupérer userId depuis les cookies
 
-    if (storedToken !== token) {
-      setToken(storedToken || null);
+    // Si les cookies sont valides, définir le contexte utilisateur
+    if (storedToken && storedUsername && storedUserId) {
+      setUser(storedUserId, storedToken, storedUsername); // Passez les 3 arguments
     }
+  }, [setUser]);
 
-    if (storedUsername !== username) {
-      setUsername(storedUsername || null);
-    }
-  }, []);
-
-  // Gestion du token avec sauvegarde dans les cookies
-  const handleToken = (newToken: string | null) => {
-    if (newToken) {
-      Cookies.set("token", newToken, { expires: 45 });
-      setToken(newToken);
+  // Mettre à jour les cookies chaque fois que token, username ou userId change
+  useEffect(() => {
+    if (token) {
+      Cookies.set("token", token, { expires: 45 });
     } else {
       Cookies.remove("token");
-      setToken(null);
     }
-  };
 
-  // Gestion du nom d'utilisateur avec sauvegarde dans les cookies
-  const handleUsername = (newUsername: string | null) => {
-    if (newUsername) {
-      Cookies.set("username", newUsername, { expires: 45 });
-      setUsername(newUsername);
+    if (username) {
+      Cookies.set("username", username, { expires: 45 });
     } else {
       Cookies.remove("username");
-      setUsername(null);
     }
-  };
+
+    if (userId) {
+      Cookies.set("userId", userId, { expires: 45 });
+    } else {
+      Cookies.remove("userId");
+    }
+  }, [token, username, userId]);
 
   return (
-    <Router>
-      {/* Le header est toujours visible */}
-      <Header token={token} handleToken={handleToken} userId={null} />
-      <Routes>
-        {/* Redirection vers /home si aucune route n'est spécifiée */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
-        <Route
-          path="/home"
-          element={<Home username={username} token={token} />}
+    <UserProvider>
+      {" "}
+      {/* Assurez-vous que UserProvider enveloppe tout le Router */}
+      <Router>
+        <Header
+          token={token}
+          logout={logout}
+          handleToken={(Token: string | null) => {}}
         />
-        <Route
-          path="/login"
-          element={
-            <Login handleToken={handleToken} handleUsername={handleUsername} />
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <Signup handleToken={handleToken} handleUsername={handleUsername} />
-          }
-        />
-        {/* Utilisation de useParams pour obtenir userId dans le composant App */}
-        <Route
-          path="/:id/profileUpdate/"
-          element={
-            token ? (
+
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route
+            path="/home"
+            element={<Home username={username} token={token} />}
+          />
+          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path="/signup" element={<Signup setUser={setUser} />} />
+          <Route
+            path="/:id/profileUpdate/"
+            element={
               <ProfileUpdate
                 username={username}
                 token={token}
-                // userId={useParams().id || null} // Utilisation de useParams ici
+                userId={userId}
               />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-        <Route path="/:id/profile" element={<ProfilePage />} />
-
-        {/* Page par défaut si aucune route ne correspond */}
-        <Route path="*" element={<NoMatch />} />
-      </Routes>
-    </Router>
+            }
+          />
+          <Route path="/:id/profile" element={<ProfilePage />} />
+          <Route path="*" element={<NoMatch />} />
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 

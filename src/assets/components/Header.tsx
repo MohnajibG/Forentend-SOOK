@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../img/LOGO.png";
+import { useUser } from "../../contexts/UserContext"; // Import du hook
+
 import { CgProfile } from "react-icons/cg";
 import "../styles/header.css";
 
@@ -8,12 +10,14 @@ import "../styles/header.css";
 interface HeaderProps {
   token: string | null;
   handleToken: (token: string | null) => void;
-  userId: string | null; // Ajout du userId
+  logout: () => void; // Ajouter logout ici dans HeaderProps
 }
 
-const Header: React.FC<HeaderProps> = ({ token, handleToken, userId }) => {
+const Header: React.FC<HeaderProps> = ({ token, handleToken }) => {
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
+  const { userId } = useUser(); // Utilisation du contexte pour obtenir userId
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Gestion de l'ouverture/fermeture du menu burger
@@ -28,6 +32,7 @@ const Header: React.FC<HeaderProps> = ({ token, handleToken, userId }) => {
       navigate(`/search?query=${encodeURIComponent(address)}`);
     }
   };
+  console.log(token);
 
   return (
     <div className="header">
@@ -69,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({ token, handleToken, userId }) => {
                 <ul>
                   <li>
                     <Link
-                      to={`/${userId}/profile`}
+                      to={`/${userId}/profile`} // Utilisation de userId depuis le contexte
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Profil

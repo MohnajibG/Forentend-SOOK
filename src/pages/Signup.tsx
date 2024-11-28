@@ -8,11 +8,10 @@ import { FaEye, FaEyeSlash } from "react-icons/fa"; // Icônes de visibilité de
 import { ClipLoader } from "react-spinners"; // Importation du Spinner
 
 type SignupProps = {
-  handleToken: (token: string | null) => void;
-  handleUsername: (username: string | null) => void;
+  setUser: (userId: string, token: string, username: string) => void; // Ajouter setUser ici
 };
 
-const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
+const Signup: React.FC<SignupProps> = ({ setUser }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,12 +31,9 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
 
     // Validation des mots de passe
     if (password !== confirmPassword) {
-      setErrorMessage("Les mots de passe ne correspondent FN.");
+      setErrorMessage("Les mots de passe ne correspondent pas.");
       return;
     }
-    console.log(password, confirmPassword);
-    console.log("Password:", password);
-    console.log("Confirm Password:", confirmPassword);
 
     // Validation de l'email avec une regex améliorée
     const isValidEmail =
@@ -65,13 +61,20 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
       });
 
       if (response.data.token && response.data.account.username) {
-        handleToken(response.data.token); // Stocke le token
-        handleUsername(response.data.account.username); // Stocke le nom d'utilisateur
-        Cookies.set("token", response.data.username);
-        Cookies.set("token", response.data.token);
+        // Récupère le token, le userId, et le username
+        const { token, userId } = response.data;
+        const username = response.data.account.username;
+
+        // Enregistre les informations dans les cookies
+        Cookies.set("token", token);
+        Cookies.set("username", username);
+        Cookies.set("userId", userId);
+
+        // Passe les informations à setUser pour mettre à jour le contexte
+        setUser(userId, token, username);
 
         // Redirige vers la page profil avec l'ID de l'utilisateur
-        navigate(`/${response.data.userId}/profileUpdate`);
+        navigate(`/${userId}/profileUpdate`);
       } else {
         setErrorMessage("Erreur inattendue lors de l'inscription.");
       }
