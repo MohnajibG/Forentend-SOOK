@@ -55,7 +55,7 @@ const Login: React.FC<LoginProps> = ({ handleToken, handleUsername }) => {
         const userId = response.data.userId;
 
         // Redirige vers la page profil après la connexion
-        navigate(`user/${userId}/profile`);
+        navigate(`/${userId}/profile`);
       }
     } catch (error: any) {
       // Gestion des erreurs

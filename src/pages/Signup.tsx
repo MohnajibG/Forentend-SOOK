@@ -36,10 +36,17 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
       return;
     }
 
-    // Validation de l'email
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    // Validation de l'email avec une regex améliorée
+    const isValidEmail =
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     if (!isValidEmail) {
       setErrorMessage("Email invalide.");
+      return;
+    }
+
+    // Validation des champs requis
+    if (!username || !email || !password || !confirmPassword) {
+      setErrorMessage("Tous les champs sont requis.");
       return;
     }
 
@@ -50,23 +57,23 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
         username,
         email,
         password,
-        confirmPassword,
-        newsletter,
+        newsletter, // On ne passe pas confirmPassword ici
       });
 
       if (response.data.token && response.data.account.username) {
         handleToken(response.data.token); // Stocke le token
         handleUsername(response.data.account.username); // Stocke le nom d'utilisateur
-        Cookies.set("token", response.data.token); // Sauvegarde le token dans les cookies
+        Cookies.set("token", response.data.username);
+        Cookies.set("token", response.data.token);
 
         // Redirige vers la page profil avec l'ID de l'utilisateur
-        navigate(`/profile/${response.data.userId}`);
+        navigate(`/${response.data.userId}/profile`);
       } else {
         setErrorMessage("Erreur inattendue lors de l'inscription.");
       }
     } catch (err: any) {
       // Vérifie si le message d'erreur existe
-      if (err.response && err.response.data && err.response.data.message) {
+      if (err.response?.data?.message) {
         setErrorMessage(err.response.data.message);
       } else {
         setErrorMessage("Erreur lors de l'inscription. Veuillez réessayer.");
@@ -115,7 +122,7 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
             className="toggle-visibility-icon"
             onClick={() => setIsPasswordVisible(!isPasswordVisible)}
           >
-            {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}{" "}
+            {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
           </span>
 
           <input
@@ -133,7 +140,7 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
               setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
             }
           >
-            {isConfirmPasswordVisible ? <FaEye /> : <FaEyeSlash />}{" "}
+            {isConfirmPasswordVisible ? <FaEye /> : <FaEyeSlash />}
           </span>
 
           <div className="nl-countainer">
