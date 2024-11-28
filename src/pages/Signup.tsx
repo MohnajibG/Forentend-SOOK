@@ -71,7 +71,7 @@ const Signup: React.FC<SignupProps> = ({ handleToken, handleUsername }) => {
         Cookies.set("token", response.data.token);
 
         // Redirige vers la page profil avec l'ID de l'utilisateur
-        navigate(`/${response.data.userId}/profile`);
+        navigate(`/${response.data.userId}/profileUpdate`);
       } else {
         setErrorMessage("Erreur inattendue lors de l'inscription.");
       }

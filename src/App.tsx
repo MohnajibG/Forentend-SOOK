@@ -7,14 +7,15 @@ import {
 } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // Import de useParams
+// import { useParams } from "react-router-dom"; // Import de useParams
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Profile from "./pages/Profile";
 import Header from "./assets/components/Header";
 import NoMatch from "../src/pages/noMatch";
 import Home from "./pages/Home";
+import ProfileUpdate from "./pages/ProfileUpdate";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   // Gestion du token et du nom d'utilisateur avec `useState` et les cookies
@@ -64,7 +65,7 @@ function App() {
   return (
     <Router>
       {/* Le header est toujours visible */}
-      <Header token={token} handleToken={handleToken} />
+      <Header token={token} handleToken={handleToken} userId={null} />
       <Routes>
         {/* Redirection vers /home si aucune route n'est spécifiée */}
         <Route path="/" element={<Navigate to="/home" replace />} />
@@ -86,19 +87,20 @@ function App() {
         />
         {/* Utilisation de useParams pour obtenir userId dans le composant App */}
         <Route
-          path="/:id/profile/"
+          path="/:id/profileUpdate/"
           element={
             token ? (
-              <Profile
+              <ProfileUpdate
                 username={username}
                 token={token}
-                userId={useParams().id || null} // Utilisation de useParams ici
+                // userId={useParams().id || null} // Utilisation de useParams ici
               />
             ) : (
               <Navigate to="/login" replace />
             )
           }
         />
+        <Route path="/:id/profile" element={<ProfilePage />} />
 
         {/* Page par défaut si aucune route ne correspond */}
         <Route path="*" element={<NoMatch />} />

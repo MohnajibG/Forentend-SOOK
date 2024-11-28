@@ -1,5 +1,5 @@
-/* Styles for the Profile Component */
-.main-profile {
+/* Styles for the profileUpdate Component */
+.main-profileUpdate {
   background-image: url("../img/backgroundsignup.jpg");
   background-size: cover; /* L'image de fond couvre tout le fond */
   background-repeat: no-repeat; /* Pas de répétition de l'image */
@@ -13,15 +13,15 @@
   font-family: "Krub", sans-serif;
 }
 
-.main-profile h2 {
+.main-profileUpdate h2 {
   font-size: 1.6rem;
   text-align: center;
   font-weight: bolder;
   margin-bottom: 1rem;
 }
 
-/* Profile Image Section */
-.profile-image {
+/* profileUpdate Image Section */
+.profileUpdate-image {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,7 +29,7 @@
   margin-bottom: 1rem;
 }
 
-.profile-image label {
+.profileUpdate-image label {
   padding: 10px;
   font-size: 1rem;
   cursor: pointer;
@@ -43,15 +43,15 @@
   margin-top: 15px;
 }
 
-.profile-image img {
+.profileUpdate-image img {
   border-radius: 50%;
   width: 60px;
   height: 60px;
   object-fit: cover;
 }
 
-/* Profile Information Section */
-.profile-info {
+/* profileUpdate Information Section */
+.profileUpdate-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,7 +60,7 @@
 }
 
 .input,
-.button-profile {
+.button-profileUpdate {
   border: none;
   border-radius: 3px;
   height: 30px;
@@ -80,7 +80,7 @@
 }
 
 /* Button Styles */
-.button-profile {
+.button-profileUpdate {
   width: 120px;
   background-color: #dfa080bd;
   color: #fff;
@@ -90,57 +90,78 @@
   align-self: center;
 }
 
-.button-profile:hover {
+.button-profileUpdate:hover {
   background-color: #c87660;
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #4caf50;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Media Queries for tablets and smaller screens */
 @media (max-width: 768px) {
-  .main-profile {
+  .main-profileUpdate {
     padding: 10%;
   }
 
-  .main-profile h2 {
+  .main-profileUpdate h2 {
     font-size: 1.4rem;
   }
 
-  .profile-image img {
+  .profileUpdate-image img {
     width: 50px;
     height: 50px;
   }
 
-  .button-profile {
+  .button-profileUpdate {
     width: 100%;
   }
 }
 
 /* Media Queries for mobile screens */
 @media (max-width: 480px) {
-  .main-profile {
+  .main-profileUpdate {
     padding: 8%;
   }
 
-  .main-profile h2 {
+  .main-profileUpdate h2 {
     font-size: 1.2rem;
   }
 
-  .profile-info .input,
-  .profile-info .button-profile {
+  .profileUpdate-info .input,
+  .profileUpdate-info .button-profileUpdate {
     width: 60vw;
     font-size: 0.9rem;
   }
 
-  .profile-image {
+  .profileUpdate-image {
     flex-direction: column;
     align-items: center;
   }
 
-  .profile-image img {
+  .profileUpdate-image img {
     width: 40px;
     height: 40px;
   }
 
-  .button-profile {
+  .button-profileUpdate {
     width: 60vw;
   }
 }

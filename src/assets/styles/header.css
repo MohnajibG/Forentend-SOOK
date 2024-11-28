@@ -16,7 +16,7 @@
 .header input {
   padding-left: 4vw;
   border: none;
-  height: 6vh;
+  height: 5vh;
   border-radius: 10px;
   background-color: #deb9a733;
   width: 50vw;
@@ -29,7 +29,7 @@
 
 .cnt-btn {
   border: none;
-  height: 6vh;
+  height: 5vh;
   width: 8vw;
   border-radius: 3px;
   color: #fff;
@@ -53,16 +53,33 @@
   border-radius: 10px;
 }
 
-.deconnexion {
+.dct-div .deconnexion {
   border: none;
-  height: 6vh;
+  height: 5vh;
   width: 20vw;
   border-radius: 10px;
   color: #ffffffd4;
   background-color: #da0d0db4;
 }
-.deconnexion:hover {
+.dct-div .deconnexion:hover {
   background-color: #ec0808c1;
+}
+.dct-div {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+}
+.dct-div div {
+  background-color: #ffc1bd;
+  height: 5vh;
+  width: 5vw;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dct-div div:hover {
+  transform: matrix(3);
 }
 .header-inpt-btn {
   display: flex;
