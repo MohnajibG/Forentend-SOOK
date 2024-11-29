@@ -20,6 +20,8 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
   const [country, setCountry] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [sexe, setSexe] = useState<"Homme" | "Femme" | "Autre" | "-">("-");
+  const [avatar, setAvatar] = useState<File | null>(null); // Typage du fichier pour l'image
+
   const [dateOfBorn, setDateOfBorn] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -87,7 +89,7 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
 
     try {
       await axios.put(
-        `http://localhost:3000/user/profileUpdate/${userId}`,
+        `http://localhost:3000/user/${userId}/profileUpdate`,
         {
           address,
           phoneNumber,
@@ -104,7 +106,7 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
       );
 
       setSuccess("Profil mis à jour avec succès !");
-      setTimeout(() => navigate("/"), 2000); // Redirection après succès
+      setTimeout(() => navigate("/"), 3000); // Redirection après succès
     } catch (error) {
       console.error("Erreur lors de la mise à jour du profil:", error);
       setError(
@@ -128,6 +130,20 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
+            <div className="input-picture">
+              <label htmlFor="picture">+ Ajouter votre photo</label>
+              <input
+                id="picture"
+                type="file"
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  setAvatar(e.target.files ? e.target.files[0] : null);
+                }}
+              />
+              {avatar && (
+                <img src={URL.createObjectURL(avatar)} alt="Image preview" />
+              )}
+            </div>
             <div className="profileUpdate-info">
               <label htmlFor="username">Nom d'utilisateur</label>
               <input

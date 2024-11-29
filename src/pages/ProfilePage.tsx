@@ -1,203 +1,177 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import "../assets/styles/profileUpdate.css";
-import { useUser } from "../contexts/UserContext"; // Import du contexte
+import { useUser } from "../contexts/UserContext"; // Importer le hook personnalisé
+import "../assets/styles/profilePage.css";
 
-const ProfileUpdate: React.FC = () => {
-  const { id } = useParams();
-  const { username, token } = useUser(); // Consommation du contexte pour récupérer username et token
-  const [address, setAddress] = useState<string>("");
-  const [postalCode, setPostalCode] = useState<string>("");
-  const [country, setCountry] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [sexe, setSexe] = useState<"Homme" | "Femme" | "Autre">("Homme");
-  const [dateOfBorn, setDateOfBorn] = useState<string>("");
+interface ProfileData {
+  username: string;
+  email: string;
+  address: string;
+  postalCode: string;
+  country: string;
+  phoneNumber: string;
+  sexe: string;
+  dateOfBorn: string;
+}
+
+const ProfilePage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const { token } = useUser(); // Utiliser le contexte pour récupérer le token
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [updatedProfile, setUpdatedProfile] = useState<Partial<ProfileData>>(
+    {}
+  );
 
-  const navigate = useNavigate();
-
-  // Récupération des données de profil existantes lors du montage du composant
   useEffect(() => {
-    if (!token || !id) return;
-
-    const fetchProfileUpdateData = async () => {
-      setLoading(true);
-
+    const fetchProfile = async () => {
       try {
+        setLoading(true);
+        setError(null);
+
+        if (!token) {
+          setError("Token non disponible. Veuillez vous connecter.");
+          setLoading(false);
+          return;
+        }
+
         const response = await axios.get(
-          `http://localhost:3000/user/${id}/profileUpdate`,
+          `http://localhost:3000/user/profile/${id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`, // Utiliser le token du contexte
             },
           }
         );
 
-        const profileUpdateData = response.data;
-        setAddress(profileUpdateData.address || "");
-        setPostalCode(profileUpdateData.postalCode || "");
-        setCountry(profileUpdateData.country || "");
-        setPhoneNumber(profileUpdateData.phoneNumber || "");
-        setSexe(profileUpdateData.sexe || "Homme");
-        setDateOfBorn(profileUpdateData.dateOfBorn || "");
-      } catch (error) {
-        console.error(
-          "Erreur lors de la récupération des données du profil",
-          error
-        );
+        setProfile(response.data);
+      } catch (err) {
+        console.error("Erreur lors de la récupération du profil :", err);
         setError("Impossible de charger les informations du profil.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfileUpdateData();
-  }, [id, token]);
-
-  // Soumission du formulaire pour la mise à jour du profil
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
-
-    if (!token) {
+    if (id) {
+      fetchProfile();
+    } else {
+      setError("ID utilisateur manquant.");
       setLoading(false);
-      setError("Vous devez être connecté pour mettre à jour votre profil.");
-      return;
     }
+  }, [id, token]); // Ajouter token en dépendance
 
-    if (!id) {
-      setLoading(false);
-      setError("L'ID utilisateur est manquant.");
-      return;
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUpdatedProfile((prev) => ({ ...prev, [name]: value }));
+  };
 
+  const handleSave = async () => {
     try {
-      await axios.put(
-        `http://localhost:3000/user/profileUpdate/${id}`,
-        {
-          address,
-          phoneNumber,
-          postalCode,
-          country,
-          sexe,
-          dateOfBorn,
-        },
+      if (!token) {
+        setError("Token non disponible. Veuillez vous connecter.");
+        return;
+      }
+
+      const response = await axios.put(
+        `http://localhost:3000/user/profilePage/${id}`,
+        updatedProfile,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
-      setSuccess("Profil mis à jour avec succès !");
-      setTimeout(() => navigate("/"), 2000);
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour du profil:", error);
-      setError(
-        "Une erreur s'est produite lors de la mise à jour de votre profil."
-      );
-    } finally {
-      setLoading(false);
+      setProfile(response.data); // Mettre à jour le profil avec les nouvelles données
+      setEditMode(false);
+      setUpdatedProfile({}); // Réinitialiser les champs modifiés
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour du profil :", err);
+      setError("Impossible de mettre à jour le profil.");
     }
   };
 
+  if (loading) {
+    return <div className="spinner">Chargement...</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
   return (
-    token && (
-      <div className="main-profileUpdate">
-        <h2>Mon Profil</h2>
-        {error && <p className="error-message">{error}</p>}
-        {success && <p className="success-message">{success}</p>}
-
-        {loading ? (
-          <div className="spinner-container">
-            <div className="spinner"></div>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <div className="profileUpdate-info">
-              <label htmlFor="username">Nom d'utilisateur</label>
-              <input
-                id="username"
-                type="text"
-                value={username || "Nom d'utilisateur non disponible"}
-                disabled
-              />
-
-              <label htmlFor="sexe">Sexe</label>
-              <select
-                id="sexe"
-                value={sexe}
-                onChange={(e) =>
-                  setSexe(e.target.value as "Homme" | "Femme" | "Autre")
-                }
-              >
-                <option value="Homme">Homme</option>
-                <option value="Femme">Femme</option>
-                <option value="Autre">Autre</option>
-              </select>
-
-              <label htmlFor="dateOfBorn">Date de naissance</label>
-              <input
-                type="date"
-                id="dateOfBorn"
-                value={dateOfBorn}
-                onChange={(e) => setDateOfBorn(e.target.value)}
-                required
-              />
-
-              <label htmlFor="adresse">Adresse</label>
-              <textarea
-                id="adresse"
-                name="adresse"
-                required
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-
-              <label htmlFor="codepostal">Code postal</label>
-              <input
-                id="codepostal"
-                name="codepostal"
-                type="text"
-                value={postalCode}
-                onChange={(e) => setPostalCode(e.target.value)}
-                required
-              />
-
-              <label htmlFor="pays">Pays</label>
-              <input
-                id="pays"
-                name="pays"
-                type="text"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                required
-              />
-
-              <label htmlFor="phoneNumber">Numéro de téléphone :</label>
-              <input
-                className="input"
-                id="telephone"
-                type="tel"
-                placeholder="par ex : +33655000000"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-            </div>
-
-            <button type="submit" className="button-profileUpdate">
-              Mettre à jour
-            </button>
-          </form>
-        )}
-      </div>
-    )
+    <div className="profile-page">
+      <h1>Profil</h1>
+      {editMode ? (
+        <div>
+          <input
+            name="username"
+            value={updatedProfile.username || profile?.username || ""}
+            onChange={handleInputChange}
+            placeholder="Nom d'utilisateur"
+          />
+          <input
+            name="email"
+            value={updatedProfile.email || profile?.email || ""}
+            onChange={handleInputChange}
+            placeholder="Email"
+          />
+          <input
+            name="address"
+            value={updatedProfile.address || profile?.address || ""}
+            onChange={handleInputChange}
+            placeholder="Adresse"
+          />
+          <input
+            name="postalCode"
+            value={updatedProfile.postalCode || profile?.postalCode || ""}
+            onChange={handleInputChange}
+            placeholder="Code postal"
+          />
+          <input
+            name="country"
+            value={updatedProfile.country || profile?.country || ""}
+            onChange={handleInputChange}
+            placeholder="Pays"
+          />
+          <input
+            name="phoneNumber"
+            value={updatedProfile.phoneNumber || profile?.phoneNumber || ""}
+            onChange={handleInputChange}
+            placeholder="Numéro de téléphone"
+          />
+          <input
+            name="sexe"
+            value={updatedProfile.sexe || profile?.sexe || ""}
+            onChange={handleInputChange}
+            placeholder="Sexe"
+          />
+          <input
+            name="dateOfBorn"
+            value={updatedProfile.dateOfBorn || profile?.dateOfBorn || ""}
+            onChange={handleInputChange}
+            placeholder="Date de naissance"
+          />
+          <button onClick={handleSave}>Enregistrer</button>
+        </div>
+      ) : (
+        <div>
+          <p>Nom d'utilisateur : {profile?.username}</p>
+          <p>Email : {profile?.email}</p>
+          <p>Adresse : {profile?.address}</p>
+          <p>Code postal : {profile?.postalCode}</p>
+          <p>Pays : {profile?.country}</p>
+          <p>Numéro de téléphone : {profile?.phoneNumber}</p>
+          <p>Sexe : {profile?.sexe}</p>
+          <p>Date de naissance : {profile?.dateOfBorn}</p>
+          <button onClick={() => setEditMode(true)}>Modifier</button>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default ProfileUpdate;
+export default ProfilePage;

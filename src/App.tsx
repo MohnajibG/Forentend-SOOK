@@ -15,6 +15,7 @@ import NoMatch from "../src/pages/noMatch";
 import Home from "./pages/Home";
 import ProfileUpdate from "./pages/ProfileUpdate";
 import ProfilePage from "./pages/ProfilePage";
+import Publish from "./pages/Publish";
 
 function App() {
   const { setUser, token, username, userId, logout } = useUser(); // Utiliser le contexte
@@ -60,10 +61,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route
-            path="/home"
-            element={<Home username={username} token={token} />}
-          />
+          <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/signup" element={<Signup setUser={setUser} />} />
           <Route
@@ -78,6 +76,7 @@ function App() {
           />
           <Route path="/:id/profilePage" element={<ProfilePage />} />
           <Route path="*" element={<NoMatch />} />
+          <Route path="/publish" element={<Publish />} />
         </Routes>
       </Router>
     </UserProvider>

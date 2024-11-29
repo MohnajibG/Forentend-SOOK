@@ -3,16 +3,14 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import hero from "../assets/img/hero.jpg";
 import "../assets/styles/home.css";
+import { useUser } from "../contexts/UserContext"; // Utilisation du contexte
 
-interface HomeProps {
-  username: string | null;
-  token: string | null;
-}
-
-const Home: React.FC<HomeProps> = ({ username, token }) => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { username, token } = useUser(); // Utilisation du hook contextuel pour récupérer username et token
+
   useEffect(() => {
-    // Vérifie si le username est bien récupéré depuis les cookies si non défini
+    // Si le username n'est pas récupéré depuis le contexte, on peut vérifier dans les cookies
     if (!username) {
       const storedUsername = Cookies.get("username");
       if (storedUsername) {
@@ -32,7 +30,7 @@ const Home: React.FC<HomeProps> = ({ username, token }) => {
       <div className="hero">
         <img src={hero} alt="image hero" />
       </div>
-      {token && username ? (
+      {username ? (
         <div className="welcom-container">
           <h2>Bonjour, {username} !</h2>
           <p>Merci de vous être connecté. Profitez de nos fonctionnalités !</p>
