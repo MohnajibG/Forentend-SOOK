@@ -1,41 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
 import { useUser } from "../../contexts/UserContext";
-
 import { HeaderProps } from "../../types/types";
-
 import logo from "../img/LOGO.png";
 import { CgProfile } from "react-icons/cg";
-
 import "../styles/header.css";
 
 const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
-  const { token, userId, logout } = useUser(); // Utilisation directe du contexte
+  const { token, userId, logout } = useUser(); // Utilisation du token
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Gestion du clic en dehors pour fermer le menu burger
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        !document.querySelector(".burger-menu")?.contains(event.target as Node)
-      ) {
-        setIsMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, []);
-
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && address.trim()) {
       navigate(`/search?query=${encodeURIComponent(address)}`);
     }
   };
+
+  // Vérification que le token est défini avant de procéder
+  useEffect(() => {
+    console.log("Token from context: ", token);
+  }, [token]);
 
   return (
     <div className="header">
@@ -58,18 +45,21 @@ const Header: React.FC<HeaderProps> = () => {
             <button
               className="deconnexion"
               onClick={() => {
-                logout();
+                logout(); // Déconnexion via le token
                 navigate("/home");
               }}
               aria-label="Bouton de déconnexion"
             >
               Déconnexion
             </button>
-            <div className="profileUpdate-icon" onClick={toggleMenu}>
+            <div
+              className="profileUpdate-icon"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
               <CgProfile />
             </div>
             {isMenuOpen && (
-              <div className="burger-menu">
+              <div className="burger-menu" ref={menuRef}>
                 <ul>
                   {userId && (
                     <li>
