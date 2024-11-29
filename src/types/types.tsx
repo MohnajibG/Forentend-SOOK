@@ -5,3 +5,7 @@ export interface UserContextType {
   setUser: (userId: string, token: string, username: string) => void;
   logout: () => void;
 }
+export interface HeaderProps {
+  token: string | null;
+  logout: () => void;
+}

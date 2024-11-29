@@ -5,7 +5,7 @@ import { UserContextType } from "../types/types";
 // Définir le type de données que vous voulez partager
 
 // Initialiser le contexte avec des valeurs par défaut
-const UserContext = createContext<UserContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | null>(null);
 
 // Créer un provider pour envelopper votre application
 export const UserProvider: React.FC<{ children: ReactNode }> = ({

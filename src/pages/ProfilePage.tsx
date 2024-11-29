@@ -28,7 +28,7 @@ const ProfileUpdate: React.FC = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/user/profileUpdate/${id}`,
+          `http://localhost:3000/user/${id}/profileUpdate`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

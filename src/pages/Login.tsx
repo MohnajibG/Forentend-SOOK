@@ -1,14 +1,16 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import login from "../assets/img/backgroudLogin.webp"; // Ajoute une image de fond pour la page login
+import login from "../assets/img/backgroudLogin.webp";
 import Cookies from "js-cookie";
-import "../assets/styles/login.css"; // Réutilise le même fichier CSS pour garder une cohérence de style
+import "../assets/styles/login.css";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
+import { toast } from "react-toastify"; // Import de react-toastify
+import "react-toastify/dist/ReactToastify.css"; // Import du CSS de react-toastify
 
 interface LoginProps {
-  setUser: (userId: string, token: string, username: string) => void; // Ajouter setUser ici
+  setUser: (userId: string, token: string, username: string) => void;
 }
 
 const Login: React.FC<LoginProps> = ({ setUser }) => {
@@ -20,14 +22,40 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
 
   const navigate = useNavigate();
 
+  // Fonction pour afficher des notifications d'erreur avec react-toastify
+  const showErrorToast = (message: string) => {
+    toast.error(message, {
+      position: "top-right", // Utilisation d'une chaîne de caractères pour la position
+      autoClose: 5000,
+    });
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage("");
-    setIsLoading(true); // Indique que le chargement commence
+    setIsLoading(true);
 
-    // Validation simple des champs
+    // Validation simple des champs côté client
     if (!email || !password) {
       setErrorMessage("Veuillez remplir tous les champs.");
+      showErrorToast("Veuillez remplir tous les champs.");
+      setIsLoading(false);
+      return;
+    }
+
+    // Validation basique de l'email (tu pourrais aller plus loin si nécessaire)
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage("Veuillez entrer un email valide.");
+      showErrorToast("Veuillez entrer un email valide.");
+      setIsLoading(false);
+      return;
+    }
+
+    // Validation du mot de passe (minimum 6 caractères)
+    if (password.length < 8) {
+      setErrorMessage("Le mot de passe doit comporter au moins 8 caractères.");
+      showErrorToast("Le mot de passe doit comporter au moins 8 caractères.");
       setIsLoading(false);
       return;
     }
@@ -39,33 +67,34 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
       });
 
       if (response.data.token) {
-        // Enregistre le token dans les cookies
-        Cookies.set("token", response.data.token);
+        Cookies.set("token", response.data.token, { expires: 45 });
 
-        // Enregistre le nom d'utilisateur si nécessaire
         if (response.data.account.username) {
-          Cookies.set("username", response.data.account.username);
+          Cookies.set("username", response.data.account.username, {
+            expires: 45,
+          });
+        }
+        if (response.data.userId) {
+          Cookies.set("userId", response.data.userId, { expires: 1 });
         }
 
-        // Récupère le userId pour la navigation
         const userId = response.data.userId;
         const username = response.data.account.username;
 
-        // Passe les trois paramètres à setUser
         setUser(userId, response.data.token, username);
 
-        // Redirige vers la page profil après la connexion
-        navigate(`/${userId}/profileUpdate`);
+        navigate(`/${userId}/profilePage`);
       }
     } catch (error: any) {
-      // Gestion des erreurs
       if (error.response && error.response.data) {
         setErrorMessage(error.response.data.message);
+        showErrorToast(error.response.data.message);
       } else {
         setErrorMessage("Erreur lors de la connexion. Veuillez réessayer.");
+        showErrorToast("Erreur lors de la connexion. Veuillez réessayer.");
       }
     } finally {
-      setIsLoading(false); // Fin du chargement
+      setIsLoading(false);
     }
   };
 
@@ -107,7 +136,6 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
           <button className="login-btn" disabled={isLoading}>
             {isLoading ? "Connexion en cours..." : "Se connecter"}
           </button>
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
         </form>
       </div>
       <img
@@ -115,6 +143,8 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
         src={login}
         alt="image-background-signup"
       />
+      {/* Affichage des erreurs via toast */}
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
     </main>
   );
 };

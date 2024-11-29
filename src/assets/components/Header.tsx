@@ -1,38 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import logo from "../img/LOGO.png";
-import { useUser } from "../../contexts/UserContext"; // Import du hook
 
+import { useUser } from "../../contexts/UserContext";
+
+import { HeaderProps } from "../../types/types";
+
+import logo from "../img/LOGO.png";
 import { CgProfile } from "react-icons/cg";
+
 import "../styles/header.css";
 
-// Propriétés attendues par le composant Header
-interface HeaderProps {
-  token: string | null;
-  handleToken: (token: string | null) => void;
-  logout: () => void; // Ajouter logout ici dans HeaderProps
-}
-
-const Header: React.FC<HeaderProps> = ({ token, handleToken }) => {
+const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
-  const { userId } = useUser(); // Utilisation du contexte pour obtenir userId
-
+  const { token, userId, logout } = useUser(); // Utilisation directe du contexte
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Gestion de l'ouverture/fermeture du menu burger
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // Gestion du clic en dehors pour fermer le menu burger
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        !document.querySelector(".burger-menu")?.contains(event.target as Node)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
 
-  // Fonction de recherche si nécessaire
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      console.log("Recherche déclenchée pour :", address);
+    if (e.key === "Enter" && address.trim()) {
       navigate(`/search?query=${encodeURIComponent(address)}`);
     }
   };
-  console.log(token);
 
   return (
     <div className="header">
@@ -55,31 +58,29 @@ const Header: React.FC<HeaderProps> = ({ token, handleToken }) => {
             <button
               className="deconnexion"
               onClick={() => {
-                handleToken(null);
+                logout();
                 navigate("/home");
               }}
               aria-label="Bouton de déconnexion"
             >
               Déconnexion
             </button>
-
-            {/* Icône de profil qui ouvre le menu burger */}
             <div className="profileUpdate-icon" onClick={toggleMenu}>
               <CgProfile />
             </div>
-
-            {/* Affichage du menu burger si isMenuOpen est vrai */}
             {isMenuOpen && (
               <div className="burger-menu">
                 <ul>
-                  <li>
-                    <Link
-                      to={`/${userId}/profile`} // Utilisation de userId depuis le contexte
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Profil
-                    </Link>
-                  </li>
+                  {userId && (
+                    <li>
+                      <Link
+                        to={`/${userId}/profile`}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Profil
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link to="/settings" onClick={() => setIsMenuOpen(false)}>
                       Réglages

@@ -54,14 +54,9 @@ function App() {
 
   return (
     <UserProvider>
-      {" "}
       {/* Assurez-vous que UserProvider enveloppe tout le Router */}
       <Router>
-        <Header
-          token={token}
-          logout={logout}
-          handleToken={(Token: string | null) => {}}
-        />
+        <Header token={token} logout={logout} />
 
         <Routes>
           <Route path="/" element={<Navigate to="/home" replace />} />
@@ -81,7 +76,7 @@ function App() {
               />
             }
           />
-          <Route path="/:id/profile" element={<ProfilePage />} />
+          <Route path="/:id/profilePage" element={<ProfilePage />} />
           <Route path="*" element={<NoMatch />} />
         </Routes>
       </Router>
