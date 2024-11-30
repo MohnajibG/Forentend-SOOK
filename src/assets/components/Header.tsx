@@ -83,7 +83,7 @@ const Header: React.FC<HeaderProps> = () => {
                   </li>
                   <li>
                     <Link to="/publish" onClick={() => setIsMenuOpen(false)}>
-                      Accueil
+                      Publier
                     </Link>
                   </li>
                 </ul>

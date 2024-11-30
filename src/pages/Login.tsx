@@ -8,6 +8,7 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
 import { toast } from "react-toastify"; // Import de react-toastify
 import "react-toastify/dist/ReactToastify.css"; // Import du CSS de react-toastify
+import { Link } from "react-router-dom";
 
 interface LoginProps {
   setUser: (userId: string, token: string, username: string) => void;
@@ -101,43 +102,45 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
   return (
     <main className="main-login">
       <h2>Connexion</h2>
-      <div className="login-countiner">
-        <form onSubmit={handleSubmit}>
-          <div>
-            <input
-              className="input"
-              type="email"
-              id="email"
-              autoComplete="email"
-              placeholder="Votre Email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-          </div>
-          <div className="password-input">
-            <input
-              className="input"
-              type={isPasswordVisible ? "text" : "password"}
-              id="password"
-              placeholder="Votre Mot de passe"
-              autoComplete="current-password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-            <span
-              className="toggle-visibility-icon"
-              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-            >
-              {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
-            </span>
-          </div>
-          <button className="login-btn" disabled={isLoading}>
-            {isLoading ? "Connexion en cours..." : "Se connecter"}
-          </button>
-        </form>
-      </div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <input
+            className="input"
+            type="email"
+            id="email"
+            autoComplete="email"
+            placeholder="Votre Email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
+        </div>
+        <div className="password-input">
+          <input
+            className="input"
+            type={isPasswordVisible ? "text" : "password"}
+            id="password"
+            placeholder="Votre Mot de passe"
+            autoComplete="current-password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
+          <span
+            className="toggle-visibility-icon"
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
+          </span>
+        </div>
+        <button className="login-btn" disabled={isLoading}>
+          {isLoading ? "Connexion en cours..." : "Se connecter"}
+        </button>
+        <p className="signup-link">
+          Pas encore de compte ? Créez-en un dès maintenant en cliquant ici{" "}
+          <Link to="/signup">S'inscrire</Link>
+        </p>
+      </form>
       <img
         className="img-background"
         src={login}

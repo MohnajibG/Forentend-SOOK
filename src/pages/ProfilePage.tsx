@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useUser } from "../contexts/UserContext"; // Importer le hook personnalisé
+import { useUser } from "../contexts/UserContext"; // Utilisation du hook personnalisé
 import "../assets/styles/profilePage.css";
 
 interface ProfileData {
@@ -17,7 +17,7 @@ interface ProfileData {
 
 const ProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { token } = useUser(); // Utiliser le contexte pour récupérer le token
+  const { token } = useUser(); // Utilisation du hook pour récupérer le token depuis le contexte
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,17 +39,17 @@ const ProfilePage: React.FC = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:3000/user/profile/${id}`,
+          `http://localhost:3000/user/${id}/profilePage`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Utiliser le token du contexte
+              Authorization: `Bearer ${token}`, // Utiliser le token depuis le contexte
             },
           }
         );
 
         setProfile(response.data);
-      } catch (err) {
-        console.error("Erreur lors de la récupération du profil :", err);
+      } catch (error) {
+        console.log("Erreur lors de la récupération du profil :", error);
         setError("Impossible de charger les informations du profil.");
       } finally {
         setLoading(false);
@@ -77,7 +77,7 @@ const ProfilePage: React.FC = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:3000/user/profilePage/${id}`,
+        `http://localhost:3000/user/${id}/profilePage`,
         updatedProfile,
         {
           headers: {
@@ -85,6 +85,7 @@ const ProfilePage: React.FC = () => {
           },
         }
       );
+
       setProfile(response.data); // Mettre à jour le profil avec les nouvelles données
       setEditMode(false);
       setUpdatedProfile({}); // Réinitialiser les champs modifiés

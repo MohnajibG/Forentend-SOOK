@@ -150,11 +150,11 @@
   border: none;
   height: 5vh;
   border-radius: 10px;
-  background-color: #deb9a733;
+  background-color: #dbc4b895;
   width: 50vw;
 }
 .header input:hover {
-  border-radius: 15px 0;
+  border-radius: 15px 15px 0 0;
   background-color: #e6d2c8bf;
   transition: 1.1s;
 }
@@ -162,20 +162,20 @@
 .cnt-btn {
   border: none;
   height: 5vh;
-  width: 8vw;
+  width: 9vw;
   border-radius: 3px;
   color: #fff;
-  background-color: #dfa0807d;
+  background-color: #dfa080cd;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
+  border: #2d2d2d8b 1px solid;
 }
 
 .cnt-btn:hover {
-  background-color: #c87660; /* Slightly darker on hover */
-  border-radius: 10px 0;
-  width: 8.2vw;
-
+  background-color: #c87660;
+  border-radius: 10px 10px 0 0;
+  width: 9vw;
   transition: 2.1s;
 }
 
@@ -199,7 +199,7 @@
 .dct-div {
   display: flex;
   align-items: center;
-  gap: 2vw;
+  gap: 4vw;
 }
 .dct-div div {
   background-color: #ffc1bd;
@@ -210,12 +210,10 @@
   align-items: center;
   justify-content: center;
 }
-.dct-div div:hover {
-  transform: matrix(3);
-}
+
 .header-inpt-btn {
   display: flex;
-  gap: 20px;
+  gap: 4vw;
   align-items: center;
 }
 /* Media Queries for tablets and smaller screens */
