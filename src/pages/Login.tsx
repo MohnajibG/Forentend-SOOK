@@ -69,7 +69,6 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
 
       if (response.data.token) {
         Cookies.set("token", response.data.token, { expires: 45 });
-
         if (response.data.account.username) {
           Cookies.set("username", response.data.account.username, {
             expires: 45,
@@ -84,7 +83,18 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
 
         setUser(userId, response.data.token, username);
 
-        navigate(`/${userId}/profilePage`);
+        // Vérification si le profil est complet
+        const isProfileComplete =
+          response.data.account.sexe &&
+          response.data.account.address &&
+          response.data.account.phoneNumber;
+
+        // Redirection selon l'état du profil
+        if (isProfileComplete) {
+          navigate(`/${userId}/profilePage`);
+        } else {
+          navigate(`/${userId}/profileUpdate`);
+        }
       }
     } catch (error: any) {
       if (error.response && error.response.data) {

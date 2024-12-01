@@ -14,14 +14,13 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
   token,
   userId,
 }) => {
-  const { id } = useParams();
+  const { id } = useParams(); // Récupère l'id de l'URL
   const [address, setAddress] = useState<string>("");
   const [postalCode, setPostalCode] = useState<string>("");
   const [country, setCountry] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [sexe, setSexe] = useState<"Homme" | "Femme" | "Autre" | "-">("-");
-  const [avatar, setAvatar] = useState<File | null>(null); // Typage du fichier pour l'image
-
+  const [avatar, setAvatar] = useState<File | null>(null);
   const [dateOfBorn, setDateOfBorn] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -30,11 +29,14 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token || !id) return;
+    if (!token || !userId) {
+      console.log("Token ou userId manquants");
+      return; // Assurez-vous que token et userId sont présents
+    }
 
-    // Fonction pour récupérer les informations du profil
-    const fetchprofileUpdateData = async () => {
-      setLoading(true); // Active le loading spinner
+    const fetchProfileData = async () => {
+      setLoading(true);
+      console.log("Chargement des données du profil...");
 
       try {
         const response = await axios.get(
@@ -46,15 +48,16 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
           }
         );
 
-        const profileUpdateData = response.data;
+        const profileData = response.data;
+        console.log("Données récupérées :", profileData); // Log des données récupérées
 
         // Remplir les champs avec les données récupérées
-        setAddress(profileUpdateData.address || "");
-        setPostalCode(profileUpdateData.postalCode || "");
-        setCountry(profileUpdateData.country || "");
-        setPhoneNumber(profileUpdateData.phoneNumber || "");
-        setSexe(profileUpdateData.sexe || "Homme");
-        setDateOfBorn(profileUpdateData.dateOfBorn || "");
+        setAddress(profileData.address || "");
+        setPostalCode(profileData.postalCode || "");
+        setCountry(profileData.country || "");
+        setPhoneNumber(profileData.phoneNumber || "");
+        setSexe(profileData.sexe || "Homme");
+        setDateOfBorn(profileData.dateOfBorn || "");
       } catch (error) {
         console.error(
           "Erreur lors de la récupération des données du profil",
@@ -62,18 +65,19 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
         );
         setError("Impossible de charger les informations du profil.");
       } finally {
-        setLoading(false); // Désactive le loading spinner
+        setLoading(false);
       }
     };
 
-    fetchprofileUpdateData();
-  }, [id]);
+    fetchProfileData();
+  }, [token, userId]);
 
+  // Gérer la soumission du formulaire
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true); // Active le spinner
-    setError(null); // Réinitialise les erreurs
-    setSuccess(null); // Réinitialise le succès
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
 
     if (!token) {
       setLoading(false);
@@ -81,39 +85,47 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
       return;
     }
 
-    if (!id) {
+    if (!userId || !id) {
       setLoading(false);
       setError("L'ID utilisateur est manquant.");
       return;
     }
 
     try {
+      // Créer un objet FormData pour inclure l'avatar
+      const formData = new FormData();
+      formData.append("address", address);
+      formData.append("phoneNumber", phoneNumber);
+      formData.append("postalCode", postalCode);
+      formData.append("country", country);
+      formData.append("sexe", sexe);
+      formData.append("dateOfBorn", dateOfBorn);
+
+      if (avatar) {
+        formData.append("avatar", avatar);
+      }
+
+      // Envoi de la requête PUT
       await axios.put(
         `http://localhost:3000/user/${userId}/profileUpdate`,
-        {
-          address,
-          phoneNumber,
-          postalCode,
-          country,
-          sexe, // Ajout de sexe
-          dateOfBorn, // Ajout de date de naissance
-        },
+        formData,
         {
           headers: {
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
       setSuccess("Profil mis à jour avec succès !");
-      setTimeout(() => navigate("/"), 3000); // Redirection après succès
+      setTimeout(() => navigate("/"), 3000); // Rediriger après succès
     } catch (error) {
       console.error("Erreur lors de la mise à jour du profil:", error);
       setError(
         "Une erreur s'est produite lors de la mise à jour de votre profil."
       );
     } finally {
-      setLoading(false); // Désactive le spinner
+      setLoading(false);
     }
   };
 

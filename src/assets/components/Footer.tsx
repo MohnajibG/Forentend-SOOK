@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
       <p>
         Réalisé par <span>Najib</span> - Retrouvez mon travail sur{" "}
         <a
-          href="https://github.com/ton-github"
+          href="https://github.com/MohnajibG"
           target="_blank"
           rel="noopener noreferrer"
           className="github-link"

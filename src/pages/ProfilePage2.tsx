@@ -48,7 +48,6 @@ const ProfilePage: React.FC = () => {
         );
 
         setProfile(response.data);
-        console.log(response.data);
       } catch (error) {
         console.log("Erreur lors de la récupération du profil :", error);
         setError("Impossible de charger les informations du profil.");

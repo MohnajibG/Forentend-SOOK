@@ -123,7 +123,7 @@ const Publish: React.FC = () => {
             <h3>Couleur:</h3>
             <input
               type="text"
-              placeholder="ex: L / 40 / 12"
+              placeholder="ex: Vert, Rose, Bleu"
               value={color}
               onChange={(e) => setColor(e.target.value)}
             />
@@ -156,7 +156,7 @@ const Publish: React.FC = () => {
             />
           </div>
 
-          <button type="submit">Envoyer</button>
+          <button>Envoyer</button>
         </div>
       </form>
     </main>

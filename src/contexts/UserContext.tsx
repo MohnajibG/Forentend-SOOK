@@ -16,7 +16,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(
+    Cookies.get("token") || null
+  );
 
   // Fonction pour mettre à jour les valeurs du contexte
   const setUser = (id: string, newToken: string, name: string) => {

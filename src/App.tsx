@@ -18,18 +18,6 @@ import ProfilePage from "./pages/ProfilePage";
 import Publish from "./pages/Publish";
 import Footer from "./assets/components/Footer";
 
-// Composant pour rediriger si connecté
-const RedirectIfLoggedIn = ({ children }) => {
-  const { token } = useUser();
-  return token ? <Navigate to="/home" replace /> : children;
-};
-
-// Composant pour protéger les routes
-const PrivateRoute = ({ children }) => {
-  const { token } = useUser();
-  return token ? children : <Navigate to="/login" replace />;
-};
-
 function App() {
   const { setUser, token, username, userId, logout } = useUser();
 
@@ -47,7 +35,7 @@ function App() {
   // Mettre à jour les cookies lorsque l'état utilisateur change
   useEffect(() => {
     if (token) {
-      Cookies.set("token", token, { expires: 45 });
+      Cookies.set("token", token, { expires: 45, path: "/", secure: true });
     } else {
       Cookies.remove("token");
     }
@@ -69,62 +57,47 @@ function App() {
     <UserProvider>
       <Router>
         <Header token={token} logout={logout} />
+
         <Routes>
           {/* Redirige "/" vers "/home" */}
           <Route path="/" element={<Navigate to="/home" replace />} />
 
-          {/* Page login accessible uniquement si déconnecté */}
+          {/* Page accessible uniquement si l'utilisateur n'est pas connecté */}
           <Route
             path="/login"
             element={
-              <RedirectIfLoggedIn>
+              token ? (
+                <Navigate to="/home" replace />
+              ) : (
                 <Login setUser={setUser} />
-              </RedirectIfLoggedIn>
+              )
             }
           />
-
-          {/* Page signup accessible uniquement si déconnecté */}
           <Route
             path="/signup"
             element={
-              <RedirectIfLoggedIn>
+              token ? (
+                <Navigate to="/home" replace />
+              ) : (
                 <Signup setUser={setUser} />
-              </RedirectIfLoggedIn>
+              )
             }
           />
 
-          {/* Route accessible par tous */}
+          {/* Routes normales */}
           <Route path="/home" element={<Home />} />
-
-          {/* Routes protégées */}
           <Route
             path="/:id/profileUpdate"
             element={
-              <PrivateRoute>
-                <ProfileUpdate
-                  username={username}
-                  token={token}
-                  userId={userId}
-                />
-              </PrivateRoute>
+              <ProfileUpdate
+                username={username}
+                token={token}
+                userId={userId}
+              />
             }
           />
-          <Route
-            path="/:id/profilePage"
-            element={
-              <PrivateRoute>
-                <ProfilePage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/publish"
-            element={
-              <PrivateRoute>
-                <Publish />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/:id/profilePage" element={<ProfilePage />} />
+          <Route path="/publish" element={<Publish />} />
 
           {/* Page 404 */}
           <Route path="*" element={<NoMatch />} />
