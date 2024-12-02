@@ -50,7 +50,7 @@ function App() {
               />
             }
           />
-          <Route path="/profilePage" element={<ProfilePage />} />
+          <Route path="/profilePage/:id" element={<ProfilePage />} />
           <Route path="/publish" element={<Publish />} />
 
           {/* Page 404 */}

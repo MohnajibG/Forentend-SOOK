@@ -42,12 +42,14 @@ const ProfilePage: React.FC = () => {
           `http://localhost:3000/user/profilePage/${id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Utiliser le token depuis le contexte
+              Authorization: `Bearer ${token}`,
             },
           }
         );
 
         setProfile(response.data);
+        console.log("hello");
+
         console.log(response.data);
       } catch (error) {
         console.log("Erreur lors de la récupération du profil :", error);

@@ -64,7 +64,7 @@ const Header: React.FC<HeaderProps> = () => {
                   {userId && (
                     <li>
                       <Link
-                        to={`/${userId}/profilePage`}
+                        to={`/profilePage/${userId}`}
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Profil
