@@ -5,7 +5,7 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import Cookies from "js-cookie";
+import Cookies from "js-cookie"; // Bibliothèque pour manipuler les cookies dans le navigateur.
 
 import { UserContextType } from "../types/types";
 
@@ -14,66 +14,45 @@ const UserContext = createContext<UserContextType | null>(null);
 export const UserProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  // États pour l'utilisateur
   const [userId, setUserId] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(
-    Cookies.get("token") || null
-  );
+  const [token, setToken] = useState<string | null>(null);
 
-  // Fonction pour mettre à jour les valeurs du contexte
+  // Fonction pour définir l'utilisateur
   const setUser = (id: string, newToken: string, name: string) => {
     setUserId(id);
     setToken(newToken);
     setUsername(name);
 
-    Cookies.set("userId", id, { expires: 7 });
+    // Stocker les informations dans les cookies
+    Cookies.set("userId", id, { expires: 7 }); // Expire dans 7 jours
     Cookies.set("username", name, { expires: 7 });
     Cookies.set("token", newToken, { expires: 7 });
   };
 
-  // Fonction de déconnexion
+  // Fonction pour déconnecter l'utilisateur
   const logout = () => {
     setUserId(null);
     setUsername(null);
     setToken(null);
+
+    // Supprimer les cookies
     Cookies.remove("userId");
     Cookies.remove("username");
     Cookies.remove("token");
   };
 
-  // Lecture initiale des cookies
+  // Récupérer les cookies lorsque le composant se charge
   useEffect(() => {
-    const storedToken = Cookies.get("token");
-    const storedUsername = Cookies.get("username");
     const storedUserId = Cookies.get("userId");
+    const storedUsername = Cookies.get("username");
+    const storedToken = Cookies.get("token");
 
-    if (storedToken && storedUsername && storedUserId) {
-      setToken(storedToken);
-      setUserId(storedUserId);
-      setUsername(storedUsername);
+    if (storedUserId && storedUsername && storedToken) {
+      setUser(storedUserId, storedToken, storedUsername);
     }
-  }, []);
-
-  // Mise à jour automatique lors d'un changement des cookies
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const storedToken = Cookies.get("token");
-      const storedUsername = Cookies.get("username");
-      const storedUserId = Cookies.get("userId");
-
-      if (
-        storedToken !== token ||
-        storedUsername !== username ||
-        storedUserId !== userId
-      ) {
-        setToken(storedToken || null);
-        setUserId(storedUserId || null);
-        setUsername(storedUsername || null);
-      }
-    }, 1000); // Vérifie les cookies toutes les secondes
-
-    return () => clearInterval(interval); // Nettoyage à la désactivation
-  }, [token, username, userId]);
+  }, []); // L'effet ne s'exécute qu'une fois, au montage du composant
 
   return (
     <UserContext.Provider value={{ username, userId, token, setUser, logout }}>
@@ -82,6 +61,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
+// Hook personnalisé pour accéder au contexte de l'utilisateur
 export const useUser = (): UserContextType => {
   const context = useContext(UserContext);
   return (

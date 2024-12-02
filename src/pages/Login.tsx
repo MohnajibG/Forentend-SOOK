@@ -1,20 +1,15 @@
-import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import login from "../assets/img/backgroudLogin.webp";
-import Cookies from "js-cookie";
-import "../assets/styles/login.css";
+import { useUser } from "../contexts/UserContext"; // Importez useUser pour accéder au contexte utilisateur
+import axios from "axios";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
 import { toast } from "react-toastify"; // Import de react-toastify
 import "react-toastify/dist/ReactToastify.css"; // Import du CSS de react-toastify
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "../assets/styles/login.css";
+import login from "../assets/img/backgroudLogin.webp";
 
-interface LoginProps {
-  setUser: (userId: string, token: string, username: string) => void;
-}
-
-const Login: React.FC<LoginProps> = ({ setUser }) => {
+const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -22,11 +17,12 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const { setUser } = useUser(); // Utilisez useUser pour obtenir setUser depuis le contexte
 
   // Fonction pour afficher des notifications d'erreur avec react-toastify
   const showErrorToast = (message: string) => {
     toast.error(message, {
-      position: "top-right", // Utilisation d'une chaîne de caractères pour la position
+      position: "top-right",
       autoClose: 5000,
     });
   };
@@ -44,7 +40,7 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
       return;
     }
 
-    // Validation basique de l'email (tu pourrais aller plus loin si nécessaire)
+    // Validation basique de l'email
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(email)) {
       setErrorMessage("Veuillez entrer un email valide.");
@@ -53,7 +49,7 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
       return;
     }
 
-    // Validation du mot de passe (minimum 6 caractères)
+    // Validation du mot de passe
     if (password.length < 8) {
       setErrorMessage("Le mot de passe doit comporter au moins 8 caractères.");
       showErrorToast("Le mot de passe doit comporter au moins 8 caractères.");
@@ -66,34 +62,27 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
         email,
         password,
       });
+      console.log(response.data.token);
 
       if (response.data.token) {
-        Cookies.set("token", response.data.token, { expires: 45 });
-        if (response.data.account.username) {
-          Cookies.set("username", response.data.account.username, {
-            expires: 45,
-          });
-        }
-        if (response.data.userId) {
-          Cookies.set("userId", response.data.userId, { expires: 1 });
-        }
+        // Mettez à jour le contexte et les cookies avec les données reçues
+        setUser(
+          response.data.userId,
+          response.data.token,
+          response.data.account.username
+        );
 
-        const userId = response.data.userId;
-        const username = response.data.account.username;
-
-        setUser(userId, response.data.token, username);
-
-        // Vérification si le profil est complet
+        // Vérifiez si le profil est complet
         const isProfileComplete =
           response.data.account.sexe &&
           response.data.account.address &&
           response.data.account.phoneNumber;
 
-        // Redirection selon l'état du profil
+        // Redirection en fonction de l'état du profil
         if (isProfileComplete) {
-          navigate(`/${userId}/profilePage`);
+          navigate(`/profilePage/${response.data.userId}`);
         } else {
-          navigate(`/${userId}/profileUpdate`);
+          navigate(`/profileUpdate/${response.data.userId}`);
         }
       }
     } catch (error: any) {

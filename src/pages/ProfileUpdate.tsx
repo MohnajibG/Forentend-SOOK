@@ -40,7 +40,7 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/user/${userId}/profileUpdate`,
+          `http://localhost:3000/user/profileUpdate/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -107,7 +107,7 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
 
       // Envoi de la requête PUT
       await axios.put(
-        `http://localhost:3000/user/${userId}/profileUpdate`,
+        `http://localhost:3000/user/profileUpdate/${userId}`,
         formData,
         {
           headers: {

@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import Cookies from "js-cookie";
 import { UserProvider, useUser } from "./contexts/UserContext";
 import {
   BrowserRouter as Router,
@@ -19,39 +17,7 @@ import Publish from "./pages/Publish";
 import Footer from "./assets/components/Footer";
 
 function App() {
-  const { setUser, token, username, userId, logout } = useUser();
-
-  // Charger les cookies et mettre à jour le contexte utilisateur
-  useEffect(() => {
-    const storedToken = Cookies.get("token");
-    const storedUsername = Cookies.get("username");
-    const storedUserId = Cookies.get("userId");
-
-    if (storedToken && storedUsername && storedUserId) {
-      setUser(storedUserId, storedToken, storedUsername);
-    }
-  }, [setUser]);
-
-  // Mettre à jour les cookies lorsque l'état utilisateur change
-  useEffect(() => {
-    if (token) {
-      Cookies.set("token", token, { expires: 45, path: "/", secure: true });
-    } else {
-      Cookies.remove("token");
-    }
-
-    if (username) {
-      Cookies.set("username", username, { expires: 45 });
-    } else {
-      Cookies.remove("username");
-    }
-
-    if (userId) {
-      Cookies.set("userId", userId, { expires: 45 });
-    } else {
-      Cookies.remove("userId");
-    }
-  }, [token, username, userId]);
+  const { token, username, userId, logout } = useUser();
 
   return (
     <UserProvider>
@@ -65,29 +31,17 @@ function App() {
           {/* Page accessible uniquement si l'utilisateur n'est pas connecté */}
           <Route
             path="/login"
-            element={
-              token ? (
-                <Navigate to="/home" replace />
-              ) : (
-                <Login setUser={setUser} />
-              )
-            }
+            element={token ? <Navigate to="/home" replace /> : <Login />}
           />
           <Route
             path="/signup"
-            element={
-              token ? (
-                <Navigate to="/home" replace />
-              ) : (
-                <Signup setUser={setUser} />
-              )
-            }
+            element={token ? <Navigate to="/home" replace /> : <Signup />}
           />
 
           {/* Routes normales */}
           <Route path="/home" element={<Home />} />
           <Route
-            path="/:id/profileUpdate"
+            path="/profileUpdate/:id"
             element={
               <ProfileUpdate
                 username={username}
@@ -96,7 +50,7 @@ function App() {
               />
             }
           />
-          <Route path="/:id/profilePage" element={<ProfilePage />} />
+          <Route path="/profilePage" element={<ProfilePage />} />
           <Route path="/publish" element={<Publish />} />
 
           {/* Page 404 */}

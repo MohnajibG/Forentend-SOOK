@@ -2,16 +2,12 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import signup from "../assets/img/backgroundsignup.jpg";
-import Cookies from "js-cookie";
-import "../assets/styles/signup.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Icônes de visibilité des mots de passe
 import { ClipLoader } from "react-spinners"; // Importation du Spinner
+import { useUser } from "../contexts/UserContext"; // Importez useUser pour accéder au contexte
+import "../assets/styles/signup.css";
 
-type SignupProps = {
-  setUser: (userId: string, token: string, username: string) => void; // Ajouter setUser ici
-};
-
-const Signup: React.FC<SignupProps> = ({ setUser }) => {
+const Signup: React.FC = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +19,7 @@ const Signup: React.FC<SignupProps> = ({ setUser }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const { setUser } = useUser(); // Utilisez useUser pour accéder à setUser depuis le contexte
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -64,11 +61,6 @@ const Signup: React.FC<SignupProps> = ({ setUser }) => {
         // Récupère le token, le userId, et le username
         const { token, userId } = response.data;
         const username = response.data.account.username;
-
-        // Enregistre les informations dans les cookies
-        Cookies.set("token", token);
-        Cookies.set("username", username);
-        Cookies.set("userId", userId);
 
         // Passe les informations à setUser pour mettre à jour le contexte
         setUser(userId, token, username);

@@ -39,7 +39,7 @@ const ProfilePage: React.FC = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:3000/user/${id}/profilePage`,
+          `http://localhost:3000/user/profilePage/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Utiliser le token depuis le contexte
@@ -78,7 +78,7 @@ const ProfilePage: React.FC = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:3000/user/${id}/profilePage`,
+        `http://localhost:3000/user/profilePage/${id}`,
         updatedProfile,
         {
           headers: {
