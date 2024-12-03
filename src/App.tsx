@@ -27,7 +27,6 @@ function App() {
         <Routes>
           {/* Redirige "/" vers "/home" */}
           <Route path="/" element={<Navigate to="/home" replace />} />
-
           {/* Page accessible uniquement si l'utilisateur n'est pas connecté */}
           <Route
             path="/login"
@@ -37,7 +36,6 @@ function App() {
             path="/signup"
             element={token ? <Navigate to="/home" replace /> : <Signup />}
           />
-
           {/* Routes normales */}
           <Route path="/home" element={<Home />} />
           <Route

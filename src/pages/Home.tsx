@@ -32,7 +32,11 @@ const Home: React.FC = () => {
       </div>
       {username ? (
         <div className="welcom-container">
-          <h2>Bonjour, {username} !</h2>
+          <h2>
+            Bonjour,{" "}
+            {username.charAt(0).toUpperCase() + username.slice(1).toLowerCase()}{" "}
+            !
+          </h2>
           <p>Merci de vous être connecté. Profitez de nos fonctionnalités !</p>
           {/* Modification ici pour la navigation */}
           <button className="home-btn" onClick={() => navigate("/publish")}>

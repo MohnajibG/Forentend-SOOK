@@ -66,7 +66,7 @@ const Signup: React.FC = () => {
         setUser(userId, token, username);
 
         // Redirige vers la page profil avec l'ID de l'utilisateur
-        navigate(`/${userId}/profileUpdate`);
+        navigate(`/profileUpdate/${userId}`);
       } else {
         setErrorMessage("Erreur inattendue lors de l'inscription.");
       }

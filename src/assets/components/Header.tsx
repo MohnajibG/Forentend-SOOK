@@ -4,6 +4,8 @@ import { useUser } from "../../contexts/UserContext";
 import { HeaderProps } from "../../types/types";
 import logo from "../img/LOGO.png";
 import { CgProfile } from "react-icons/cg";
+import { BsFillBasket3Fill } from "react-icons/bs";
+
 import "../styles/header.css";
 
 const Header: React.FC<HeaderProps> = () => {
@@ -73,7 +75,7 @@ const Header: React.FC<HeaderProps> = () => {
                   )}
                   <li>
                     <Link to="/settings" onClick={() => setIsMenuOpen(false)}>
-                      Réglages
+                      Panier <BsFillBasket3Fill />
                     </Link>
                   </li>
                   <li>

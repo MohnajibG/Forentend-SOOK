@@ -1,7 +1,7 @@
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useLocation, Navigate } from "react-router-dom";
-import CheckoutForm from "../assets/components/";
+import CheckoutForm from "../assets/components/CheckoutForm";
 import { useUser } from "../contexts/UserContext"; // Assure-toi que tu utilises le context pour récupérer le token
 
 const stripePromise = loadStripe(
@@ -10,21 +10,28 @@ const stripePromise = loadStripe(
 
 const Payment = () => {
   const location = useLocation();
-  const { title, price } = location.state;
+  const { title, price } = location.state || {}; // Sécuriser l'accès à title et price
+  const { token } = useUser(); // Récupérer le token de l'utilisateur depuis le contexte
 
+  if (!title || !price) {
+    return <Navigate to="/home" />; // Si title ou price est manquant, rediriger
+  }
+
+  // Configurer les options Stripe
   const options = {
-    mode: "payment",
-    amount: Number((price * 100).toFixed(0)),
-    currency: "eur",
+    clientSecret: "your_client_secret_here", // Génère un clientSecret côté serveur
+    appearance: {
+      theme: "stripe" as "stripe", // Utilise le type "stripe" pour theme
+    },
   };
 
   return token ? (
     <div>
       <h3 className="payment">
-        {title}Montant à regler {price}€
+        {title} - Montant à régler : {price}€
       </h3>
       <Elements stripe={stripePromise} options={options}>
-        <CheckoutForm />
+        <CheckoutForm title={title} price={price} />
       </Elements>
     </div>
   ) : (

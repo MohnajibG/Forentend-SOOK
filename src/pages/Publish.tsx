@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext"; // Assure-toi que tu utilises le context pour récupérer le token
 
 import background from "../assets/img/background-publish.webp";
-
 import "../assets/styles/publish.css";
+
 const Publish: React.FC = () => {
-  const { token } = useUser(); // Récupérer le token depuis le contexte
+  const navigate = useNavigate(); // Hook pour rediriger
+  const { token } = useUser(); // Récupérer le token du contexte d'utilisateur
+
+  // Déclaration des états du formulaire
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -16,7 +19,8 @@ const Publish: React.FC = () => {
   const [brand, setBrand] = useState("");
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
-  const [picture, setPicture] = useState<File | null>(null); // Typage du fichier pour l'image
+  const [pictures, setPictures] = useState<File[]>([]); // Tableau pour plusieurs images
+  const [message, setMessage] = useState<string | null>(null); // Message de succès ou d'erreur
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -36,10 +40,10 @@ const Publish: React.FC = () => {
       formData.append("size", size);
       formData.append("color", color);
 
-      // Ajouter l'image si elle est présente
-      if (picture) {
-        formData.append("picture", picture);
-      }
+      // Ajouter les images si elles sont présentes
+      pictures.forEach((picture) => {
+        formData.append("pictures", picture);
+      });
 
       const response = await axios.post(
         "http://localhost:3000/user/offer/publish",
@@ -53,9 +57,15 @@ const Publish: React.FC = () => {
       );
 
       console.log("Offre publiée avec succès:", response.data);
-      // Rediriger ou gérer le succès ici
+      setMessage("Votre produit a été publié avec succès !");
+
+      // Rediriger après 3 secondes
+      setTimeout(() => {
+        navigate("/home"); // Redirige vers la page d'accueil
+      }, 3000);
     } catch (error) {
       console.error("Erreur lors de la publication de l'offre:", error);
+      setMessage("Une erreur est survenue lors de la publication de l'offre.");
     }
   };
 
@@ -67,22 +77,33 @@ const Publish: React.FC = () => {
     <main className="main-publish">
       <img src={background} alt="image backgroud" />
       <form className="publish" onSubmit={handleSubmit}>
-        <h2>Publier votre article </h2>
+        <h2>Publier votre article</h2>
         <div className="publish">
           <div className="input-picture">
-            <label htmlFor="picture">+ Ajouter votre photo</label>
+            <label htmlFor="pictures">+ Ajouter vos photos</label>
             <input
-              id="picture"
+              id="pictures"
               type="file"
+              multiple
               style={{ display: "none" }}
               onChange={(e) => {
-                setPicture(e.target.files ? e.target.files[0] : null);
+                const files = e.target.files ? Array.from(e.target.files) : [];
+                setPictures(files); // Mettre à jour le tableau d'images
               }}
             />
-            {picture && (
-              <img src={URL.createObjectURL(picture)} alt="Image preview" />
+            {pictures.length > 0 && (
+              <div className="image-preview">
+                {pictures.map((picture, index) => (
+                  <img
+                    key={index}
+                    src={URL.createObjectURL(picture)}
+                    alt={`Image preview ${index + 1}`}
+                  />
+                ))}
+              </div>
             )}
           </div>
+          {/* Inputs pour chaque champ du formulaire */}
           <div className="input-publish">
             <h3>Titre:</h3>
             <input
@@ -156,9 +177,12 @@ const Publish: React.FC = () => {
             />
           </div>
 
-          <button>Envoyer</button>
+          <button type="submit">Envoyer</button>
         </div>
       </form>
+
+      {/* Afficher un message de succès ou d'erreur */}
+      {message && <div className="message">{message}</div>}
     </main>
   );
 };

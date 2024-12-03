@@ -1,20 +1,14 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { useUser } from "../contexts/UserContext"; // Assurez-vous d'importer useUser
+import { useParams, useNavigate } from "react-router-dom";
 import "../assets/styles/profileUpdate.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-type profileUpdateProps = {
-  username: string | null;
-  token: string | null;
-  userId: string | null;
-};
+const ProfileUpdate: React.FC = () => {
+  const { username, token, userId } = useUser(); // Utilisation du contexte ici
+  const { id } = useParams();
+  const navigate = useNavigate(); // Appeler le hook useNavigate
 
-const ProfileUpdate: React.FC<profileUpdateProps> = ({
-  username,
-  token,
-  userId,
-}) => {
-  const { id } = useParams(); // Récupère l'id de l'URL
   const [address, setAddress] = useState<string>("");
   const [postalCode, setPostalCode] = useState<string>("");
   const [country, setCountry] = useState<string>("");
@@ -22,25 +16,16 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
   const [sexe, setSexe] = useState<"Homme" | "Femme" | "Autre" | "-">("-");
   const [avatar, setAvatar] = useState<File | null>(null);
   const [dateOfBorn, setDateOfBorn] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const navigate = useNavigate();
-
+  // Effectuer les actions de mise à jour du profil, etc.
   useEffect(() => {
-    if (!token || !userId) {
-      console.log("Token ou userId manquants");
-      return; // Assurez-vous que token et userId sont présents
-    }
-
     const fetchProfileData = async () => {
       setLoading(true);
-      console.log("Chargement des données du profil...");
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/user/profileUpdate/${userId}`,
+          `http://localhost:3000/profile/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -49,7 +34,6 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
         );
 
         const profileData = response.data;
-        console.log("Données récupérées :", profileData); // Log des données récupérées
 
         // Remplir les champs avec les données récupérées
         setAddress(profileData.address || "");
@@ -60,11 +44,9 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
         setDateOfBorn(profileData.dateOfBorn || "");
       } catch (error) {
         console.error(
-          "Erreur lors de la récupération des données du profil",
+          // "Erreur lors de la récupération des données du profil",
           error
         );
-        setError("Impossible de charger les informations du profil.");
-      } finally {
         setLoading(false);
       }
     };
@@ -76,18 +58,14 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(null);
 
     if (!token) {
       setLoading(false);
-      setError("Vous devez être connecté pour mettre à jour votre profil.");
       return;
     }
 
     if (!userId || !id) {
       setLoading(false);
-      setError("L'ID utilisateur est manquant.");
       return;
     }
 
@@ -106,134 +84,121 @@ const ProfileUpdate: React.FC<profileUpdateProps> = ({
       }
 
       // Envoi de la requête PUT
-      await axios.put(
-        `http://localhost:3000/user/profileUpdate/${userId}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.put(`http://localhost:3000/profile/${userId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      setSuccess("Profil mis à jour avec succès !");
       setTimeout(() => navigate("/"), 3000); // Rediriger après succès
     } catch (error) {
-      console.error("Erreur lors de la mise à jour du profil:", error);
-      setError(
-        "Une erreur s'est produite lors de la mise à jour de votre profil."
-      );
-    } finally {
+      console.log("Erreur lors de la mise à jour du profil:", error);
       setLoading(false);
     }
   };
 
   return (
-    token && (
-      <div className="main-profileUpdate">
-        <h2>Mon Profil</h2>
-        {error && <p className="error-message">{error}</p>}
-        {success && <p className="success-message">{success}</p>}
+    <div className="main-profileUpdate">
+      <h2>Mon Profil</h2>
 
-        {loading ? (
-          <div className="spinner-container">
-            <div className="spinner"></div>
+      {loading ? (
+        <div className="spinner-container">
+          <div className="spinner"></div>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className="input-picture">
+            <label htmlFor="picture">+ Ajouter votre photo</label>
+            <input
+              id="picture"
+              type="file"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                setAvatar(e.target.files ? e.target.files[0] : null);
+              }}
+            />
+            {avatar && (
+              <img src={URL.createObjectURL(avatar)} alt="Image preview" />
+            )}
           </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <div className="input-picture">
-              <label htmlFor="picture">+ Ajouter votre photo</label>
-              <input
-                id="picture"
-                type="file"
-                style={{ display: "none" }}
-                onChange={(e) => {
-                  setAvatar(e.target.files ? e.target.files[0] : null);
-                }}
-              />
-              {avatar && (
-                <img src={URL.createObjectURL(avatar)} alt="Image preview" />
-              )}
-            </div>
-            <div className="profileUpdate-info">
-              <label htmlFor="username">Nom d'utilisateur</label>
-              <input
-                id="username"
-                type="text"
-                value={username || "Nom d'utilisateur non disponible"}
-                disabled
-              />
+          <div className="profileUpdate-info">
+            <label htmlFor="username">Nom d'utilisateur</label>
+            <input
+              id="username"
+              type="text"
+              value={username || "Nom d'utilisateur non disponible"}
+              disabled
+            />
 
-              <label htmlFor="sexe">Sexe</label>
-              <select
-                id="sexe"
-                value={sexe}
-                onChange={(e) =>
-                  setSexe(e.target.value as "Homme" | "Femme" | "Autre")
-                }
-              >
-                <option value="Homme">Homme</option>
-                <option value="Femme">Femme</option>
-                <option value="Autre">Autre</option>
-              </select>
+            <label htmlFor="sexe">Sexe</label>
+            <select
+              id="sexe"
+              value={sexe}
+              onChange={(e) =>
+                setSexe(e.target.value as "Homme" | "Femme" | "Autre")
+              }
+            >
+              <option value="Homme">Homme</option>
+              <option value="Femme">Femme</option>
+              <option value="Autre">Autre</option>
+            </select>
 
-              <label htmlFor="dateOfBorn">Date de naissance</label>
-              <input
-                type="date"
-                id="dateOfBorn"
-                value={dateOfBorn}
-                onChange={(e) => setDateOfBorn(e.target.value)}
-                required
-              />
+            <label htmlFor="dateOfBorn">Date de naissance</label>
+            <input
+              type="date"
+              id="dateOfBorn"
+              value={dateOfBorn}
+              onChange={(e) => setDateOfBorn(e.target.value)}
+              required
+            />
 
-              <label htmlFor="adresse">Adresse</label>
-              <textarea
-                id="adresse"
-                name="adresse"
-                required
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
+            <label htmlFor="adresse">Adresse</label>
+            <textarea
+              id="adresse"
+              name="adresse"
+              required
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
 
-              <label htmlFor="codepostal">Code postal</label>
-              <input
-                id="codepostal"
-                name="codepostal"
-                type="text"
-                value={postalCode}
-                onChange={(e) => setPostalCode(e.target.value)}
-                required
-              />
+            <label htmlFor="codepostal">Code postal</label>
+            <input
+              id="codepostal"
+              name="codepostal"
+              type="text"
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+              required
+            />
 
-              <label htmlFor="pays">Pays</label>
-              <input
-                id="pays"
-                name="pays"
-                type="text"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                required
-              />
+            <label htmlFor="pays">Pays</label>
+            <input
+              id="pays"
+              name="pays"
+              type="text"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              required
+            />
 
-              <label htmlFor="phoneNumber">Numéro de téléphone :</label>
-              <input
-                className="input"
-                id="telephone"
-                type="tel"
-                placeholder="par ex : +33655000000"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-            </div>
+            <label htmlFor="phoneNumber">Numéro de téléphone :</label>
+            <input
+              className="input"
+              id="telephone"
+              type="tel"
+              placeholder="par ex : +33655000000"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </div>
 
-            <button type="submit" className="button-profileUpdate">
-              Mettre à jour
-            </button>
-          </form>
-        )}
-      </div>
-    )
+          <button type="submit" className="button-profileUpdate">
+            Mettre à jour
+          </button>
+        </form>
+      )}
+    </div>
   );
 };
 
