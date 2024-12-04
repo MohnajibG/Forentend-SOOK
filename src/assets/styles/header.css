@@ -235,6 +235,12 @@
     height: 5vh;
     width: 30vw;
   }
+  .cnt-btn {
+    width: 8vh;
+  }
+  .cnt-btn:hover {
+    width: 8vh;
+  }
 }
 
 /* Media Queries for mobile screens */
