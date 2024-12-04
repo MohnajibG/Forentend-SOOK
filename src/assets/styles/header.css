@@ -242,6 +242,7 @@
   .header {
     gap: 4vw; /* Further reduce the gap */
     padding: 4vw; /* Increase padding for mobile */
+    align-items: center;
   }
 
   .header-btn {
@@ -264,9 +265,6 @@
   .deconnexion {
     height: 6vh;
   }
-  .cnt-btn {
-    width: 15vw;
-  }
 
   .header img {
     height: 10vw;
@@ -280,5 +278,11 @@
     display: flex;
     align-items: center;
     gap: 0;
+  }
+  .cnt-btn {
+    width: 12vh;
+  }
+  .cnt-btn:hover {
+    width: 12vh;
   }
 }
