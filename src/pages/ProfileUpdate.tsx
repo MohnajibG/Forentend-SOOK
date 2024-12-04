@@ -25,7 +25,7 @@ const ProfileUpdate: React.FC = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/profile/${userId}`,
+          `https://site--sook--dnxhn8mdblq5.code.run//profile/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -84,12 +84,16 @@ const ProfileUpdate: React.FC = () => {
       }
 
       // Envoi de la requête PUT
-      await axios.put(`http://localhost:3000/profile/${userId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.put(
+        `https:/site--sook--dnxhn8mdblq5.code.run//profile/${userId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setTimeout(() => navigate("/"), 3000); // Rediriger après succès
     } catch (error) {

@@ -49,13 +49,16 @@ const Signup: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3000/user/signup", {
-        username,
-        email,
-        password,
-        confirmPassword,
-        newsletter,
-      });
+      const response = await axios.post(
+        "https://site--sook--dnxhn8mdblq5.code.run/user/signup",
+        {
+          username,
+          email,
+          password,
+          confirmPassword,
+          newsletter,
+        }
+      );
 
       if (response.data.token && response.data.account.username) {
         // Récupère le token, le userId, et le username

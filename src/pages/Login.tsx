@@ -56,12 +56,14 @@ const Login: React.FC = () => {
       setIsLoading(false);
       return;
     }
-
     try {
-      const response = await axios.post("http://localhost:3000/user/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://site--sook--dnxhn8mdblq5.code.run/user/login",
+        {
+          email,
+          password,
+        }
+      );
       console.log(response.data.token);
 
       if (response.data.token) {

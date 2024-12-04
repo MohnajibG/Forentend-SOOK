@@ -46,7 +46,7 @@ const Publish: React.FC = () => {
       });
 
       const response = await axios.post(
-        "http://localhost:3000/user/offer/publish",
+        "https://site--sook--dnxhn8mdblq5.code.run/user/offer/publish",
         formData,
         {
           headers: {

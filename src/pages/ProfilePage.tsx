@@ -40,7 +40,7 @@ const ProfilePage: React.FC = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:3000/profile/${userId}`,
+          `https://site--sook--dnxhn8mdblq5.code.run/profile/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ const ProfilePage: React.FC = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:3000/user/profilePage/${userId}`,
+        `https://site--sook--dnxhn8mdblq5.code.run//user/profilePage/${userId}`,
         updatedProfile,
         {
           headers: {
