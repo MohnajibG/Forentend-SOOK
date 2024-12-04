@@ -1,72 +1,76 @@
-import {
-  PaymentElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
-import { useState } from "react";
-import axios from "axios";
+// import {
+//   PaymentElement,
+//   useStripe,
+//   useElements,
+// } from "@stripe/react-stripe-js";
+// import { useState } from "react";
+// import axios from "axios";
 
-const CheckoutForm = ({ title, price }) => {
-  const stripe = useStripe();
-  const elements = useElements();
+// // Define a type for props
+// interface CheckoutFormProps {
+//   title: string;
+//   price: number;
+// }
 
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [completed, setCompleted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+// const CheckoutForm = ({ title, price }: CheckoutFormProps) => {
+//   const stripe = useStripe();
+//   const elements = useElements();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setErrorMessage(null);
-    setIsLoading(true);
+//   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+//   const [completed, setCompleted] = useState(false);
+//   const [isLoading, setIsLoading] = useState(false);
 
-    if (!elements) {
-      // Meilleure vérification
-      return;
-    }
+//   const handleSubmit = async (event: { preventDefault: () => void }) => {
+//     event.preventDefault();
+//     setErrorMessage(null);
+//     setIsLoading(true);
 
-    try {
-      const response = await axios.post(
-        "https://lereacteur-vinted-api.herokuapp.com/v2/payment", // Ajout du `https://`
-        {
-          title,
-          amount: price, // Utilisation de la syntaxe plus concise
-        }
-      );
+//     if (!stripe || !elements) {
+//       setErrorMessage("Stripe.js or elements not loaded.");
+//       setIsLoading(false);
+//       return;
+//     }
 
-      const clientSecret = response.data.client_secret;
+//     try {
+//       const response = await axios.post(
+//         "https://lereacteur-vinted-api.herokuapp.com/v2/payment",
+//         { title, amount: price }
+//       );
 
-      const stripeResponse = await stripe.confirmPayment({
-        elements,
-        clientSecret,
-        confirmParams: {
-          return_url: "http://localhost:5173/",
-        },
-        redirect: "if_required",
-      });
+//       const clientSecret = response.data.client_secret;
 
-      if (stripeResponse.error) {
-        setErrorMessage(stripeResponse.error.message);
-      } else if (stripeResponse.paymentIntent.status === "succeeded") {
-        setCompleted(true);
-      }
-    } catch (error) {
-      setErrorMessage("Erreur lors de la transaction : " + error.message);
-    }
+//       const stripeResponse = await stripe.confirmPayment({
+//         elements,
+//         clientSecret,
+//         confirmParams: { return_url: "http://localhost:5173/" },
+//         redirect: "if_required",
+//       });
 
-    setIsLoading(false);
-  };
+//       if (stripeResponse.error) {
+//         setErrorMessage(stripeResponse.error.message);
+//       } else if (stripeResponse.paymentIntent.status === "succeeded") {
+//         setCompleted(true);
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       setErrorMessage("Erreur lors de la transaction : " + error.message);
+//     }
 
-  return completed ? (
-    <p>Paiement effectué</p>
-  ) : (
-    <form onSubmit={handleSubmit}>
-      <PaymentElement />
-      <button type="submit" disabled={!stripe || !elements || isLoading}>
-        Pay
-      </button>
-      {errorMessage && <div>{errorMessage}</div>}
-    </form>
-  );
-};
+//     setIsLoading(false);
+//   };
 
-export default CheckoutForm;
+//   return completed ? (
+//     <p>Paiement effectué avec succès !</p>
+//   ) : (
+//     <form onSubmit={handleSubmit}>
+//       <PaymentElement />
+//       {isLoading && <div>Processing payment...</div>}
+//       <button type="submit" disabled={!stripe || !elements || isLoading}>
+//         Pay
+//       </button>
+//       {errorMessage && <div>{errorMessage}</div>}
+//     </form>
+//   );
+// };
+
+// export default CheckoutForm;

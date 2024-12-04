@@ -38,16 +38,7 @@ function App() {
           />
           {/* Routes normales */}
           <Route path="/home" element={<Home />} />
-          <Route
-            path="/profileUpdate/:id"
-            element={
-              <ProfileUpdate
-                username={username}
-                token={token}
-                userId={userId}
-              />
-            }
-          />
+          <Route path="/profileUpdate/:id" element={<ProfileUpdate />} />
           <Route path="/profilePage/:id" element={<ProfilePage />} />
           <Route path="/publish" element={<Publish />} />
 
