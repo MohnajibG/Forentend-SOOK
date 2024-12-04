@@ -272,6 +272,12 @@
     object-fit: cover;
     border-radius: 10px;
   }
+  .cnt-btn {
+    width: 14vh;
+  }
+  .cnt-btn:hover {
+    width: 14vh;
+  }
 }
 @media (max-width: 375px) {
   .header-inpt-btn {
