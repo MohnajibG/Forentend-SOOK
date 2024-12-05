@@ -1,4 +1,15 @@
 body {
   width: 100vw;
   font-family: "Krub", sans-serif;
+  height: 100%;
 }
+/* header {
+  height: 10%;
+}
+
+footer {
+  height: 10%;
+}
+main {
+  height: 80%;
+} */
