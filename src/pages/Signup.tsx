@@ -2,9 +2,9 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import signup from "../assets/img/backgroundsignup.jpg";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Icônes de visibilité des mots de passe
-import { ClipLoader } from "react-spinners"; // Importation du Spinner
-import { useUser } from "../contexts/UserContext"; // Importez useUser pour accéder au contexte
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ClipLoader } from "react-spinners";
+import { useUser } from "../contexts/UserContext";
 import "../assets/styles/signup.css";
 
 const Signup: React.FC = () => {
@@ -19,7 +19,7 @@ const Signup: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setUser } = useUser(); // Utilisez useUser pour accéder à setUser depuis le contexte
+  const { setUser } = useUser();
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -65,7 +65,6 @@ const Signup: React.FC = () => {
         const { token, userId } = response.data;
         const username = response.data.account.username;
 
-        // Passe les informations à setUser pour mettre à jour le contexte
         setUser(userId, token, username);
 
         // Redirige vers la page profil avec l'ID de l'utilisateur
@@ -81,7 +80,7 @@ const Signup: React.FC = () => {
         setErrorMessage("Erreur lors de l'inscription. Veuillez réessayer.");
       }
     } finally {
-      setIsLoading(false); // Réinitialise l'état de chargement
+      setIsLoading(false);
     }
   };
 

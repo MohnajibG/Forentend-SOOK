@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import hero from "../assets/img/hero.jpg";
 import "../assets/styles/home.css";
-import { useUser } from "../contexts/UserContext"; // Utilisation du contexte
+import { useUser } from "../contexts/UserContext";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { username, token } = useUser(); // Utilisation du hook contextuel pour récupérer username et token
+  const { username, token } = useUser();
 
   useEffect(() => {
-    // Si le username n'est pas récupéré depuis le contexte, on peut vérifier dans les cookies
     if (!username) {
       const storedUsername = Cookies.get("username");
       if (storedUsername) {

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-import { useUser } from "../contexts/UserContext"; // Utilisation du hook personnalisé
+import { useUser } from "../contexts/UserContext";
 
 import "../assets/styles/profilePage.css";
 
@@ -17,7 +17,7 @@ interface ProfileData {
 }
 
 const ProfilePage: React.FC = () => {
-  const { token, userId } = useUser(); // Utilisation du hook pour récupérer le token depuis le contexte
+  const { token, userId } = useUser();
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -82,9 +82,9 @@ const ProfilePage: React.FC = () => {
         }
       );
 
-      setProfile(response.data); // Mettre à jour le profil avec les nouvelles données
+      setProfile(response.data);
       setEditMode(false);
-      setUpdatedProfile({}); // Réinitialiser les champs modifiés
+      setUpdatedProfile({});
     } catch (error) {
       console.error("Erreur lors de la mise à jour du profil :", error);
       setError("Impossible de mettre à jour le profil.");
@@ -94,10 +94,6 @@ const ProfilePage: React.FC = () => {
   if (loading) {
     return;
   }
-
-  // if (error) {
-  //   return <div className="error-message">{error}</div>;
-  // }
 
   return loading ? (
     <div className="spinner">Chargement...</div>

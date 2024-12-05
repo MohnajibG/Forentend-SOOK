@@ -5,7 +5,7 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import Cookies from "js-cookie"; // Bibliothèque pour manipuler les cookies dans le navigateur.
+import Cookies from "js-cookie";
 
 import { UserContextType } from "../types/types";
 
@@ -26,7 +26,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     setUsername(name);
 
     // Stocker les informations dans les cookies
-    Cookies.set("userId", id, { expires: 7 }); // Expire dans 7 jours
+    Cookies.set("userId", id, { expires: 7 });
     Cookies.set("username", name, { expires: 7 });
     Cookies.set("token", newToken, { expires: 7 });
   };
@@ -52,7 +52,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     if (storedUserId && storedUsername && storedToken) {
       setUser(storedUserId, storedToken, storedUsername);
     }
-  }, []); // L'effet ne s'exécute qu'une fois, au montage du composant
+  }, []);
 
   return (
     <UserContext.Provider value={{ username, userId, token, setUser, logout }}>

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useUser } from "../contexts/UserContext"; // Importez useUser pour accéder au contexte utilisateur
+import { useUser } from "../contexts/UserContext";
 import axios from "axios";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
-import { toast } from "react-toastify"; // Import de react-toastify
-import "react-toastify/dist/ReactToastify.css"; // Import du CSS de react-toastify
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 import "../assets/styles/login.css";
 import login from "../assets/img/backgroudLogin.webp";
@@ -17,9 +17,8 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const { setUser } = useUser(); // Utilisez useUser pour obtenir setUser depuis le contexte
+  const { setUser } = useUser();
 
-  // Fonction pour afficher des notifications d'erreur avec react-toastify
   const showErrorToast = (message: string) => {
     toast.error(message, {
       position: "top-right",

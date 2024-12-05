@@ -88,7 +88,7 @@ const Publish: React.FC = () => {
               style={{ display: "none" }}
               onChange={(e) => {
                 const files = e.target.files ? Array.from(e.target.files) : [];
-                setPictures(files); // Mettre à jour le tableau d'images
+                setPictures(files);
               }}
             />
             {pictures.length > 0 && (

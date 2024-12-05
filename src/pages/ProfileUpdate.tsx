@@ -1,13 +1,13 @@
-import { useUser } from "../contexts/UserContext"; // Assurez-vous d'importer useUser
+import { useUser } from "../contexts/UserContext";
 import { useParams, useNavigate } from "react-router-dom";
 import "../assets/styles/profileUpdate.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 const ProfileUpdate: React.FC = () => {
-  const { username, token, userId } = useUser(); // Utilisation du contexte ici
+  const { username, token, userId } = useUser();
   const { id } = useParams();
-  const navigate = useNavigate(); // Appeler le hook useNavigate
+  const navigate = useNavigate();
 
   const [address, setAddress] = useState<string>("");
   const [postalCode, setPostalCode] = useState<string>("");
@@ -18,7 +18,6 @@ const ProfileUpdate: React.FC = () => {
   const [dateOfBorn, setDateOfBorn] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Effectuer les actions de mise à jour du profil, etc.
   useEffect(() => {
     const fetchProfileData = async () => {
       setLoading(true);
@@ -95,7 +94,7 @@ const ProfileUpdate: React.FC = () => {
         }
       );
 
-      setTimeout(() => navigate("/"), 3000); // Rediriger après succès
+      setTimeout(() => navigate("/"), 3000);
     } catch (error) {
       console.log("Erreur lors de la mise à jour du profil:", error);
       setLoading(false);

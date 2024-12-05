@@ -11,7 +11,7 @@ import "../styles/header.css";
 const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
-  const { token, userId, logout } = useUser(); // Utilisation du token
+  const { token, userId, logout } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = () => {
             <button
               className="deconnexion"
               onClick={() => {
-                logout(); // Déconnexion via le token
+                logout();
                 navigate("/home");
               }}
               aria-label="Bouton de déconnexion"
