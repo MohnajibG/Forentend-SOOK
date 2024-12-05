@@ -1,22 +1,22 @@
 tu peux me faire le responsive pour tablette et pour mobile//* Conteneur principal de la page d'accueil */
 .home-container {
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  width: 100vw;
-  height: 70vh;
+  padding: 10% 10% 10% 30%;
+  color: #fff;
   font-family: "Krub", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 
-/* Section du héros avec l'image de fond */
 .hero img {
-  width: 100vw; /* Image occupe toute la largeur de l'écran */
-  height: 100vh; /* Image occupe toute la hauteur de l'écran */
-  object-fit: cover; /* Assure que l'image couvre tout en conservant son ratio */
-  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: -1; /* L'image de fond reste derrière le contenu */
+  z-index: -1;
 }
 
 /* Titre principal de la page d'accueil */
@@ -140,7 +140,8 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
   }
 
   .hero img {
-    height: 60vh;
+    height: 100%;
+    object-fit: cover;
   }
 
   .home-container h1 {

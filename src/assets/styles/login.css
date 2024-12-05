@@ -5,19 +5,18 @@
   font-family: "Krub", sans-serif;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
   position: relative;
 }
 
 .main-login img {
-  width: 100%; /* Largeur à 100% */
-  height: 100vh; /* Hauteur à 100% de la vue */
-  object-fit: cover; /* Permet à l'image de couvrir toute la zone tout en maintenant son ratio */
-  position: fixed; /* Position fixe pour que l'image reste en fond */
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: -1; /* L'image reste derrière tout le contenu */
+  z-index: -1;
 }
 
 .main-login h2 {
