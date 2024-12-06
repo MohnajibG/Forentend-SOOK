@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -26,13 +27,11 @@ const Signup: React.FC = () => {
     event.preventDefault();
     setErrorMessage("");
 
-    // Validation des mots de passe
     if (password !== confirmPassword) {
       setErrorMessage("Les mots de passe ne correspondent pas.");
       return;
     }
 
-    // Validation de l'email avec une regex améliorée
     const isValidEmail =
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     if (!isValidEmail) {
@@ -40,7 +39,6 @@ const Signup: React.FC = () => {
       return;
     }
 
-    // Validation des champs requis
     if (!username || !email || !password || !confirmPassword) {
       setErrorMessage("Tous les champs sont requis.");
       return;
@@ -61,19 +59,16 @@ const Signup: React.FC = () => {
       );
 
       if (response.data.token && response.data.account.username) {
-        // Récupère le token, le userId, et le username
         const { token, userId } = response.data;
         const username = response.data.account.username;
 
         setUser(userId, token, username);
 
-        // Redirige vers la page profil avec l'ID de l'utilisateur
         navigate(`/profileUpdate/${userId}`);
       } else {
         setErrorMessage("Erreur inattendue lors de l'inscription.");
       }
     } catch (err: any) {
-      // Vérifie si le message d'erreur existe
       if (err.response?.data?.message) {
         setErrorMessage(err.response.data.message);
       } else {

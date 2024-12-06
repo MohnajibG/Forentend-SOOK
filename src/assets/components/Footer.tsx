@@ -13,6 +13,7 @@ const Footer: React.FC = () => {
           rel="noopener noreferrer"
           className="github-link"
         >
+          {" "}
           <FaGithub className="github-icon" /> GitHub
         </a>
       </p>
