@@ -7,6 +7,7 @@ import { CgProfile } from "react-icons/cg";
 import { BsFillBasket3Fill } from "react-icons/bs";
 
 import "../styles/header.css";
+import "../styles/burgerMenu.css";
 
 const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
@@ -27,21 +28,21 @@ const Header: React.FC<HeaderProps> = () => {
   }, [token]);
 
   return (
-    <div className="header">
+    <header className="header">
       <Link to="/home">
         <img src={logo} alt="Le logo de Sook!" />
       </Link>
+      <input
+        className="search"
+        id="search"
+        type="text"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        onKeyDown={handleSearch}
+        placeholder="Recherche"
+        aria-label="Champ de recherche"
+      />
       <div className="header-inpt-btn">
-        <input
-          className="search"
-          id="search"
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          onKeyDown={handleSearch}
-          placeholder="Recherche"
-          aria-label="Champ de recherche"
-        />
         {token ? (
           <div className="dct-div">
             <button
@@ -59,6 +60,9 @@ const Header: React.FC<HeaderProps> = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               <CgProfile />
+            </div>
+            <div className="panier">
+              <BsFillBasket3Fill />
             </div>
             {isMenuOpen && (
               <div className="burger-menu" ref={menuRef}>
@@ -111,7 +115,7 @@ const Header: React.FC<HeaderProps> = () => {
           </div>
         )}
       </div>
-    </div>
+    </header>
   );
 };
 

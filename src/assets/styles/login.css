@@ -32,7 +32,7 @@
 
 .main-login .input {
   width: 60%;
-  height: 4vh;
+  height: 1rem;
   padding: 0.8rem;
   border-radius: 5px;
   font-size: 1rem;
@@ -48,19 +48,19 @@
 }
 
 .toggle-visibility-icon {
-  position: absolute;
-  left: 59%;
-  top: 50%;
+  position: fixed;
+  left: 35vw;
+  top: 60vh;
   cursor: pointer;
   font-size: 1.2rem;
-  color: #aaa;
+  color: #000000;
 }
 
 .login-btn {
   width: 65%;
   padding: 1vh;
   height: 3rem;
-  border-radius: 5px;
+  border-radius: 10px;
   color: #fff;
   background-color: #dfa080ec;
   font-size: 1.3rem;
@@ -71,7 +71,9 @@
 }
 
 .login-btn:hover {
-  background-color: #c87660;
+  background-color: #cf8860;
+  font-size: 1.25rem;
+  transition: 900ms;
 }
 /* Style du paragraphe */
 .signup-link {
