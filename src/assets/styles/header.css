@@ -5,8 +5,11 @@ header {
   justify-content: center;
   align-items: center;
   gap: 30px;
+  font-family: "Krub", sans-serif;
 }
-
+a {
+  text-decoration: none;
+}
 header img {
   height: 50px;
   width: 60px;
@@ -69,7 +72,8 @@ header img {
   align-items: center;
   gap: 4vw;
 }
-.dct-div div {
+.profileUpdate-icon,
+.panier {
   background-color: #ffc1bdd8;
   height: 40px;
   width: 40px;
@@ -77,6 +81,9 @@ header img {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.header-nav {
+  display: none;
 }
 
 .header-inpt-btn {
@@ -87,6 +94,7 @@ header img {
 .panier {
   display: none;
 }
+
 /* Media Queries for tablets and smaller screens */
 @media (max-width: 768px) {
   .header-btn {
@@ -115,12 +123,22 @@ header img {
     display: none;
   }
   .panier {
-    visibility: visible;
-    margin-right: 0rem;
+    display: flex;
+  }
+  .search-nav {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .header-nav {
+    font-weight: bolder;
+    display: flex;
+    justify-content: space-around;
   }
   .dct-div {
     justify-content: space-around;
-    border: #fff 1px solid;
   }
 }
 

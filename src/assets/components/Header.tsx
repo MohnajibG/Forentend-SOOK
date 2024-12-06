@@ -32,16 +32,41 @@ const Header: React.FC<HeaderProps> = () => {
       <Link to="/home">
         <img src={logo} alt="Le logo de Sook!" />
       </Link>
-      <input
-        className="search"
-        id="search"
-        type="text"
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-        onKeyDown={handleSearch}
-        placeholder="Recherche"
-        aria-label="Champ de recherche"
-      />
+      <div className="search-nav">
+        <input
+          className="search"
+          id="search"
+          type="text"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          onKeyDown={handleSearch}
+          placeholder="Recherche"
+          aria-label="Champ de recherche"
+        />
+        {token && (
+          <nav className="header-nav">
+            <p>
+              <Link
+                to={`/profilePage/${userId}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Profil
+              </Link>
+            </p>
+            <p>
+              <Link to="/home" onClick={() => setIsMenuOpen(false)}>
+                Accueil
+              </Link>
+            </p>
+            <p>
+              <Link to="/publish" onClick={() => setIsMenuOpen(false)}>
+                Publier
+              </Link>
+            </p>
+          </nav>
+        )}
+      </div>
+
       <div className="header-inpt-btn">
         {token ? (
           <div className="dct-div">
