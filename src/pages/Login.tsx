@@ -1,12 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import axios from "axios";
+
 import { useState } from "react";
 import { useUser } from "../contexts/UserContext";
-import axios from "axios";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
+
 import "../assets/styles/login.css";
+import "../assets/styles/input.css";
+import "react-toastify/dist/ReactToastify.css";
+
 import login from "../assets/img/backgroudLogin.webp";
 
 const Login: React.FC = () => {
@@ -105,11 +110,11 @@ const Login: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <input
-            className="input"
+            // className="input"
             type="email"
             id="email"
             autoComplete="email"
-            placeholder="Votre Email"
+            placeholder="Email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
@@ -117,10 +122,10 @@ const Login: React.FC = () => {
         </div>
         <div className="password-input">
           <input
-            className="input"
+            // className="input"
             type={isPasswordVisible ? "text" : "password"}
             id="password"
-            placeholder="Votre Mot de passe"
+            placeholder="Mot de passe"
             autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}

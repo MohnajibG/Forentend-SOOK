@@ -1,9 +1,8 @@
-tu peux me faire le responsive pour tablette et pour mobile//* Conteneur principal de la page d'accueil */
 .home-container {
-  padding: 10% 10% 10% 30%;
   color: #fff;
   font-family: "Krub", sans-serif;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
   position: relative;
@@ -19,7 +18,6 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
   z-index: -1;
 }
 
-/* Titre principal de la page d'accueil */
 .home-container h1 {
   padding: 9vw;
   font-size: 5rem;
@@ -42,7 +40,6 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
   transition: 1s;
 }
 
-/* Sous-titre de la page d'accueil */
 .home-container h2 {
   text-align: center;
   font-size: 1.5rem;
@@ -50,7 +47,6 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
   color: #ffffff;
 }
 
-/* Paragraphe général */
 .home-container p {
   padding: 10px;
   font-size: 1rem;
@@ -58,23 +54,22 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
   color: #ffffff;
 }
 
-/* Conteneur de bienvenue */
 .welcom-container {
   color: white;
   padding: 3vh;
   border-radius: 10px;
-  background-color: rgba(211, 178, 142, 0.3);
+  background-color: rgba(227, 192, 153, 0.502);
   width: 30%;
   position: absolute;
   top: 30vh;
   left: 75vw;
-  transform: translateX(-50%); /* Centre horizontalement */
+  transform: translateX(-50%);
   box-shadow: 0px 0px 13px 4px rgba(251, 209, 168, 0.412);
   z-index: 2;
   font-family: "Krub", sans-serif;
 }
 .welcom-container:hover {
-  background-color: rgba(251, 209, 168, 0.412);
+  background-color: rgba(253, 219, 185, 0.659);
   transition: 1s;
 }
 .welcom-container > div {
@@ -87,10 +82,9 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
   margin: 5px;
 }
 
-/* Bouton sur la page d'accueil */
 .home-btn {
   margin: 0 5px;
-  background-color: rgba(133, 149, 166, 0.35);
+  background-color: rgba(133, 149, 166, 0.618);
   color: white;
   font-weight: bold;
   font-size: 1em;
@@ -99,7 +93,7 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
   cursor: pointer;
   transition: background-color 0.3s;
   height: 6vh;
-  width: 50%;
+  width: 90%;
 }
 
 /* Style du bouton lors du survol */
@@ -116,7 +110,7 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
 /* MEDIA QUERIES */
 
 /* Pour les tablettes (écran entre 768px et 1024px) */
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
   .home-container h1 {
     font-size: 1.8rem;
     padding: 2vw;
@@ -131,12 +125,12 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
   .home-btn {
     width: 90%;
   }
-}
+} */
 
 /* Pour les mobiles (écran inférieur à 768px) */
 @media (max-width: 768px) {
   .home-container {
-    height: 60vh;
+    margin-top: 30vh;
   }
 
   .hero img {
@@ -168,7 +162,6 @@ tu peux me faire le responsive pour tablette et pour mobile//* Conteneur princip
   }
 
   .home-btn {
-    width: 50%;
     height: 5vh;
   }
 }

@@ -1,18 +1,16 @@
 .main-signup {
   color: #fff;
   font-family: "Krub", sans-serif;
-  overflow: scroll;
 }
 
 .main-signup img {
   width: 100vw;
   height: 100%;
-  object-fit: cover;
   position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
-  overflow: auto;
+  object-fit: cover;
 }
 
 .signup-container {
@@ -31,8 +29,8 @@
 }
 
 .main-signup h2 {
-  font-size: 2rem;
   color: #fffffff1;
+  font-size: 2rem;
   margin: 1rem;
   text-shadow: 0px 0px 5px #5e463f;
   text-align: center;
@@ -44,7 +42,7 @@
   justify-content: flex-start;
 }
 
-.signup-container form .input {
+/* .signup-container form .input {
   margin-bottom: 1rem;
   border: none;
   width: 100%;
@@ -52,22 +50,22 @@
   font-size: 1rem;
   background-color: rgba(255, 255, 255, 0.7);
   transition: background-color 0.3s;
-}
+} */
 
 .signup-container form .input:hover {
   background-color: rgba(255, 255, 255, 0.85);
 }
 
 .signup-container p {
+  color: #fff;
   font-size: 14px;
   text-align: justify;
   padding: 1vh 0;
-  color: #fff;
 }
 
 .signup-container p span {
-  font-weight: bold;
   color: #dfa080bd;
+  font-weight: bold;
 }
 
 .nl-container {
@@ -88,11 +86,11 @@
 }
 
 .signup-container form button {
+  color: #fff;
   margin-top: 1rem;
   border: none;
   height: 3rem;
   border-radius: 5px;
-  color: #fff;
   background-color: #dfa080bd;
   font-size: 1.3rem;
   font-weight: bold;

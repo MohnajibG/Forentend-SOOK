@@ -135,7 +135,7 @@ header img {
   .header-nav {
     font-weight: bolder;
     display: flex;
-    justify-content: space-around;
+    gap: 20px;
   }
   .dct-div {
     justify-content: space-around;

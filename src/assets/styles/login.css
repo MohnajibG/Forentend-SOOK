@@ -1,12 +1,12 @@
 /* Simplified Styles for the Login Component */
 .main-login {
-  padding: 10% 10% 10% 30%;
-  color: #fff;
+  margin-top: 5rem;
   font-family: "Krub", sans-serif;
+  color: #fff;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: relative;
+  justify-content: center;
+  gap: 5rem;
 }
 
 .main-login img {
@@ -20,26 +20,20 @@
 }
 
 .main-login h2 {
-  padding: 2% 30% 5% 0;
+  text-align: center;
   font-size: 2em;
   text-shadow: 0 0 20px rgba(252, 124, 124, 0.8);
 }
 
 .main-login form {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
+  gap: 20px;
 }
 
-.main-login .input {
-  width: 60%;
-  height: 0.7rem;
-  padding: 0.8rem;
-  border-radius: 5px;
-  font-size: 0.8rem;
-  background-color: rgba(255, 255, 255, 0.7);
-}
-
-.main-login .input:hover {
+.main-login input:hover {
   background-color: rgba(255, 255, 255, 0.854);
 }
 
@@ -48,17 +42,17 @@
 }
 
 .toggle-visibility-icon {
-  position: fixed;
-  left: 35vw;
-  top: 60vh;
+  position: absolute;
+  left: 90%;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
   font-size: 1.2rem;
-  color: #000000;
+  color: #292727;
 }
 
 .login-btn {
   width: 10.1rem;
-  padding: 1vh;
   height: 3rem;
   border-radius: 10px;
   color: #fff;
@@ -66,7 +60,6 @@
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 1rem;
   transition: background-color 0.3s;
 }
 
@@ -75,29 +68,25 @@
   font-size: 1.25rem;
   transition: 900ms;
 }
-/* Style du paragraphe */
 .signup-link {
-  width: 60%;
+  width: 17rem;
   font-weight: bold;
   font-size: 1rem;
   color: #fff;
-  text-align: center;
-  margin-top: 20px;
+  text-align: justify;
 }
 
-/* Style du lien */
 .signup-link a {
   color: #dfa080bd;
-  font-weight: bold;
+  font-weight: 600;
   text-decoration: none;
   transition: color 0.3s, text-shadow 0.3s;
-  text-shadow: 2px 2px 5px rgb(17, 2, 2); /* Ombre du texte */
+  text-shadow: 2px 2px 5px rgb(17, 2, 2);
 }
 
-/* Changer la couleur du lien et l'ombre au survol */
 .signup-link a:hover {
   color: #d6390d;
-  text-shadow: 2px 2px 10px rgb(246, 246, 246); /* Ombre plus marquée */
+  text-shadow: 2px 2px 10px rgb(246, 246, 246);
 }
 
 .error-message {
