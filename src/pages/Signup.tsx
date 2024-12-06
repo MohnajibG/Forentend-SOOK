@@ -1,12 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import signup from "../assets/img/backgroundsignup.jpg";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+
 import { useUser } from "../contexts/UserContext";
+
+import signup from "../assets/img/backgroundsignup.jpg";
+
 import "../assets/styles/signup.css";
+import "../assets/styles/input.css";
+
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -83,95 +88,91 @@ const Signup: React.FC = () => {
     <main className="main-signup">
       <img src={signup} alt="image-background-signup" />
       <h2>S'inscrire</h2>
-      <div className="signup-container">
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          id="username"
+          placeholder="Votre nom"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+          disabled={isLoading}
+        />
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Votre Email"
+          autoComplete="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          disabled={isLoading}
+        />
+
+        <input
+          type={isPasswordVisible ? "text" : "password"}
+          id="password"
+          placeholder="Votre Mot de passe"
+          autoComplete="new-password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          disabled={isLoading}
+        />
+        <span
+          className="toggle-visibility-icon-password "
+          onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+        >
+          {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
+        </span>
+
+        <input
+          type={isConfirmPasswordVisible ? "text" : "password"}
+          id="confirmPassword"
+          placeholder="Confirmer Votre Mot de passe"
+          autoComplete="new-password"
+          value={confirmPassword}
+          onChange={(event) => setConfirmPassword(event.target.value)}
+          disabled={isLoading}
+        />
+        <span
+          className="toggle-visibility-icon-confirmPassword "
+          onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+        >
+          {isConfirmPasswordVisible ? <FaEye /> : <FaEyeSlash />}
+        </span>
+
+        <div className="nl-countainer">
           <input
-            className="input"
-            type="text"
-            id="username"
-            placeholder="Votre nom"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
+            className="checkbox-newsletter"
+            type="checkbox"
+            id="newsletter"
+            checked={newsletter}
+            onChange={() => setNewsletter(!newsletter)}
             disabled={isLoading}
           />
+          <span>S'abonner à la newsletter</span>
+        </div>
 
-          <input
-            className="input"
-            type="email"
-            id="email"
-            placeholder="Votre Email"
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            disabled={isLoading}
-          />
+        <p>
+          En m'inscrivant, je certifie avoir pris connaissance et accepté les
+          Termes et Conditions ainsi que la Politique de Confidentialité de{" "}
+          <span>SOUK!</span>. Je déclare également avoir au moins 18 ans.
+        </p>
 
-          <input
-            className="input"
-            type={isPasswordVisible ? "text" : "password"}
-            id="password"
-            placeholder="Votre Mot de passe"
-            autoComplete="new-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            disabled={isLoading}
-          />
-          <span
-            className="toggle-visibility-icon"
-            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-          >
-            {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
-          </span>
+        {/* Affichage du bouton ou du spinner */}
+        <button disabled={isLoading}>
+          {isLoading ? (
+            <ClipLoader size={20} color="#fff" loading={isLoading} />
+          ) : (
+            "S'inscrire"
+          )}
+        </button>
+        <p className="signup-link">
+          vous avez déja un compte? connectez vous ici{" "}
+          <Link to="/login">Se connecter</Link>
+        </p>
 
-          <input
-            className="input"
-            type={isConfirmPasswordVisible ? "text" : "password"}
-            id="confirmPassword"
-            placeholder="Confirmer Votre Mot de passe"
-            autoComplete="new-password"
-            value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
-            disabled={isLoading}
-          />
-          <span
-            className="toggle-visibility-icon"
-            onClick={() =>
-              setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
-            }
-          >
-            {isConfirmPasswordVisible ? <FaEye /> : <FaEyeSlash />}
-          </span>
-
-          <div className="nl-countainer">
-            <input
-              className="checkbox-newsletter"
-              type="checkbox"
-              id="newsletter"
-              checked={newsletter}
-              onChange={() => setNewsletter(!newsletter)}
-              disabled={isLoading}
-            />
-            <span>S'abonner à la newsletter</span>
-          </div>
-
-          <p>
-            En m'inscrivant, je confirme avoir lu et accepté les Termes &
-            Conditions et Politique de Confidentialité de <span>SOUK!</span>. Je
-            confirme avoir au moins 18 ans.
-          </p>
-
-          {/* Affichage du bouton ou du spinner */}
-          <button disabled={isLoading}>
-            {isLoading ? (
-              <ClipLoader size={20} color="#fff" loading={isLoading} />
-            ) : (
-              "S'inscrire"
-            )}
-          </button>
-
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
-        </form>
-      </div>
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
+      </form>
     </main>
   );
 };
