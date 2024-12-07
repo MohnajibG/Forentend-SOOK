@@ -4,7 +4,9 @@ import axios from "axios";
 import { useUser } from "../contexts/UserContext"; // Assure-toi que tu utilises le context pour récupérer le token
 
 import background from "../assets/img/background-publish.webp";
+
 import "../assets/styles/publish.css";
+import "../assets/styles/button.css";
 
 const Publish: React.FC = () => {
   const navigate = useNavigate(); // Hook pour rediriger
@@ -76,6 +78,7 @@ const Publish: React.FC = () => {
   return (
     <main className="main-publish">
       <img src={background} alt="image backgroud" />
+      <div></div>
       <form className="publish" onSubmit={handleSubmit}>
         <h2>Publier votre article</h2>
         <div className="publish">

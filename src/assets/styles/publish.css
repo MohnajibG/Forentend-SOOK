@@ -1,78 +1,51 @@
-/* Main Publish Styles */
 .main-publish {
   color: #fff;
+  margin-top: 5rem;
+  padding-bottom: 150px;
+
+  color: #fff;
   font-family: "Krub", sans-serif;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5rem;
 }
 
 .main-publish img {
   width: 100%;
-  height: 100%;
+  height: 100vh;
+
   object-fit: cover;
+
   position: fixed;
   top: 0;
   left: 0;
   z-index: -1;
 }
 
-/* Publish Form Styles */
 .publish {
-  position: absolute;
-  top: 15vh;
-  left: 40%;
-  transform: translateX(-50%);
+  margin: 0 2rem;
   display: flex;
+  justify-content: center;
+  /* align-items: center; */
   flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  border-radius: 10px;
-  width: 50%;
-  height: 90vh;
-  z-index: 2;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  padding-bottom: 20vh;
+  gap: 20px;
 }
 
 .publish h2 {
-  font-size: 2.5rem;
-  z-index: 2;
-  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
   text-align: center;
-  padding: 2vh;
-  box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
-  background-color: rgba(249, 200, 208, 0.4);
-  border-radius: 10px;
+  font-size: 2em;
+  text-shadow: 0 0 20px rgba(252, 124, 124, 0.8);
 }
 .publish h3 {
   color: #fefefe;
   font-size: 1rem;
-  margin-bottom: 0.2rem;
-}
-
-/* Input Styles */
-.input-publish {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-bottom: 0.4rem;
-}
-
-.input-publish input {
-  border: none;
-  border-radius: 5px;
-  padding: 0.8rem;
-  font-size: 0.8rem;
-  background-color: rgba(255, 255, 255, 0.7);
-  transition: background-color 0.3s;
-  height: 8px;
-  overflow: auto;
 }
 
 .input-publish input:hover {
   background-color: rgba(255, 255, 255, 0.85);
 }
 
-/* Picture Input Styles */
 .input-picture {
   display: flex;
   align-items: center;
@@ -104,26 +77,10 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Submit Button Styles */
-.publish button {
-  margin-top: 1rem;
-  border: none;
-  height: 3rem;
-  border-radius: 5px;
-  color: #fff;
-  background-color: #dfa080bd;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  width: 50%;
-}
-
 .publish button:hover {
   background-color: #c87660;
 }
 
-/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .publish {
     width: 80%;
