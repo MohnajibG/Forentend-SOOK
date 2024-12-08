@@ -5,7 +5,6 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  position: relative;
 }
 
 .hero img {
@@ -145,5 +144,9 @@
 
   .home-btn {
     height: 5vh;
+  }
+  @media (max-width: 480px) {
+  }
+  @media (max-width: 375px) {
   }
 }

@@ -194,5 +194,6 @@ header img {
   .cnt-btn {
     height: 2rem;
     width: 4rem;
+    font-size: small;
   }
 }
