@@ -1,11 +1,15 @@
 header {
-  margin: 15px auto;
+  margin: 1rem 2rem;
   position: static;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  flex-direction: column;
+  gap: 5px;
   font-family: "Krub", sans-serif;
+}
+header div {
+  display: flex;
 }
 a {
   text-decoration: none;
@@ -22,13 +26,22 @@ header img {
   gap: 2vw;
 }
 
+.logo-nav-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dbc4b8;
+}
+
 .search {
   padding-left: 4vw;
   border: none;
-  height: 5vh;
+  height: 1rem;
   border-radius: 10px;
-  background-color: #dbc4b895;
-  width: 50vw;
+  background-color: #dbc4b8ec;
+  width: 80vw;
 }
 .search:hover {
   border-radius: 15px 15px 0 0;
@@ -54,7 +67,7 @@ header img {
 }
 
 .deconnexion {
-  height: 5vh;
+  height: 3rem;
   width: 8rem;
   border-radius: 10px;
   color: #ffffffd4;
@@ -63,7 +76,6 @@ header img {
 }
 .dct-div .deconnexion:hover {
   background-color: #ff2f2ff4;
-  height: 6vh;
 
   transition: 900ms;
 }
@@ -95,17 +107,14 @@ header img {
   display: none;
 }
 
-/* Media Queries for tablets and smaller screens */
 @media (max-width: 768px) {
   .header-btn {
     gap: 10px;
     display: flex;
-    flex-direction: column;
   }
 
   .header input {
-    padding-left: 3vw; /* Adjust padding for the input */
-    height: 5vh; /* Increase height of input on smaller screens */
+    height: 1rem;
   }
   .header img {
     width: 35px;
@@ -124,13 +133,15 @@ header img {
   }
   .panier {
     display: flex;
+    width: 35px;
+    height: 35px;
   }
   .search-nav {
-    margin-top: 25px;
+    /* margin-top: 25px; */
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 10px;
+    gap: 2px;
   }
   .header-nav {
     font-weight: bolder;
@@ -145,34 +156,33 @@ header img {
 /* Media Queries for mobile screens */
 @media (max-width: 480px) {
   .header {
-    gap: 4vw; /* Further reduce the gap */
-    padding: 4vw; /* Increase padding for mobile */
+    margin: 1rem;
+    gap: 0.2rem;
     align-items: center;
   }
 
   .header input {
-    padding-left: 2vw; /* Reduce padding for mobile */
-    height: 5vh; /* Increase input field height */
-  }
-
-  .header-btn {
-    height: 10vh; /* Increase button height */
-    width: 20vw;
+    height: 0.2rem;
   }
 
   .deconnexion {
-    height: 6vh;
+    height: 2rem;
     width: auto;
+    font-size: 0.6rem;
   }
 
-  .header img {
-    height: 40px;
-    width: 60px;
-    object-fit: cover;
-    border-radius: 10px;
+  .header img,
+  .panier {
+    height: 30px;
+    width: 50px;
+    border-radius: 5px;
   }
   .cnt-btn {
     height: 8vw;
+  }
+  .header-nav {
+    font-size: 12px;
+    gap: 10px;
   }
 }
 @media (max-width: 375px) {

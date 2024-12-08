@@ -122,3 +122,10 @@
 .menu li button:hover {
   background-color: #f0f0f0;
 }
+@media (max-width: 768px) {
+}
+
+@media (max-width: 480px) {
+}
+@media (max-width: 375px) {
+}

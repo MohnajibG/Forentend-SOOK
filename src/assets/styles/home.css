@@ -109,25 +109,6 @@
 
 /* MEDIA QUERIES */
 
-/* Pour les tablettes (écran entre 768px et 1024px) */
-/* @media (max-width: 1024px) {
-  .home-container h1 {
-    font-size: 1.8rem;
-    padding: 2vw;
-    top: 20%;
-  }
-
-  .welcom-container {
-    top: 25vh;
-    left: 70vw;
-  }
-
-  .home-btn {
-    width: 90%;
-  }
-} */
-
-/* Pour les mobiles (écran inférieur à 768px) */
 @media (max-width: 768px) {
   .home-container {
     margin-top: 30vh;
@@ -135,6 +116,7 @@
 
   .hero img {
     height: 100%;
+    width: 100%;
     object-fit: cover;
   }
 

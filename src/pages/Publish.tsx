@@ -80,8 +80,8 @@ const Publish: React.FC = () => {
       <img src={background} alt="image backgroud" />
       <div></div>
       <form className="publish" onSubmit={handleSubmit}>
-        <h2>Publier votre article</h2>
         <div className="publish">
+          <h2>Publier votre article</h2>
           <div className="input-picture">
             <label htmlFor="pictures">+ Ajouter vos photos</label>
             <input
