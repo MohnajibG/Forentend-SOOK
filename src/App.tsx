@@ -17,7 +17,7 @@ import Publish from "./pages/Publish";
 import Footer from "./assets/components/Footer";
 
 function App() {
-  const { token, username, userId, logout } = useUser();
+  const { token, logout } = useUser();
 
   return (
     <UserProvider>

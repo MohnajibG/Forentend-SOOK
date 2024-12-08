@@ -14,3 +14,8 @@ export interface OfferProps {
   title: string;
   price: number;
 }
+
+export interface HeaderProps {
+  token: string | null;
+  logout: () => void;
+}
