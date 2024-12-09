@@ -126,14 +126,30 @@
   }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 480px) {
   .main-signup p {
     font-size: 1rem;
+  }
+  .toggle-visibility-icon-confirmPassword {
+    left: 75%;
+    top: 52%;
+  }
+  .toggle-visibility-icon-password {
+    left: 75%;
+    top: 46%;
   }
 }
 
 @media (max-width: 375px) {
   .main-signup p {
     font-size: 1rem;
+  }
+  .toggle-visibility-icon-confirmPassword {
+    left: 78%;
+    top: 61%;
+  }
+  .toggle-visibility-icon-password {
+    left: 78%;
+    top: 70%;
   }
 }

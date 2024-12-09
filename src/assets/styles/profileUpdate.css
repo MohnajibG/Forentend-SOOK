@@ -1,9 +1,4 @@
-/* Styles for the profileUpdate Component */
 .main-profileUpdate {
-  background-image: url("../img/backgroundsignup.jpg");
-  background-size: cover; /* L'image de fond couvre tout le fond */
-  background-repeat: no-repeat; /* Pas de répétition de l'image */
-  background-position: center; /* Centre l'image de fond */
   color: aliceblue;
   display: flex;
   flex-direction: column;
@@ -20,7 +15,6 @@
   margin-bottom: 1rem;
 }
 
-/* profileUpdate Image Section */
 .profileUpdate-image {
   display: flex;
   align-items: center;

@@ -5,36 +5,24 @@ import { useUser } from "../contexts/UserContext";
 
 import "../assets/styles/profilePage.css";
 
-interface ProfileData {
-  username: string;
-  email: string;
-  address: string;
-  postalCode: string;
-  country: string;
-  phoneNumber: string;
-  sexe: string;
-  dateOfBorn: string;
-}
+import { ProfileDataProps } from "../types/types";
 
 const ProfilePage: React.FC = () => {
   const { token, userId } = useUser();
 
-  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [profile, setProfile] = useState<ProfileDataProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [updatedProfile, setUpdatedProfile] = useState<Partial<ProfileData>>(
-    {}
-  );
+  const [updatedProfile, setUpdatedProfile] = useState<
+    Partial<ProfileDataProps>
+  >({});
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         setLoading(true);
-        setError(null);
 
         if (!token) {
-          setError("Token non disponible. Veuillez vous connecter.");
           setLoading(false);
           return;
         }
@@ -50,15 +38,14 @@ const ProfilePage: React.FC = () => {
 
         setProfile(response.data);
 
-        console.log(response.data);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        setError("Impossible de charger les informations du profil.");
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, [token]);
+  }, [token, userId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -67,11 +54,6 @@ const ProfilePage: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      if (!token) {
-        setError("Token non disponible. Veuillez vous connecter.");
-        return;
-      }
-
       const response = await axios.put(
         `https://site--sook--dnxhn8mdblq5.code.run//user/profilePage/${userId}`,
         updatedProfile,
@@ -87,13 +69,8 @@ const ProfilePage: React.FC = () => {
       setUpdatedProfile({});
     } catch (error) {
       console.error("Erreur lors de la mise à jour du profil :", error);
-      setError("Impossible de mettre à jour le profil.");
     }
   };
-
-  if (loading) {
-    return;
-  }
 
   return loading ? (
     <div className="spinner">Chargement...</div>

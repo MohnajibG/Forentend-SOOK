@@ -19,3 +19,14 @@ export interface HeaderProps {
   token: string | null;
   logout: () => void;
 }
+
+export interface ProfileDataProps {
+  username: string;
+  email: string;
+  address: string;
+  postalCode: string;
+  country: string;
+  phoneNumber: string;
+  sexe: string;
+  dateOfBorn: string;
+}
