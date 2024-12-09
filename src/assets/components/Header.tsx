@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
-import logo from "../img/LOGO1.png";
+import logo from "../img/LOGO.png";
 import { CgProfile } from "react-icons/cg";
 import { BsFillBasket3Fill } from "react-icons/bs";
 

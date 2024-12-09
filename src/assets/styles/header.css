@@ -16,9 +16,10 @@ a {
 }
 header img {
   height: 50px;
-  width: 60px;
-  border-radius: 10px;
+  width: 50px;
+  border-radius: 50%;
   object-fit: cover;
+  border: #000000f9 2px solid;
 }
 
 .header-btn {
@@ -31,7 +32,6 @@ header img {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 10px;
   border-bottom: 1px solid #dbc4b8;
 }
 
@@ -39,9 +39,9 @@ header img {
   padding-left: 4vw;
   border: none;
   height: 1rem;
-  border-radius: 10px;
+  border-radius: 25px;
   background-color: #dbc4b8ec;
-  width: 80vw;
+  width: 85vw;
 }
 .search:hover {
   border-radius: 15px 15px 0 0;
@@ -52,7 +52,7 @@ header img {
 .cnt-btn {
   height: 35px;
   width: 9vw;
-  border-radius: 10px;
+  border-radius: 25px;
   color: #fff;
   background-color: #dfa080ed;
   font-weight: bold;
@@ -62,14 +62,13 @@ header img {
 
 .cnt-btn:hover {
   background-color: #c87660;
-  border-radius: 10px 10px 0 0;
   transition: 2.1s;
 }
 
 .deconnexion {
-  height: 3rem;
+  height: 2.5rem;
   width: 8rem;
-  border-radius: 10px;
+  border-radius: 50px;
   color: #ffffffd4;
   background-color: #da0d0df9;
   font-weight: 800;
@@ -86,14 +85,21 @@ header img {
 }
 .profileUpdate-icon,
 .panier {
-  background-color: #ffc1bdd8;
+  background-color: #ffc1bdf2;
   height: 40px;
   width: 40px;
-  border-radius: 10px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: #000000f9 2px solid;
 }
+
+a {
+  color: rgb(253, 253, 253); /* ou la couleur de votre choix */
+  text-decoration: none;
+}
+
 .header-nav {
   display: none;
 }
@@ -121,8 +127,7 @@ header img {
     height: 35px;
   }
   .deconnexion {
-    height: 5vh;
-    width: 10rem;
+    height: 2.4rem;
   }
   .cnt-btn {
     width: 10vh;
@@ -173,9 +178,9 @@ header img {
 
   .header img,
   .panier {
-    height: 30px;
-    width: 50px;
-    border-radius: 5px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
   }
   .cnt-btn {
     height: 8vw;

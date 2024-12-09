@@ -2,9 +2,10 @@
   color: #fff;
   font-family: "Krub", sans-serif;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   flex-direction: column;
   align-items: center;
+  gap: 2rem;
 }
 
 .hero img {
@@ -18,20 +19,11 @@
 }
 
 .home-container h1 {
-  padding: 9vw;
-  font-size: 5rem;
-  margin-bottom: 1rem;
-  position: absolute;
-  top: 40vh;
-  left: 30vw;
-  transform: translate(-50%, -50%);
-  z-index: 2;
   text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
-  text-align: center;
-  padding: 2vh;
+  font-size: 5rem;
+  padding: 3vh;
   box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
   background-color: rgba(249, 200, 208, 0.4);
-  border-radius: 10px;
   font-family: "Krub", sans-serif;
 }
 .home-container h1:hover {
@@ -55,16 +47,12 @@
 
 .welcom-container {
   color: white;
-  padding: 3vh;
+  padding: 3rem;
   border-radius: 10px;
   background-color: rgba(227, 192, 153, 0.502);
   width: 30%;
-  position: absolute;
-  top: 30vh;
-  left: 75vw;
-  transform: translateX(-50%);
+
   box-shadow: 0px 0px 13px 4px rgba(251, 209, 168, 0.412);
-  z-index: 2;
   font-family: "Krub", sans-serif;
 }
 .welcom-container:hover {
@@ -95,7 +83,6 @@
   width: 90%;
 }
 
-/* Style du bouton lors du survol */
 .home-btn:hover {
   background-color: rgba(249, 200, 208, 0.8);
 }
@@ -109,10 +96,6 @@
 /* MEDIA QUERIES */
 
 @media (max-width: 768px) {
-  .home-container {
-    margin-top: 30vh;
-  }
-
   .hero img {
     height: 100%;
     width: 100%;
@@ -135,8 +118,6 @@
     width: 50%;
     top: 30vh;
     left: 50%;
-    height: 20vh;
-    transform: translateX(-50%);
   }
   .home-container p {
     display: none;

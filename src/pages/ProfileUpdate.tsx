@@ -101,106 +101,103 @@ const ProfileUpdate: React.FC = () => {
     }
   };
 
-  return (
+  return loading ? (
+    <div className="spinner-container">
+      <div className="spinner"></div>
+    </div>
+  ) : (
     <div className="main-profileUpdate">
       <h2>Mon Profil</h2>
-
-      {loading ? (
-        <div className="spinner-container">
-          <div className="spinner"></div>
+      <form onSubmit={handleSubmit}>
+        <div className="input-picture">
+          <label htmlFor="picture">+ Ajouter votre photo</label>
+          <input
+            id="picture"
+            type="file"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              setAvatar(e.target.files ? e.target.files[0] : null);
+            }}
+          />
+          {avatar && (
+            <img src={URL.createObjectURL(avatar)} alt="Image preview" />
+          )}
         </div>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <div className="input-picture">
-            <label htmlFor="picture">+ Ajouter votre photo</label>
-            <input
-              id="picture"
-              type="file"
-              style={{ display: "none" }}
-              onChange={(e) => {
-                setAvatar(e.target.files ? e.target.files[0] : null);
-              }}
-            />
-            {avatar && (
-              <img src={URL.createObjectURL(avatar)} alt="Image preview" />
-            )}
-          </div>
-          <div className="profileUpdate-info">
-            <label htmlFor="username">Nom d'utilisateur</label>
-            <input
-              id="username"
-              type="text"
-              value={username || "Nom d'utilisateur non disponible"}
-              disabled
-            />
+        <div className="profileUpdate-info">
+          <label htmlFor="username">Nom d'utilisateur</label>
+          <input
+            id="username"
+            type="text"
+            value={username || "Nom d'utilisateur non disponible"}
+            disabled
+          />
 
-            <label htmlFor="sexe">Sexe</label>
-            <select
-              id="sexe"
-              value={sexe}
-              onChange={(e) =>
-                setSexe(e.target.value as "Homme" | "Femme" | "Autre")
-              }
-            >
-              <option value="Homme">Homme</option>
-              <option value="Femme">Femme</option>
-              <option value="Autre">Autre</option>
-            </select>
+          <label htmlFor="sexe">Sexe</label>
+          <select
+            id="sexe"
+            value={sexe}
+            onChange={(e) =>
+              setSexe(e.target.value as "Homme" | "Femme" | "Autre")
+            }
+          >
+            <option value="Homme">Homme</option>
+            <option value="Femme">Femme</option>
+            <option value="Autre">Autre</option>
+          </select>
 
-            <label htmlFor="dateOfBorn">Date de naissance</label>
-            <input
-              type="date"
-              id="dateOfBorn"
-              value={dateOfBorn}
-              onChange={(e) => setDateOfBorn(e.target.value)}
-              required
-            />
+          <label htmlFor="dateOfBorn">Date de naissance</label>
+          <input
+            type="date"
+            id="dateOfBorn"
+            value={dateOfBorn}
+            onChange={(e) => setDateOfBorn(e.target.value)}
+            required
+          />
 
-            <label htmlFor="adresse">Adresse</label>
-            <textarea
-              id="adresse"
-              name="adresse"
-              required
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
+          <label htmlFor="adresse">Adresse</label>
+          <textarea
+            id="adresse"
+            name="adresse"
+            required
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
 
-            <label htmlFor="codepostal">Code postal</label>
-            <input
-              id="codepostal"
-              name="codepostal"
-              type="text"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
-              required
-            />
+          <label htmlFor="codepostal">Code postal</label>
+          <input
+            id="codepostal"
+            name="codepostal"
+            type="text"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+            required
+          />
 
-            <label htmlFor="pays">Pays</label>
-            <input
-              id="pays"
-              name="pays"
-              type="text"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              required
-            />
+          <label htmlFor="pays">Pays</label>
+          <input
+            id="pays"
+            name="pays"
+            type="text"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            required
+          />
 
-            <label htmlFor="phoneNumber">Numéro de téléphone :</label>
-            <input
-              className="input"
-              id="telephone"
-              type="tel"
-              placeholder="par ex : +33655000000"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-          </div>
+          <label htmlFor="phoneNumber">Numéro de téléphone :</label>
+          <input
+            className="input"
+            id="telephone"
+            type="tel"
+            placeholder="par ex : +33655000000"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+        </div>
 
-          <button type="submit" className="button-profileUpdate">
-            Mettre à jour
-          </button>
-        </form>
-      )}
+        <button type="submit" className="button-profileUpdate">
+          Mettre à jour
+        </button>
+      </form>
     </div>
   );
 };

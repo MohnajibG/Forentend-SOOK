@@ -3,3 +3,7 @@ body {
   font-family: "Krub", sans-serif;
   height: 100%;
 }
+a {
+  color: rgb(253, 253, 253); /* ou la couleur de votre choix */
+  text-decoration: none;
+}
