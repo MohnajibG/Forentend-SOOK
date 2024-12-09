@@ -1,8 +1,12 @@
+import axios from "axios";
+
+import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 import { useParams, useNavigate } from "react-router-dom";
+
 import "../assets/styles/profileUpdate.css";
-import { useState, useEffect } from "react";
-import axios from "axios";
+
+import backgroundUpdateProfil from "../assets/img/hero.jpg";
 
 const ProfileUpdate: React.FC = () => {
   const { username, token, userId } = useUser();
@@ -102,11 +106,15 @@ const ProfileUpdate: React.FC = () => {
   };
 
   return loading ? (
-    <div className="spinner-container">
-      <div className="spinner"></div>
+    <div className="main-profileUpdate">
+      <img src={backgroundUpdateProfil} alt="background UpdateProfil" />
+      <div className="spinner-container">
+        <div className="spinner"></div>
+      </div>
     </div>
   ) : (
     <div className="main-profileUpdate">
+      <img src={backgroundUpdateProfil} alt="background UpdateProfil" />
       <h2>Mon Profil</h2>
       <form onSubmit={handleSubmit}>
         <div className="input-picture">
@@ -137,12 +145,12 @@ const ProfileUpdate: React.FC = () => {
             id="sexe"
             value={sexe}
             onChange={(e) =>
-              setSexe(e.target.value as "Homme" | "Femme" | "Autre")
+              setSexe(e.target.value as "Autre" | "Femme" | "Homme")
             }
           >
-            <option value="Homme">Homme</option>
-            <option value="Femme">Femme</option>
             <option value="Autre">Autre</option>
+            <option value="Femme">Femme</option>
+            <option value="Homme">Homme</option>
           </select>
 
           <label htmlFor="dateOfBorn">Date de naissance</label>

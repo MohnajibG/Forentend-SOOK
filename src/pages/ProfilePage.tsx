@@ -7,6 +7,8 @@ import "../assets/styles/profilePage.css";
 
 import { ProfileDataProps } from "../types/types";
 
+import backgroundUpdateProfil from "../assets/img/hero.jpg";
+
 const ProfilePage: React.FC = () => {
   const { token, userId } = useUser();
 
@@ -37,6 +39,7 @@ const ProfilePage: React.FC = () => {
         );
 
         setProfile(response.data);
+        console.log("data===>:", response.data);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
@@ -73,10 +76,15 @@ const ProfilePage: React.FC = () => {
   };
 
   return loading ? (
-    <div className="spinner">Chargement...</div>
+    <div className="profile-page">
+      <img src={backgroundUpdateProfil} alt="background UpdateProfil" />
+
+      <div className="spinner">Chargement...</div>
+    </div>
   ) : (
     <div className="profile-page">
-      <h1>ton Profile</h1>
+      <img src={backgroundUpdateProfil} alt="background UpdateProfil" />
+      <h1>Votre Profil</h1>
       {editMode ? (
         <div>
           <input
@@ -130,7 +138,7 @@ const ProfilePage: React.FC = () => {
           <button onClick={handleSave}>Enregistrer</button>
         </div>
       ) : (
-        <div>
+        <div className="profile-informations">
           <p>Nom d'utilisateur : {profile?.username}</p>
           <p>Email : {profile?.email}</p>
           <p>Adresse : {profile?.address}</p>

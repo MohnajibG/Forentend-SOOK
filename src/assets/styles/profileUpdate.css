@@ -1,13 +1,25 @@
 .main-profileUpdate {
-  color: aliceblue;
+  margin-top: 5rem;
+  padding-bottom: 150px;
+
+  color: #fff;
+  font-family: "Krub", sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding: 5%;
-  font-family: "Krub", sans-serif;
+  gap: 5rem;
 }
+.main-profileUpdate img {
+  width: 100%;
+  height: 100vh;
 
+  object-fit: cover;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
 .main-profileUpdate h2 {
   font-size: 1.6rem;
   text-align: center;
@@ -35,6 +47,15 @@
   height: 25px;
   width: 100%;
   margin-top: 15px;
+}
+#sexe {
+  border: none;
+  width: 15rem;
+  height: 0.8rem;
+  padding: 0.8rem;
+  border-radius: 7.5px;
+  font-size: 0.8rem;
+  background-color: rgba(255, 255, 255, 0.91);
 }
 
 .profileUpdate-image img {
@@ -124,18 +145,8 @@
 
 /* Media Queries for mobile screens */
 @media (max-width: 480px) {
-  .main-profileUpdate {
-    padding: 8%;
-  }
-
   .main-profileUpdate h2 {
     font-size: 1.2rem;
-  }
-
-  .profileUpdate-info .input,
-  .profileUpdate-info .button-profileUpdate {
-    width: 60vw;
-    font-size: 0.9rem;
   }
 
   .profileUpdate-image {
