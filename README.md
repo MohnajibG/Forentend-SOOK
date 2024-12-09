@@ -1,6 +1,5 @@
 # Création d'un fichier README.md avec le contenu structuré pour le projet SOOK
 
-readme_content = """
 # **SOOK** 🛍️  
 Une plateforme de marché en ligne permettant aux utilisateurs de publier, rechercher et gérer des produits avec une architecture complète (frontend, backend, base de données).  
 
