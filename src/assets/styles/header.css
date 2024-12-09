@@ -93,6 +93,7 @@ header img {
   align-items: center;
   justify-content: center;
   border: #000000f9 2px solid;
+  cursor: context-menu;
 }
 
 a {

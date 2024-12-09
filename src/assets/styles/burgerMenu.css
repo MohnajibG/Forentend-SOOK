@@ -2,7 +2,7 @@
 .burger-menu {
   position: absolute;
   top: 7vh;
-  right: 9vw;
+  right: 2vw;
   background-color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -23,7 +23,9 @@
   margin: 1vh;
   background-color: #ffc1bddc;
   border-radius: 10px;
-  transition: 1000ms;
+  transition: 300ms ease-in-out;
+  border: #000000f9 2px solid;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .burger-menu li {
