@@ -30,7 +30,7 @@ const ProfilePage: React.FC = () => {
         }
 
         const response = await axios.get(
-          `https://site--sook--dnxhn8mdblq5.code.run/profile/${userId}`,
+          `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ const ProfilePage: React.FC = () => {
   const handleSave = async () => {
     try {
       const response = await axios.put(
-        `https://site--sook--dnxhn8mdblq5.code.run//user/profilePage/${userId}`,
+        `https://site--sook--dnxhn8mdblq5.code.run/user/profilePage/${userId}`,
         updatedProfile,
         {
           headers: {

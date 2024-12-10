@@ -17,7 +17,7 @@ const ProfileUpdate: React.FC = () => {
   const [postalCode, setPostalCode] = useState<string>("");
   const [country, setCountry] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [sexe, setSexe] = useState<"Homme" | "Femme" | "Autre" | "-">("-");
+  const [sexe, setSexe] = useState<"Homme" | "Femme" | "Autre" | "-">("Autre");
   const [avatar, setAvatar] = useState<File | null>(null);
   const [dateOfBorn, setDateOfBorn] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,7 +28,7 @@ const ProfileUpdate: React.FC = () => {
 
       try {
         const response = await axios.get(
-          `https://site--sook--dnxhn8mdblq5.code.run//profile/${userId}`,
+          `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -88,7 +88,7 @@ const ProfileUpdate: React.FC = () => {
 
       // Envoi de la requête PUT
       await axios.put(
-        `https:/site--sook--dnxhn8mdblq5.code.run//profile/${userId}`,
+        `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
         formData,
         {
           headers: {
@@ -143,7 +143,7 @@ const ProfileUpdate: React.FC = () => {
           <label htmlFor="sexe">Sexe</label>
           <select
             id="sexe"
-            value={sexe}
+            value="-"
             onChange={(e) =>
               setSexe(e.target.value as "Autre" | "Femme" | "Homme")
             }
@@ -164,6 +164,7 @@ const ProfileUpdate: React.FC = () => {
 
           <label htmlFor="adresse">Adresse</label>
           <textarea
+            className="adress-area"
             id="adresse"
             name="adresse"
             required
