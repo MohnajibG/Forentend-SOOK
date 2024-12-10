@@ -24,12 +24,16 @@
 }
 .profile-page h1 {
   text-align: center;
-  color: #ecbbbb;
+  color: #fef2f2;
+  font-size: 2rem;
 }
 .profile-page div {
+  padding: 2rem;
   display: flex;
   flex-direction: column;
+  background-color: #ecbbbb63;
   gap: 1rem;
+  border-radius: 5px;
 }
 .profile-informations {
   font-weight: 600;
@@ -56,4 +60,18 @@
   color: red;
   font-size: 18px;
   margin-top: 50px;
+}
+
+.spinner img {
+  border: 2px solid rgba(0, 0, 0, 0.781);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

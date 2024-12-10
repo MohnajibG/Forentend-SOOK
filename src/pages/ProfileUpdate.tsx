@@ -19,12 +19,13 @@ const ProfileUpdate: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [sexe, setSexe] = useState<"Homme" | "Femme" | "Autre" | "-">("Autre");
   const [avatar, setAvatar] = useState<File | null>(null);
-  const [dateOfBorn, setDateOfBorn] = useState<string>("");
+  const [dateOfBorn, setDateOfBorn] = useState<string>("../../....");
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       setLoading(true);
+      console.log("userId===", userId);
 
       try {
         const response = await axios.get(
@@ -143,7 +144,7 @@ const ProfileUpdate: React.FC = () => {
           <label htmlFor="sexe">Sexe</label>
           <select
             id="sexe"
-            value="-"
+            value={sexe}
             onChange={(e) =>
               setSexe(e.target.value as "Autre" | "Femme" | "Homme")
             }

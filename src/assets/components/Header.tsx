@@ -8,9 +8,9 @@ import { BsFillBasket3Fill } from "react-icons/bs";
 import "../styles/header.css";
 import "../styles/burgerMenu.css";
 
-import { HeaderProps } from "../../types/types";
+import { UserContextType } from "../../types/types";
 
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC<UserContextType> = () => {
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
   const { token, userId, logout } = useUser();
