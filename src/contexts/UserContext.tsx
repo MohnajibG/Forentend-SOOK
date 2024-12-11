@@ -62,6 +62,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 };
 
 // Hook personnalisé pour accéder au contexte de l'utilisateur
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUser = (): UserContextType => {
   const context = useContext(UserContext);
   return (

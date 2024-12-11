@@ -6,19 +6,15 @@ import "../assets/styles/profilePage.css";
 import backgroundUpdateProfil from "../assets/img/hero.jpg";
 import logo from "../assets/img/LOGO1.png";
 
-import { Account, UserProfile } from "../types/types";
+import { Account } from "../types/types";
 
 const ProfilePage: React.FC = () => {
   const { token, userId } = useUser();
 
-  const [dataProfile, setDataProfile] = useState<Account | UserProfile | null>(
-    null
-  );
+  const [dataProfile, setDataProfile] = useState<Account | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [updatedProfile, setUpdatedProfile] = useState<
-    Partial<Account | UserProfile>
-  >({});
+  const [updatedProfile, setUpdatedProfile] = useState<Partial<Account>>({});
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -30,7 +26,7 @@ const ProfilePage: React.FC = () => {
           return;
         }
 
-        const response = await axios.get<Account>(
+        const response = await axios.get<Account | null>(
           `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -40,7 +36,6 @@ const ProfilePage: React.FC = () => {
         setDataProfile(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération du profil :", error);
-      } finally {
         setLoading(false);
       }
     };
@@ -57,7 +52,7 @@ const ProfilePage: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.put<Account | UserProfile | UserContextType>(
+      const response = await axios.put<Account | null>(
         `https://site--sook--dnxhn8mdblq5.code.run/user/profilePage/${userId}`,
         updatedProfile,
         {
@@ -66,6 +61,7 @@ const ProfilePage: React.FC = () => {
       );
 
       setDataProfile(response.data);
+
       setEditMode(false);
       setUpdatedProfile({});
     } catch (error) {
@@ -96,12 +92,7 @@ const ProfilePage: React.FC = () => {
             onChange={handleInputChange}
             placeholder="Nom d'utilisateur"
           />
-          <input
-            name="email"
-            value={updatedProfile.email || dataProfile?.email || ""}
-            onChange={handleInputChange}
-            placeholder="Email"
-          />
+
           <input
             name="address"
             value={updatedProfile.address || dataProfile?.address || ""}
@@ -149,7 +140,6 @@ const ProfilePage: React.FC = () => {
       ) : (
         <div className="profile-informations">
           <p>Nom d'utilisateur : {dataProfile?.username || "Non renseigné"}</p>
-          <p>Email : {dataProfile?.email || "Non renseigné"}</p>
           <p>Adresse : {dataProfile?.address || "Non renseigné"}</p>
           <p>Code postal : {dataProfile?.postalCode || "Non renseigné"}</p>
           <p>Pays : {dataProfile?.country || "Non renseigné"}</p>

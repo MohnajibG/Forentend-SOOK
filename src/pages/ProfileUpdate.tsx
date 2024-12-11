@@ -1,11 +1,9 @@
 import axios from "axios";
-
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 import { useParams, useNavigate } from "react-router-dom";
 
 import "../assets/styles/profileUpdate.css";
-
 import backgroundUpdateProfil from "../assets/img/hero.jpg";
 
 const ProfileUpdate: React.FC = () => {
@@ -13,44 +11,46 @@ const ProfileUpdate: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [address, setAddress] = useState<string>("");
-  const [postalCode, setPostalCode] = useState<string>("");
-  const [country, setCountry] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [sexe, setSexe] = useState<"Homme" | "Femme" | "Autre" | "-">("Autre");
-  const [avatar, setAvatar] = useState<File | null>(null);
-  const [dateOfBorn, setDateOfBorn] = useState<string>("../../....");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [profileData, setProfileData] = useState({
+    address: "",
+    postalCode: "",
+    country: "",
+    phoneNumber: "",
+    sexe: "Autre" as "Homme" | "Femme" | "Autre",
+    dateOfBorn: "",
+    avatar: null as File | null,
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchProfileData = async () => {
       setLoading(true);
-      console.log("userId===", userId);
+      setError("");
 
       try {
         const response = await axios.get(
           `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        const profileData = response.data;
-
-        // Remplir les champs avec les données récupérées
-        setAddress(profileData.address || "");
-        setPostalCode(profileData.postalCode || "");
-        setCountry(profileData.country || "");
-        setPhoneNumber(profileData.phoneNumber || "");
-        setSexe(profileData.sexe || "Homme");
-        setDateOfBorn(profileData.dateOfBorn || "");
-      } catch (error) {
-        console.error(
-          // "Erreur lors de la récupération des données du profil",
-          error
-        );
+        const data = response.data;
+        setProfileData((prev) => ({
+          ...prev,
+          address: data.address || "",
+          postalCode: data.postalCode || "",
+          country: data.country || "",
+          phoneNumber: data.phoneNumber || "",
+          sexe: data.sexe || "Autre",
+          dateOfBorn: data.dateOfBorn || "",
+        }));
+      } catch (err) {
+        setError("Erreur lors de la récupération du profil.");
+        console.error(err);
+      } finally {
         setLoading(false);
       }
     };
@@ -58,36 +58,39 @@ const ProfileUpdate: React.FC = () => {
     fetchProfileData();
   }, [token, userId]);
 
-  // Gérer la soumission du formulaire
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setProfileData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProfileData((prev) => ({
+      ...prev,
+      avatar: e.target.files ? e.target.files[0] : null,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
-    if (!userId || !id) {
+    if (!token || !userId || !id) {
+      setError("Données utilisateur manquantes.");
       setLoading(false);
       return;
     }
 
     try {
-      // Créer un objet FormData pour inclure l'avatar
       const formData = new FormData();
-      formData.append("address", address);
-      formData.append("phoneNumber", phoneNumber);
-      formData.append("postalCode", postalCode);
-      formData.append("country", country);
-      formData.append("sexe", sexe);
-      formData.append("dateOfBorn", dateOfBorn);
+      Object.entries(profileData).forEach(([key, value]) => {
+        if (value) formData.append(key, value as string | Blob);
+      });
 
-      if (avatar) {
-        formData.append("avatar", avatar);
-      }
-
-      // Envoi de la requête PUT
       await axios.put(
         `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
         formData,
@@ -99,108 +102,111 @@ const ProfileUpdate: React.FC = () => {
         }
       );
 
-      setTimeout(() => navigate("/"), 3000);
-    } catch (error) {
-      console.log("Erreur lors de la mise à jour du profil:", error);
+      navigate("/");
+    } catch (err) {
+      setError("Erreur lors de la mise à jour du profil.");
+      console.error(err);
+    } finally {
       setLoading(false);
     }
   };
 
-  return loading ? (
-    <div className="main-profileUpdate">
-      <img src={backgroundUpdateProfil} alt="background UpdateProfil" />
-      <div className="spinner-container">
-        <div className="spinner"></div>
+  if (loading) {
+    return (
+      <div className="main-profileUpdate">
+        <img src={backgroundUpdateProfil} alt="Background Update Profil" />
+        <div className="spinner-container">
+          <div className="spinner"></div>
+        </div>
       </div>
-    </div>
-  ) : (
+    );
+  }
+
+  return (
     <div className="main-profileUpdate">
-      <img src={backgroundUpdateProfil} alt="background UpdateProfil" />
-      <h2>Mon Profil</h2>
+      <img src={backgroundUpdateProfil} alt="Background Update Profil" />
+      <h2>Mettre à jour le profil</h2>
+
+      {error && <p className="error">{error}</p>}
+
       <form onSubmit={handleSubmit}>
         <div className="input-picture">
-          <label htmlFor="picture">+ Ajouter votre photo</label>
+          <label htmlFor="avatar">+ Ajouter une photo</label>
           <input
-            id="picture"
+            id="avatar"
             type="file"
             style={{ display: "none" }}
-            onChange={(e) => {
-              setAvatar(e.target.files ? e.target.files[0] : null);
-            }}
+            onChange={handleAvatarChange}
           />
-          {avatar && (
-            <img src={URL.createObjectURL(avatar)} alt="Image preview" />
+          {profileData.avatar && (
+            <img src={URL.createObjectURL(profileData.avatar)} alt="Preview" />
           )}
         </div>
+
         <div className="profileUpdate-info">
           <label htmlFor="username">Nom d'utilisateur</label>
           <input
             id="username"
             type="text"
-            value={username || "Nom d'utilisateur non disponible"}
+            value={username || "Nom non disponible"}
             disabled
           />
 
           <label htmlFor="sexe">Sexe</label>
           <select
             id="sexe"
-            value={sexe}
-            onChange={(e) =>
-              setSexe(e.target.value as "Autre" | "Femme" | "Homme")
-            }
+            name="sexe"
+            value={profileData.sexe}
+            onChange={handleInputChange}
           >
-            <option value="Autre">Autre</option>
-            <option value="Femme">Femme</option>
             <option value="Homme">Homme</option>
+            <option value="Femme">Femme</option>
+            <option value="Autre">Autre</option>
           </select>
 
           <label htmlFor="dateOfBorn">Date de naissance</label>
           <input
-            type="date"
             id="dateOfBorn"
-            value={dateOfBorn}
-            onChange={(e) => setDateOfBorn(e.target.value)}
-            required
+            type="date"
+            name="dateOfBorn"
+            value={profileData.dateOfBorn}
+            onChange={handleInputChange}
           />
 
-          <label htmlFor="adresse">Adresse</label>
+          <label htmlFor="address">Adresse</label>
           <textarea
-            className="adress-area"
-            id="adresse"
-            name="adresse"
-            required
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            id="address"
+            name="address"
+            value={profileData.address}
+            onChange={handleInputChange}
           />
 
-          <label htmlFor="codepostal">Code postal</label>
+          <label htmlFor="postalCode">Code postal</label>
           <input
-            id="codepostal"
-            name="codepostal"
+            id="postalCode"
+            name="postalCode"
             type="text"
-            value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
-            required
+            value={profileData.postalCode}
+            onChange={handleInputChange}
           />
 
-          <label htmlFor="pays">Pays</label>
+          <label htmlFor="country">Pays</label>
           <input
-            id="pays"
-            name="pays"
+            id="country"
+            name="country"
             type="text"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            required
+            value={profileData.country}
+            onChange={handleInputChange}
           />
 
-          <label htmlFor="phoneNumber">Numéro de téléphone :</label>
+          <label htmlFor="phoneNumber">Numéro de téléphone</label>
           <input
-            className="input"
-            id="telephone"
+            id="phoneNumber"
+            name="phoneNumber"
             type="tel"
-            placeholder="par ex : +33655000000"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            placeholder="+33655000000"
+            value={profileData.phoneNumber}
+            onChange={handleInputChange}
           />
         </div>
 

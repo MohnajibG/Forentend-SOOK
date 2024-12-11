@@ -12,18 +12,18 @@ export interface OfferProps {
 }
 
 export interface Account {
-  address: string | null;
-  email: string | null;
+  username: string | null;
   avatar: string | null;
-  country: string | null;
-  dateOfBorn: string | null;
   phoneNumber: string | null;
   sexe: string | null;
-  username: string | null;
+  dateOfBorn: string | null;
+  address: string | null;
   postalCode: string | null;
+  country: string | null;
 }
 
 export interface UserProfile {
+  email: string | null;
   account: Account | null;
   newsletter: boolean | null;
   createdAt: string | null;
