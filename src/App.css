@@ -2,6 +2,7 @@ body {
   width: 100vw;
   font-family: "Krub", sans-serif;
   height: 100%;
+  color: light-dark(white, black);
 }
 a {
   color: rgb(253, 253, 253); /* ou la couleur de votre choix */

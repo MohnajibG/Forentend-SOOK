@@ -68,7 +68,6 @@ const Login: React.FC = () => {
           password,
         }
       );
-      console.log(response.data.token);
 
       if (response.data.token) {
         // Mettez à jour le contexte et les cookies avec les données reçues

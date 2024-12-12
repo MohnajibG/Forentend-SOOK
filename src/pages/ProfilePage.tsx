@@ -16,13 +16,23 @@ const ProfilePage: React.FC = () => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [updatedProfile, setUpdatedProfile] = useState<Partial<Account>>({});
 
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         setLoading(true);
 
         if (!token) {
-          setLoading(false);
+          setLoading(true);
+          console.log("pas de token recu");
+
+          return;
+        }
+        if (!userId) {
+          setLoading(true);
+          console.log("pas de userId recu");
+
           return;
         }
 
@@ -35,7 +45,8 @@ const ProfilePage: React.FC = () => {
 
         setDataProfile(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération du profil :", error);
+        console.log("Erreur lors de la récupération du profil :", error);
+        setError("Impossible de charger votre profil.");
         setLoading(false);
       }
     };
@@ -52,16 +63,22 @@ const ProfilePage: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.put<Account | null>(
-        `https://site--sook--dnxhn8mdblq5.code.run/user/profilePage/${userId}`,
-        updatedProfile,
+      if (
+        !updatedProfile.address ||
+        !updatedProfile.phoneNumber ||
+        !updatedProfile.country
+      ) {
+        alert("Veuillez remplir tous les champs obligatoires.");
+        return;
+      }
+      const response = await axios.get<Account | null>(
+        `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       setDataProfile(response.data);
-
       setEditMode(false);
       setUpdatedProfile({});
     } catch (error) {
@@ -84,42 +101,43 @@ const ProfilePage: React.FC = () => {
     <div className="profile-page">
       <img src={backgroundUpdateProfil} alt="Background Update Profil" />
       <h1>Votre Profil</h1>
+      {error && <p className="error-message">{error}</p>}
       {editMode ? (
         <div>
           <input
             name="username"
-            value={updatedProfile.username || dataProfile?.username || ""}
+            value={updatedProfile.username || ""}
             onChange={handleInputChange}
             placeholder="Nom d'utilisateur"
           />
 
           <input
             name="address"
-            value={updatedProfile.address || dataProfile?.address || ""}
+            value={updatedProfile.address || ""}
             onChange={handleInputChange}
             placeholder="Adresse"
           />
           <input
             name="postalCode"
-            value={updatedProfile.postalCode || dataProfile?.postalCode || ""}
+            value={updatedProfile.postalCode || ""}
             onChange={handleInputChange}
             placeholder="Code postal"
           />
           <input
             name="country"
-            value={updatedProfile.country || dataProfile?.country || ""}
+            value={updatedProfile.country || ""}
             onChange={handleInputChange}
             placeholder="Pays"
           />
           <input
             name="phoneNumber"
-            value={updatedProfile.phoneNumber || dataProfile?.phoneNumber || ""}
+            value={updatedProfile.phoneNumber || ""}
             onChange={handleInputChange}
             placeholder="Numéro de téléphone"
           />
           <select
             name="sexe"
-            value={updatedProfile.sexe || dataProfile?.sexe || ""}
+            value={updatedProfile.sexe || ""}
             onChange={handleInputChange}
           >
             <option value="" disabled>
@@ -130,6 +148,7 @@ const ProfilePage: React.FC = () => {
             <option value="autre">Autre</option>
           </select>
           <input
+            type="date"
             name="dateOfBorn"
             value={updatedProfile.dateOfBorn || dataProfile?.dateOfBorn || ""}
             onChange={handleInputChange}
@@ -139,7 +158,7 @@ const ProfilePage: React.FC = () => {
         </div>
       ) : (
         <div className="profile-informations">
-          <p>Nom d'utilisateur : {dataProfile?.username || "Non renseigné"}</p>
+          <p>Nom d'utilisateur : {dataProfile?.username}</p>
           <p>Adresse : {dataProfile?.address || "Non renseigné"}</p>
           <p>Code postal : {dataProfile?.postalCode || "Non renseigné"}</p>
           <p>Pays : {dataProfile?.country || "Non renseigné"}</p>
@@ -150,7 +169,14 @@ const ProfilePage: React.FC = () => {
           <p>
             Date de naissance : {dataProfile?.dateOfBorn || "Non renseigné"}
           </p>
-          <button onClick={() => setEditMode(true)}>Modifier</button>
+          <button
+            onClick={() => {
+              setUpdatedProfile(dataProfile || {});
+              setEditMode(true);
+            }}
+          >
+            Modifier
+          </button>
         </div>
       )}
     </div>

@@ -1,24 +1,11 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import hero from "../assets/img/hero.jpg";
 import "../assets/styles/home.css";
 import { useUser } from "../contexts/UserContext";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { username, token } = useUser();
-
-  useEffect(() => {
-    if (!username) {
-      const storedUsername = Cookies.get("username");
-      if (storedUsername) {
-        console.log("Username récupéré depuis les cookies:", storedUsername);
-      } else {
-        console.log("Aucun username trouvé dans les cookies.");
-      }
-    }
-  }, [username, token]);
+  const { username } = useUser();
 
   return (
     <div className="home-container">
