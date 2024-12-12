@@ -14,8 +14,9 @@ const ProfilePage: React.FC = () => {
   const [dataProfile, setDataProfile] = useState<Account | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [updatedProfile, setUpdatedProfile] = useState<Partial<Account>>({});
-
+  const [updatedProfile, setUpdatedProfile] = useState<
+    Partial<Account["account"]>
+  >({});
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -23,20 +24,13 @@ const ProfilePage: React.FC = () => {
       try {
         setLoading(true);
 
-        if (!token) {
-          setLoading(true);
-          console.log("pas de token recu");
-
-          return;
-        }
-        if (!userId) {
-          setLoading(true);
-          console.log("pas de userId recu");
-
+        if (!token || !userId) {
+          setError("Token ou userId manquant.");
+          setLoading(false);
           return;
         }
 
-        const response = await axios.get<Account | null>(
+        const response = await axios.get<Account>(
           `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -45,8 +39,9 @@ const ProfilePage: React.FC = () => {
 
         setDataProfile(response.data);
       } catch (error) {
-        console.log("Erreur lors de la récupération du profil :", error);
+        console.error("Erreur lors de la récupération du profil :", error);
         setError("Impossible de charger votre profil.");
+      } finally {
         setLoading(false);
       }
     };
@@ -71,8 +66,15 @@ const ProfilePage: React.FC = () => {
         alert("Veuillez remplir tous les champs obligatoires.");
         return;
       }
-      const response = await axios.get<Account | null>(
+
+      if (!token || !userId) {
+        alert("Vous devez être connecté pour mettre à jour votre profil.");
+        return;
+      }
+
+      const response = await axios.put<Account>(
         `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
+        { account: updatedProfile },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -83,6 +85,7 @@ const ProfilePage: React.FC = () => {
       setUpdatedProfile({});
     } catch (error) {
       console.error("Erreur lors de la mise à jour du profil :", error);
+      setError("Impossible de mettre à jour votre profil.");
     }
   };
 
@@ -97,47 +100,63 @@ const ProfilePage: React.FC = () => {
     );
   }
 
+  if (error) {
+    return <p className="error-message">{error}</p>;
+  }
+
   return (
     <div className="profile-page">
       <img src={backgroundUpdateProfil} alt="Background Update Profil" />
       <h1>Votre Profil</h1>
-      {error && <p className="error-message">{error}</p>}
       {editMode ? (
         <div>
           <input
             name="username"
-            value={updatedProfile.username || ""}
+            value={
+              updatedProfile.username || dataProfile?.account?.username || ""
+            }
             onChange={handleInputChange}
             placeholder="Nom d'utilisateur"
           />
-
           <input
             name="address"
-            value={updatedProfile.address || ""}
+            value={
+              updatedProfile.address || dataProfile?.account?.address || ""
+            }
             onChange={handleInputChange}
             placeholder="Adresse"
           />
           <input
             name="postalCode"
-            value={updatedProfile.postalCode || ""}
+            value={
+              updatedProfile.postalCode ||
+              dataProfile?.account?.postalCode ||
+              ""
+            }
             onChange={handleInputChange}
             placeholder="Code postal"
           />
           <input
             name="country"
-            value={updatedProfile.country || ""}
+            value={
+              updatedProfile.country || dataProfile?.account?.country || ""
+            }
             onChange={handleInputChange}
             placeholder="Pays"
           />
           <input
             name="phoneNumber"
-            value={updatedProfile.phoneNumber || ""}
+            value={
+              updatedProfile.phoneNumber ||
+              dataProfile?.account?.phoneNumber ||
+              ""
+            }
             onChange={handleInputChange}
             placeholder="Numéro de téléphone"
           />
           <select
             name="sexe"
-            value={updatedProfile.sexe || ""}
+            value={updatedProfile.sexe || dataProfile?.account?.sexe || ""}
             onChange={handleInputChange}
           >
             <option value="" disabled>
@@ -150,28 +169,38 @@ const ProfilePage: React.FC = () => {
           <input
             type="date"
             name="dateOfBorn"
-            value={updatedProfile.dateOfBorn || dataProfile?.dateOfBorn || ""}
+            value={
+              updatedProfile.dateOfBorn ||
+              dataProfile?.account?.dateOfBorn ||
+              ""
+            }
             onChange={handleInputChange}
-            placeholder="Date de naissance"
           />
           <button onClick={handleSave}>Enregistrer</button>
         </div>
       ) : (
         <div className="profile-informations">
-          <p>Nom d'utilisateur : {dataProfile?.username}</p>
-          <p>Adresse : {dataProfile?.address || "Non renseigné"}</p>
-          <p>Code postal : {dataProfile?.postalCode || "Non renseigné"}</p>
-          <p>Pays : {dataProfile?.country || "Non renseigné"}</p>
           <p>
-            Numéro de téléphone : {dataProfile?.phoneNumber || "Non renseigné"}
+            Nom d'utilisateur :{" "}
+            {dataProfile?.account?.username || "Non renseigné"}
           </p>
-          <p>Sexe : {dataProfile?.sexe || "Non renseigné"}</p>
+          <p>Adresse : {dataProfile?.account?.address || "Non renseigné"}</p>
           <p>
-            Date de naissance : {dataProfile?.dateOfBorn || "Non renseigné"}
+            Code postal : {dataProfile?.account?.postalCode || "Non renseigné"}
+          </p>
+          <p>Pays : {dataProfile?.account?.country || "Non renseigné"}</p>
+          <p>
+            Numéro de téléphone :{" "}
+            {dataProfile?.account?.phoneNumber || "Non renseigné"}
+          </p>
+          <p>Sexe : {dataProfile?.account?.sexe || "Non renseigné"}</p>
+          <p>
+            Date de naissance :{" "}
+            {dataProfile?.account?.dateOfBorn || "Non renseigné"}
           </p>
           <button
             onClick={() => {
-              setUpdatedProfile(dataProfile || {});
+              setUpdatedProfile(dataProfile?.account || {});
               setEditMode(true);
             }}
           >

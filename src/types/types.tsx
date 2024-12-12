@@ -12,21 +12,26 @@ export interface OfferProps {
 }
 
 export interface Account {
-  username: string | null;
-  avatar: string | null;
-  phoneNumber: string | null;
-  sexe: string | null;
-  dateOfBorn: string | null;
+  username: string;
+  account: Account;
+
   address: string | null;
   postalCode: string | null;
   country: string | null;
+  phoneNumber: string | null;
+  sexe: string | null;
+  dateOfBorn: string | null;
+  avatar: string | null;
 }
 
 export interface UserProfile {
-  email: string | null;
-  account: Account | null;
-  newsletter: boolean | null;
-  createdAt: string | null;
-  updatedAt: string | null;
-  _id: string | null;
+  account: Account;
+  createdAt: string;
+  email: string;
+  hash: string;
+  newsletter: boolean;
+  salt: string;
+  token: string;
+  updatedAt: string;
+  _id: string;
 }

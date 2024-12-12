@@ -16,9 +16,8 @@ const ProfileUpdate: React.FC = () => {
     postalCode: "",
     country: "",
     phoneNumber: "",
-    sexe: "Autre" as "Homme" | "Femme" | "Autre",
+    sexe: "Autre",
     dateOfBorn: "",
-    avatar: null as File | null,
   });
 
   const [loading, setLoading] = useState(false);
@@ -26,6 +25,12 @@ const ProfileUpdate: React.FC = () => {
 
   useEffect(() => {
     const fetchProfileData = async () => {
+      if (!userId || !token) {
+        setError("Utilisateur non authentifié");
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       setError("");
 
@@ -40,12 +45,12 @@ const ProfileUpdate: React.FC = () => {
         const data = response.data;
         setProfileData((prev) => ({
           ...prev,
-          address: data.address || "",
-          postalCode: data.postalCode || "",
-          country: data.country || "",
-          phoneNumber: data.phoneNumber || "",
-          sexe: data.sexe || "Autre",
-          dateOfBorn: data.dateOfBorn || "",
+          address: data.account?.address || "",
+          postalCode: data.account?.postalCode || "",
+          country: data.account?.country || "",
+          phoneNumber: data.account?.phoneNumber || "",
+          sexe: data.account?.sexe || "Autre",
+          dateOfBorn: data.account?.dateOfBorn || "",
         }));
       } catch (err) {
         setError("Erreur lors de la récupération du profil.");
@@ -67,13 +72,6 @@ const ProfileUpdate: React.FC = () => {
     setProfileData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProfileData((prev) => ({
-      ...prev,
-      avatar: e.target.files ? e.target.files[0] : null,
-    }));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -87,11 +85,15 @@ const ProfileUpdate: React.FC = () => {
 
     try {
       const formData = new FormData();
+
+      // Parcourir profileData et ajouter les données au formData
       Object.entries(profileData).forEach(([key, value]) => {
-        if (value) formData.append(key, value as string | Blob);
+        if (value) formData.append(key, value as string);
       });
 
-      await axios.put(
+      // Envoi de la requête pour mettre à jour le profil
+      console.log("Envoi des données : ", formData);
+      const response = await axios.put(
         `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
         formData,
         {
@@ -102,10 +104,12 @@ const ProfileUpdate: React.FC = () => {
         }
       );
 
-      navigate("/");
-    } catch (err) {
+      console.log("Réponse de la requête PUT : ", response);
+
+      navigate(`/profile/${userId}`);
+    } catch (error) {
       setError("Erreur lors de la mise à jour du profil.");
-      console.error(err);
+      console.error("Erreur lors de la requête PUT : ", error);
     } finally {
       setLoading(false);
     }
@@ -130,25 +134,17 @@ const ProfileUpdate: React.FC = () => {
       {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleSubmit}>
-        <div className="input-picture">
-          <label htmlFor="avatar">+ Ajouter une photo</label>
-          <input
-            id="avatar"
-            type="file"
-            style={{ display: "none" }}
-            onChange={handleAvatarChange}
-          />
-          {profileData.avatar && (
-            <img src={URL.createObjectURL(profileData.avatar)} alt="Preview" />
-          )}
-        </div>
-
         <div className="profileUpdate-info">
           <label htmlFor="username">Nom d'utilisateur</label>
           <input
             id="username"
             type="text"
-            value={username || "Nom non disponible"}
+            value={
+              username
+                ? username.charAt(0).toUpperCase() +
+                  username.slice(1).toLowerCase()
+                : "Nom non disponible"
+            }
             disabled
           />
 
