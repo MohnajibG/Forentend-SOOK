@@ -15,14 +15,20 @@ import ProfileUpdate from "./pages/ProfileUpdate";
 import ProfilePage from "./pages/ProfilePage";
 import Publish from "./pages/Publish";
 import Footer from "./assets/components/Footer";
+import OffersPage from "./pages/OfferPage";
 
 function App() {
-  const { token, logout } = useUser();
+  const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    const { token } = useUser();
+    return token ? children : <Navigate to="/login" replace />;
+  };
+
+  const { token } = useUser();
 
   return (
     <UserProvider>
       <Router>
-        <Header token={token} logout={logout} />
+        <Header />
 
         <Routes>
           {/* Redirige "/" vers "/home" */}
@@ -38,9 +44,18 @@ function App() {
           />
           {/* Routes normales */}
           <Route path="/home" element={<Home />} />
-          <Route path="/profileUpdate/:id" element={<ProfileUpdate />} />
-          <Route path="/profilePage/:id" element={<ProfilePage />} />
-          <Route path="/publish" element={<Publish />} />
+          <Route path="/profileUpdate/:userId" element={<ProfileUpdate />} />
+          <Route path="/profilePage/:userId" element={<ProfilePage />} />
+
+          <Route
+            path="/publish"
+            element={
+              <ProtectedRoute>
+                <Publish />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/offers" element={<OffersPage />} />
 
           {/* Page 404 */}
           <Route path="*" element={<NoMatch />} />

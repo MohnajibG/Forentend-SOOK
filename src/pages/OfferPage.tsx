@@ -10,11 +10,13 @@ const OffersPage: React.FC = () => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/offers");
+        const response = await axios.get(
+          "https://site--sook--dnxhn8mdblq5.code.run/offers"
+        );
         setOffers(response.data.offers);
         setLoading(false);
       } catch (error) {
-        console.error("Erreur lors de la récupération des offres :", error);
+        console.log("Erreur lors de la récupération des offres :", error);
         setError("Impossible de charger les offres.");
         setLoading(false);
       }
@@ -23,25 +25,19 @@ const OffersPage: React.FC = () => {
     fetchOffers();
   }, []);
 
-  if (loading) {
-    return <div>Chargement...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  return (
-    <div>
-      <h1>Toutes les offres</h1>
+  return loading ? (
+    <main className="offer-main">Chargement...</main>
+  ) : (
+    <main className="offer-main">
+      {error && <div>{error}</div>}
       {offers.length === 0 ? (
-        <p>Aucune offre disponible.</p>
+        <p>Soyez le premier a publier surmain SOOK.</p>
       ) : (
         <div>
           {offers.map((offer: any) => (
             <div key={offer._id}>
               <h2>{offer.title}</h2>
-              <p>{offer.description}</p>
+              <p> Description : {offer.description}</p>
               <p>Prix : {offer.price}€</p>
               <div>
                 {offer.pictures.map((picture: string, index: number) => (
@@ -56,7 +52,7 @@ const OffersPage: React.FC = () => {
           ))}
         </div>
       )}
-    </div>
+    </main>
   );
 };
 
