@@ -1,14 +1,13 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "../assets/styles/profileUpdate.css";
 import backgroundUpdateProfil from "../assets/img/hero.jpg";
 
 const ProfileUpdate: React.FC = () => {
   const { username, token, userId } = useUser();
-  const { id } = useParams();
   const navigate = useNavigate();
 
   const [profileData, setProfileData] = useState({
@@ -77,39 +76,41 @@ const ProfileUpdate: React.FC = () => {
     setLoading(true);
     setError("");
 
-    if (!token || !userId || !id) {
+    if (!token || !userId) {
       setError("Données utilisateur manquantes.");
       setLoading(false);
       return;
     }
 
     try {
-      const formData = new FormData();
+      const updatedProfile = {
+        address: profileData.address,
+        postalCode: profileData.postalCode,
+        country: profileData.country,
+        phoneNumber: profileData.phoneNumber,
+        sexe: profileData.sexe,
+        dateOfBorn: profileData.dateOfBorn,
+      };
 
-      // Parcourir profileData et ajouter les données au formData
-      Object.entries(profileData).forEach(([key, value]) => {
-        if (value) formData.append(key, value as string);
-      });
+      console.log("Données envoyées :", updatedProfile);
 
-      // Envoi de la requête pour mettre à jour le profil
-      console.log("Envoi des données : ", formData);
+      // Envoi de la requête pour mettre à jour le profil (sans FormData)
       const response = await axios.put(
         `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
-        formData,
+        updatedProfile,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      console.log("Réponse de la requête PUT : ", response);
-
-      navigate(`/profile/${userId}`);
+      setProfileData(response.data);
+      navigate(`/profilePage/${userId}`);
     } catch (error) {
       setError("Erreur lors de la mise à jour du profil.");
-      console.error("Erreur lors de la requête PUT : ", error);
+      console.error(error);
     } finally {
       setLoading(false);
     }

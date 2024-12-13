@@ -72,20 +72,24 @@ const ProfilePage: React.FC = () => {
         return;
       }
 
-      const response = await axios.put<Account>(
+      const response = await axios.put(
         `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
-        { account: updatedProfile },
+        updatedProfile,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-
       setDataProfile(response.data);
       setEditMode(false);
       setUpdatedProfile({});
     } catch (error) {
-      console.error("Erreur lors de la mise à jour du profil :", error);
-      setError("Impossible de mettre à jour votre profil.");
+      setError("Erreur lors de la mise à jour du profil.");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
