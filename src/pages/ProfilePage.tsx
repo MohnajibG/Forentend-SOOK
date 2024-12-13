@@ -6,6 +6,7 @@ import "../assets/styles/profilePage.css";
 import backgroundUpdateProfil from "../assets/img/hero.jpg";
 import logo from "../assets/img/LOGO1.png";
 
+import { FaPen } from "react-icons/fa"; // Import de l'icône de crayon
 import { Account } from "../types/types";
 
 const ProfilePage: React.FC = () => {
@@ -114,72 +115,107 @@ const ProfilePage: React.FC = () => {
       <h1>Votre Profil</h1>
       {editMode ? (
         <div>
-          <input
-            name="username"
-            value={
-              updatedProfile.username || dataProfile?.account?.username || ""
-            }
-            onChange={handleInputChange}
-            placeholder="Nom d'utilisateur"
-          />
-          <input
-            name="address"
-            value={
-              updatedProfile.address || dataProfile?.account?.address || ""
-            }
-            onChange={handleInputChange}
-            placeholder="Adresse"
-          />
-          <input
-            name="postalCode"
-            value={
-              updatedProfile.postalCode ||
-              dataProfile?.account?.postalCode ||
-              ""
-            }
-            onChange={handleInputChange}
-            placeholder="Code postal"
-          />
-          <input
-            name="country"
-            value={
-              updatedProfile.country || dataProfile?.account?.country || ""
-            }
-            onChange={handleInputChange}
-            placeholder="Pays"
-          />
-          <input
-            name="phoneNumber"
-            value={
-              updatedProfile.phoneNumber ||
-              dataProfile?.account?.phoneNumber ||
-              ""
-            }
-            onChange={handleInputChange}
-            placeholder="Numéro de téléphone"
-          />
-          <select
-            name="sexe"
-            value={updatedProfile.sexe || dataProfile?.account?.sexe || ""}
-            onChange={handleInputChange}
-          >
-            <option value="" disabled>
-              Sélectionnez votre sexe
-            </option>
-            <option value="homme">Homme</option>
-            <option value="femme">Femme</option>
-            <option value="autre">Autre</option>
-          </select>
-          <input
-            type="date"
-            name="dateOfBorn"
-            value={
-              updatedProfile.dateOfBorn ||
-              dataProfile?.account?.dateOfBorn ||
-              ""
-            }
-            onChange={handleInputChange}
-          />
+          <div className="input-group">
+            <input
+              name="username"
+              value={
+                updatedProfile.username || dataProfile?.account?.username || ""
+              }
+              onChange={handleInputChange}
+              placeholder="Nom d'utilisateur"
+            />
+            <button onClick={() => setEditMode(true)}>
+              <FaPen />
+            </button>
+          </div>
+          <div className="input-group">
+            <input
+              name="address"
+              value={
+                updatedProfile.address || dataProfile?.account?.address || ""
+              }
+              onChange={handleInputChange}
+              placeholder="Adresse"
+            />
+            <button onClick={() => setEditMode(true)}>
+              <FaPen />
+            </button>
+          </div>
+          <div className="input-group">
+            <input
+              name="postalCode"
+              value={
+                updatedProfile.postalCode ||
+                dataProfile?.account?.postalCode ||
+                ""
+              }
+              onChange={handleInputChange}
+              placeholder="Code postal"
+            />
+            <button onClick={() => setEditMode(true)}>
+              <FaPen />
+            </button>
+          </div>
+          <div className="input-group">
+            <input
+              name="country"
+              value={
+                updatedProfile.country || dataProfile?.account?.country || ""
+              }
+              onChange={handleInputChange}
+              placeholder="Pays"
+            />
+            <button onClick={() => setEditMode(true)}>
+              <FaPen />
+            </button>
+          </div>
+          <div className="input-group">
+            <input
+              name="phoneNumber"
+              value={
+                updatedProfile.phoneNumber ||
+                dataProfile?.account?.phoneNumber ||
+                ""
+              }
+              onChange={handleInputChange}
+              placeholder="Numéro de téléphone"
+            />
+            <button onClick={() => setEditMode(true)}>
+              <FaPen />
+            </button>
+          </div>
+          <div className="input-group">
+            <select
+              name="sexe"
+              value={updatedProfile.sexe || dataProfile?.account?.sexe || ""}
+              onChange={handleInputChange}
+            >
+              <option value="" disabled>
+                Sélectionnez votre sexe
+              </option>
+              <option value="homme">Homme</option>
+              <option value="femme">Femme</option>
+              <option value="autre">Autre</option>
+            </select>
+            <button onClick={() => setEditMode(true)}>
+              <FaPen />
+            </button>
+          </div>
+          <div className="input-group">
+            <input
+              type="date"
+              name="dateOfBorn"
+              value={
+                updatedProfile.dateOfBorn ||
+                dataProfile?.account?.dateOfBorn ||
+                ""
+              }
+              onChange={handleInputChange}
+            />
+            <button onClick={() => setEditMode(true)}>
+              <FaPen />
+            </button>
+          </div>
           <button onClick={handleSave}>Enregistrer</button>
         </div>
       ) : (

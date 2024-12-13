@@ -38,7 +38,9 @@
 .profile-informations {
   font-weight: 600;
 }
-
+.input-group {
+  display: flex;
+}
 .profile-details p {
   margin: 10px 0;
   font-size: 16px;
