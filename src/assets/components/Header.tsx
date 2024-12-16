@@ -55,6 +55,11 @@ const Header: React.FC = () => {
               </Link>
             </p>
             <p>
+              <Link to="/offers" onClick={() => setIsMenuOpen(false)}>
+                Offres
+              </Link>
+            </p>
+            <p>
               <Link to="/home" onClick={() => setIsMenuOpen(false)}>
                 Accueil
               </Link>
