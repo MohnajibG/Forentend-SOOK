@@ -89,43 +89,53 @@ const Publish: React.FC = () => {
 
   return (
     <main className="main-publish">
-      <img src={background} alt="Image de fond" />
+      <img
+        className="publish-background-img"
+        src={background}
+        alt="Image de fond"
+      />
       <form className="publish" onSubmit={handleSubmit}>
-        <div className="publish-content">
-          <h2>Publier votre article</h2>
+        <div className="input-picture">
+          <label htmlFor="pictures">+ Ajouter vos photos</label>
+          <input
+            id="pictures"
+            type="file"
+            multiple
+            style={{ display: "none" }}
+            onChange={(e) => {
+              const files = e.target.files ? Array.from(e.target.files) : [];
+              setPictures((prevPictures) => [...prevPictures, ...files]);
+            }}
+          />
 
-          <div className="input-picture">
-            <label htmlFor="pictures">+ Ajouter vos photos</label>
-            <input
-              id="pictures"
-              type="file"
-              multiple
-              style={{ display: "none" }}
-              onChange={(e) => {
-                const files = e.target.files ? Array.from(e.target.files) : [];
-                setPictures((prevPictures) => [...prevPictures, ...files]);
-              }}
-            />
-
-            {pictures.length > 0 && (
-              <div className="image-preview">
-                {pictures.map((picture, index) => (
+          {pictures.length > 0 && (
+            <div className="image-preview">
+              {pictures.map((picture, index) => (
+                <div key={index} className="image-container">
                   <img
-                    key={index}
+                    className="pictures"
                     src={URL.createObjectURL(picture)}
                     alt={`Aperçu de l'image ${index + 1}`}
                   />
-                ))}
-                <button
-                  type="button"
-                  onClick={() => setPictures([])}
-                  className="clear-button"
-                >
-                  Supprimer toutes les images
-                </button>
-              </div>
-            )}
-          </div>
+                  <button
+                    type="button"
+                    className="remove-image-button"
+                    onClick={() => {
+                      setPictures((prevPictures) =>
+                        prevPictures.filter((_, i) => i !== index)
+                      );
+                    }}
+                  >
+                    x
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="publish-content">
+          <h2>Publier votre article</h2>
 
           {[
             { name: "title", label: "Titre", placeholder: "ex: Chemise Zara" },
