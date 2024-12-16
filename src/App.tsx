@@ -18,11 +18,6 @@ import Footer from "./assets/components/Footer";
 import OffersPage from "./pages/OfferPage";
 
 function App() {
-  const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-    const { token } = useUser();
-    return token ? children : <Navigate to="/login" replace />;
-  };
-
   const { token } = useUser();
 
   return (
@@ -47,14 +42,7 @@ function App() {
           <Route path="/profileUpdate/:userId" element={<ProfileUpdate />} />
           <Route path="/profilePage/:userId" element={<ProfilePage />} />
 
-          <Route
-            path="/publish"
-            element={
-              <ProtectedRoute>
-                <Publish />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/publish" element={<Publish />} />
           <Route path="/offers" element={<OffersPage />} />
 
           {/* Page 404 */}
