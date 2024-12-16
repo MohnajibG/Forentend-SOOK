@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useUser } from "../contexts/UserContext"; // Assure-toi que tu utilises le context pour récupérer le token
+import { useUser } from "../contexts/UserContext";
 
 import background from "../assets/img/background-publish.webp";
 
@@ -9,8 +9,8 @@ import "../assets/styles/publish.css";
 import "../assets/styles/button.css";
 
 const Publish: React.FC = () => {
-  const navigate = useNavigate(); // Hook pour rediriger
-  const { token } = useUser(); // Récupérer le token du contexte d'utilisateur
+  const navigate = useNavigate();
+  const { token } = useUser();
 
   // Déclaration des états du formulaire
   const [title, setTitle] = useState("");
@@ -21,16 +21,11 @@ const Publish: React.FC = () => {
   const [brand, setBrand] = useState("");
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
-  const [pictures, setPictures] = useState<File[]>([]); // Tableau pour plusieurs images
-  const [message, setMessage] = useState<string | null>(null); // Message de succès ou d'erreur
+  const [pictures, setPictures] = useState<File[]>([]);
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!token) {
-      console.log("Token manquant");
-      return; // Si pas de token, on ne fait pas l'envoi
-    }
-
     try {
       const formData = new FormData();
       formData.append("title", title);
