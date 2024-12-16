@@ -35,25 +35,10 @@ const Publish: React.FC = () => {
   };
 
   const isFormValid = (): boolean => {
-    const { title, description, price, condition, city, brand, size, color } =
-      formData;
+    const { title, description, price, city, brand, color } = formData;
 
-    if (
-      !title ||
-      !description ||
-      !price ||
-      !condition ||
-      !city ||
-      !brand ||
-      !size ||
-      !color
-    ) {
+    if (!title || !description || !price || !city || !brand || !color) {
       setMessage("Veuillez remplir tous les champs obligatoires.");
-      return false;
-    }
-
-    if (pictures.length === 0) {
-      setMessage("Veuillez ajouter au moins une photo.");
       return false;
     }
 
