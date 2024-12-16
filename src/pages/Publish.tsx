@@ -94,6 +94,8 @@ const Publish: React.FC = () => {
           },
         }
       );
+      console.log("1", token);
+      console.log("2", token);
 
       // Afficher un message de succès
       setMessage("Votre produit a été publié avec succès !");
@@ -101,7 +103,7 @@ const Publish: React.FC = () => {
 
       // Rediriger après 5 secondes
       setTimeout(() => {
-        navigate("/Offer");
+        navigate("/");
       }, 5000);
     } catch (error) {
       console.error("Erreur lors de la publication de l'offre :", error);

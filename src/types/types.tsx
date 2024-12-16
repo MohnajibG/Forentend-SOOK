@@ -7,8 +7,15 @@ export interface UserContextType {
 }
 
 export interface OfferProps {
-  title: string | null;
-  price: number | null;
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  pictures: string[];
+  userId: {
+    username: string; // En supposant que le username est peuplé
+    avatar: string;
+  };
 }
 
 export interface Account {
