@@ -12,71 +12,118 @@ const Publish: React.FC = () => {
   const navigate = useNavigate();
   const { token } = useUser();
 
-  // Déclaration des états du formulaire
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [condition, setCondition] = useState("");
-  const [city, setCity] = useState("");
-  const [brand, setBrand] = useState("");
-  const [size, setSize] = useState("");
-  const [color, setColor] = useState("");
+  // État global pour les données du formulaire
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    price: "",
+    condition: "",
+    city: "",
+    brand: "",
+    size: "",
+    color: "",
+  });
+
+  // État pour les images et les messages
   const [pictures, setPictures] = useState<File[]>([]);
   const [message, setMessage] = useState<string | null>(null);
 
+  // Fonction pour gérer les changements dans les champs du formulaire
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  // Validation des champs avant soumission
+  const isFormValid = (): boolean => {
+    const { title, description, price, condition, city, brand, size, color } =
+      formData;
+
+    if (
+      !title ||
+      !description ||
+      !price ||
+      !condition ||
+      !city ||
+      !brand ||
+      !size ||
+      !color
+    ) {
+      setMessage("Veuillez remplir tous les champs obligatoires.");
+      return false;
+    }
+
+    if (pictures.length === 0) {
+      setMessage("Veuillez ajouter au moins une photo.");
+      return false;
+    }
+
+    return true;
+  };
+
+  // Fonction de soumission du formulaire
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("price", price);
-      formData.append("condition", condition);
-      formData.append("city", city);
-      formData.append("brand", brand);
-      formData.append("size", size);
-      formData.append("color", color);
 
-      // Ajouter les images si elles sont présentes
-      pictures.forEach((picture) => {
-        formData.append("pictures", picture);
+    // Vérification de la validité des données
+    if (!isFormValid()) return;
+
+    try {
+      const formPayload = new FormData();
+
+      // Ajouter les données du formulaire
+      Object.keys(formData).forEach((key) => {
+        formPayload.append(key, (formData as never)[key]);
       });
 
+      // Ajouter les fichiers images
+      pictures.forEach((picture) => {
+        formPayload.append("pictures", picture);
+      });
+
+      // Requête POST pour publier l'offre
       const response = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/user/offer/publish",
-        formData,
+        formPayload,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Ajoute le token dans l'header pour l'authentification
+            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      console.log("Offre publiée avec succès:", response.data);
+      // Afficher un message de succès
       setMessage("Votre produit a été publié avec succès !");
+      console.log("Réponse de l'API :", response.data);
 
       // Rediriger après 3 secondes
       setTimeout(() => {
-        navigate("/home"); // Redirige vers la page d'accueil
+        navigate("/home");
       }, 3000);
-    } catch (error) {
-      console.error("Erreur lors de la publication de l'offre:", error);
-      setMessage("Une erreur est survenue lors de la publication de l'offre.");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Erreur lors de la publication de l'offre :", error);
+      const errorMsg =
+        error.response?.data?.message ||
+        "Une erreur est survenue lors de la publication.";
+      setMessage(errorMsg);
     }
   };
 
+  // Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
   if (!token) {
     return <Navigate to="/login" />;
   }
 
   return (
     <main className="main-publish">
-      <img src={background} alt="image backgroud" />
-      <div></div>
+      <img src={background} alt="Image de fond" />
       <form className="publish" onSubmit={handleSubmit}>
-        <div className="publish">
+        <div className="publish-content">
           <h2>Publier votre article</h2>
+
+          {/* Section pour l'upload des photos */}
           <div className="input-picture">
             <label htmlFor="pictures">+ Ajouter vos photos</label>
             <input
@@ -95,92 +142,72 @@ const Publish: React.FC = () => {
                   <img
                     key={index}
                     src={URL.createObjectURL(picture)}
-                    alt={`Image preview ${index + 1}`}
+                    alt={`Aperçu de l'image ${index + 1}`}
                   />
                 ))}
+                <button
+                  type="button"
+                  onClick={() => setPictures([])}
+                  className="clear-button"
+                >
+                  Supprimer toutes les images
+                </button>
               </div>
             )}
           </div>
-          {/* Inputs pour chaque champ du formulaire */}
-          <div className="input-publish">
-            <h3>Titre:</h3>
-            <input
-              type="text"
-              placeholder="ex: Chemise Sézane verte"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <div className="input-publish">
-            <h3>Description:</h3>
-            <input
-              type="text"
-              placeholder="ex: porté quelquefois, taille correctement"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
-          <div className="input-publish">
-            <h3>Marque:</h3>
-            <input
-              type="text"
-              placeholder="ex: Zara"
-              value={brand}
-              onChange={(e) => setBrand(e.target.value)}
-            />
-          </div>
-          <div className="input-publish">
-            <h3>Taille:</h3>
-            <input
-              type="text"
-              placeholder="ex: L / 40 / 12"
-              value={size}
-              onChange={(e) => setSize(e.target.value)}
-            />
-          </div>
-          <div className="input-publish">
-            <h3>Couleur:</h3>
-            <input
-              type="text"
-              placeholder="ex: Vert, Rose, Bleu"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-            />
-          </div>
-          <div className="input-publish">
-            <h3>Condition:</h3>
-            <input
-              type="text"
-              placeholder="ex: Neuf avec étiquette"
-              value={condition}
-              onChange={(e) => setCondition(e.target.value)}
-            />
-          </div>
-          <div className="input-publish">
-            <h3>Ville:</h3>
-            <input
-              type="text"
-              placeholder="ex: Paris"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
-          </div>
-          <div className="input-publish">
-            <h3>Prix:</h3>
-            <input
-              type="number"
-              placeholder="ex: 0.00 €"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-            />
-          </div>
 
-          <button type="submit">Envoyer</button>
+          {/* Champs du formulaire */}
+          {[
+            { name: "title", label: "Titre", placeholder: "ex: Chemise Zara" },
+            {
+              name: "description",
+              label: "Description",
+              placeholder: "ex: porté quelques fois, taille bien",
+            },
+            { name: "brand", label: "Marque", placeholder: "ex: Zara" },
+            { name: "size", label: "Taille", placeholder: "ex: L / 40 / 12" },
+            {
+              name: "color",
+              label: "Couleur",
+              placeholder: "ex: Vert, Rouge, Bleu",
+            },
+            {
+              name: "condition",
+              label: "Condition",
+              placeholder: "ex: Neuf avec étiquette",
+            },
+            { name: "city", label: "Ville", placeholder: "ex: Paris" },
+            { name: "price", label: "Prix", placeholder: "ex: 25.00" },
+          ].map(({ name, label, placeholder }) => (
+            <div className="input-publish" key={name}>
+              <h3>{label} :</h3>
+              <input
+                type={name === "price" ? "number" : "text"}
+                name={name}
+                placeholder={placeholder}
+                value={(formData as never)[name]}
+                onChange={handleInputChange}
+              />
+            </div>
+          ))}
+
+          {/* Bouton de soumission */}
+          <button type="submit" className="btn-primary">
+            Publier
+          </button>
         </div>
       </form>
 
-      {/* Afficher un message de succès ou d'erreur */}
-      {message && <div className="message">{message}</div>}
+      {/* Message de feedback */}
+      {message && (
+        <div
+          className={`message ${
+            message.includes("erreur") ? "error" : "success"
+          }`}
+        >
+          {message}
+        </div>
+      )}
     </main>
   );
 };
