@@ -14,7 +14,6 @@ const Publish: React.FC = () => {
   const navigate = useNavigate();
   const { token } = useUser();
 
-  // État global pour les données du formulaire
   const [formData, setFormData] = useState<FormDataType>({
     title: "",
     description: "",
@@ -26,17 +25,15 @@ const Publish: React.FC = () => {
     color: "",
   });
 
-  // État pour les images et les messages
   const [pictures, setPictures] = useState<File[]>([]);
   const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  // Fonction pour gérer les changements dans les champs du formulaire
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Validation des champs avant soumission
   const isFormValid = (): boolean => {
     const { title, description, price, condition, city, brand, size, color } =
       formData;
@@ -63,27 +60,24 @@ const Publish: React.FC = () => {
     return true;
   };
 
-  // Fonction de soumission du formulaire
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Vérification de la validité des données
     if (!isFormValid()) return;
 
     try {
-      const formPayload = new FormData();
+      setLoading(true);
+      setMessage(null);
 
-      // Ajouter les données du formulaire
+      const formPayload = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         formPayload.append(key, value);
       });
 
-      // Ajouter les fichiers images
       pictures.forEach((picture) => {
         formPayload.append("pictures", picture);
       });
 
-      // Requête POST pour publier l'offre
       const response = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/offers/publish",
         formPayload,
@@ -94,19 +88,17 @@ const Publish: React.FC = () => {
           },
         }
       );
-      console.log("1", token);
-      console.log("2", token);
+      console.log(response.data);
 
-      // Afficher un message de succès
       setMessage("Votre produit a été publié avec succès !");
-      console.log("Réponse de l'API :", response.data);
-
-      // Rediriger après 5 secondes
       setTimeout(() => {
-        navigate("/");
+        navigate("/offer");
       }, 5000);
     } catch (error) {
       console.error("Erreur lors de la publication de l'offre :", error);
+      setMessage("Erreur lors de la publication de l'offre.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,7 +109,6 @@ const Publish: React.FC = () => {
         <div className="publish-content">
           <h2>Publier votre article</h2>
 
-          {/* Section pour l'upload des photos */}
           <div className="input-picture">
             <label htmlFor="pictures">+ Ajouter vos photos</label>
             <input
@@ -127,7 +118,7 @@ const Publish: React.FC = () => {
               style={{ display: "none" }}
               onChange={(e) => {
                 const files = e.target.files ? Array.from(e.target.files) : [];
-                setPictures((prevPictures) => [...prevPictures, ...files]); // Ajout des nouvelles images
+                setPictures((prevPictures) => [...prevPictures, ...files]);
               }}
             />
 
@@ -136,7 +127,7 @@ const Publish: React.FC = () => {
                 {pictures.map((picture, index) => (
                   <img
                     key={index}
-                    src={URL.createObjectURL(picture)} // Génération de l'aperçu
+                    src={URL.createObjectURL(picture)}
                     alt={`Aperçu de l'image ${index + 1}`}
                   />
                 ))}
@@ -151,7 +142,6 @@ const Publish: React.FC = () => {
             )}
           </div>
 
-          {/* Champs du formulaire */}
           {[
             { name: "title", label: "Titre", placeholder: "ex: Chemise Zara" },
             {
@@ -186,14 +176,12 @@ const Publish: React.FC = () => {
             </div>
           ))}
 
-          {/* Bouton de soumission */}
-          <button type="submit" className="btn-primary">
-            Publier
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? "Envoi en cours..." : "Publier"}
           </button>
         </div>
       </form>
 
-      {/* Message de feedback */}
       {message && (
         <div
           className={`message ${
