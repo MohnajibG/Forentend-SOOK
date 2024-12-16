@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 
 import background from "../assets/img/background-publish.webp";
+
+import { FormDataType } from "../types/types";
 
 import "../assets/styles/publish.css";
 import "../assets/styles/button.css";
@@ -13,7 +15,7 @@ const Publish: React.FC = () => {
   const { token } = useUser();
 
   // État global pour les données du formulaire
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormDataType>({
     title: "",
     description: "",
     price: "",
@@ -72,8 +74,8 @@ const Publish: React.FC = () => {
       const formPayload = new FormData();
 
       // Ajouter les données du formulaire
-      Object.keys(formData).forEach((key) => {
-        formPayload.append(key, (formData as never)[key]);
+      Object.entries(formData).forEach(([key, value]) => {
+        formPayload.append(key, value);
       });
 
       // Ajouter les fichiers images
@@ -83,7 +85,7 @@ const Publish: React.FC = () => {
 
       // Requête POST pour publier l'offre
       const response = await axios.post(
-        "https://site--sook--dnxhn8mdblq5.code.run/user/offer/publish",
+        "https://site--sook--dnxhn8mdblq5.code.run/offers/publish",
         formPayload,
         {
           headers: {
@@ -97,24 +99,14 @@ const Publish: React.FC = () => {
       setMessage("Votre produit a été publié avec succès !");
       console.log("Réponse de l'API :", response.data);
 
-      // Rediriger après 3 secondes
+      // Rediriger après 5 secondes
       setTimeout(() => {
-        navigate("/home");
-      }, 3000);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+        navigate("/Offer");
+      }, 5000);
+    } catch (error) {
       console.error("Erreur lors de la publication de l'offre :", error);
-      const errorMsg =
-        error.response?.data?.message ||
-        "Une erreur est survenue lors de la publication.";
-      setMessage(errorMsg);
     }
   };
-
-  // Si l'utilisateur n'est pas connecté, redirige vers la page de connexion
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
 
   return (
     <main className="main-publish">
@@ -133,15 +125,16 @@ const Publish: React.FC = () => {
               style={{ display: "none" }}
               onChange={(e) => {
                 const files = e.target.files ? Array.from(e.target.files) : [];
-                setPictures(files);
+                setPictures((prevPictures) => [...prevPictures, ...files]); // Ajout des nouvelles images
               }}
             />
+
             {pictures.length > 0 && (
               <div className="image-preview">
                 {pictures.map((picture, index) => (
                   <img
                     key={index}
-                    src={URL.createObjectURL(picture)}
+                    src={URL.createObjectURL(picture)} // Génération de l'aperçu
                     alt={`Aperçu de l'image ${index + 1}`}
                   />
                 ))}
@@ -185,7 +178,7 @@ const Publish: React.FC = () => {
                 type={name === "price" ? "number" : "text"}
                 name={name}
                 placeholder={placeholder}
-                value={(formData as never)[name]}
+                value={formData[name as keyof FormDataType]}
                 onChange={handleInputChange}
               />
             </div>

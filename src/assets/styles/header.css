@@ -73,6 +73,7 @@ header img {
   color: #ffffffd4;
   background-color: #da0d0df9;
   font-weight: 800;
+  border: #000000 2px solid;
 }
 .dct-div .deconnexion:hover {
   background-color: #ff2f2ff4;
@@ -93,7 +94,7 @@ header img {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: #000000f9 2px solid;
+  border: #000000 2px solid;
   cursor: context-menu;
 }
 

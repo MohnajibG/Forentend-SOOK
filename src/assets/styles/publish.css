@@ -1,13 +1,12 @@
 .main-publish {
   color: #fff;
-  padding-bottom: 150px;
+  padding: 50px 0;
 
   color: #fff;
   font-family: "Krub", sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 5rem;
 }
 
 .main-publish img {
@@ -26,9 +25,8 @@
   margin: 0 2rem;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
 }
 
 .publish h2 {

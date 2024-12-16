@@ -35,3 +35,14 @@ export interface UserProfile {
   updatedAt: string;
   _id: string;
 }
+
+export type FormDataType = {
+  title: string;
+  description: string;
+  price: string;
+  condition: string;
+  city: string;
+  brand: string;
+  size: string;
+  color: string;
+};
