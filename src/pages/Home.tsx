@@ -24,14 +24,13 @@ const Home: React.FC = () => {
             !
           </h2>
           <p>Merci de vous être connecté. Profitez de nos fonctionnalités !</p>
-          {/* Modification ici pour la navigation */}
           <button className="home-btn" onClick={() => navigate("/publish")}>
             Publier un article
           </button>
         </div>
       ) : (
         <div className="welcom-container">
-          <h2>Bienvenue visiteur !</h2>
+          <h2>Bienvenue!</h2>
           <p>Pour accéder à plus de fonctionnalités, veuillez </p>
           <div>
             <button className="home-btn" onClick={() => navigate("/login")}>

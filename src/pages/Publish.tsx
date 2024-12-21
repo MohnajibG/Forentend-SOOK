@@ -34,21 +34,15 @@ const Publish: React.FC = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const isFormValid = (): boolean => {
-    const { title, description, price, city, brand, color } = formData;
-
-    if (!title || !description || !price || !city || !brand || !color) {
-      setMessage("Veuillez remplir tous les champs obligatoires.");
-      return false;
-    }
-
-    return true;
-  };
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!isFormValid()) return;
+    // Validation directe dans handleSubmit
+    const { title, description, price, city, brand, color } = formData;
+    if (!title || !description || !price || !city || !brand || !color) {
+      setMessage("Veuillez remplir tous les champs obligatoires.");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -73,8 +67,8 @@ const Publish: React.FC = () => {
           },
         }
       );
-      console.log(response.data);
 
+      console.log(response.data);
       setMessage("Votre produit a été publié avec succès !");
       setTimeout(() => {
         navigate("/offer");
@@ -137,39 +131,93 @@ const Publish: React.FC = () => {
         <div className="publish-content">
           <h2>Publier votre article</h2>
 
-          {[
-            { name: "title", label: "Titre", placeholder: "ex: Chemise Zara" },
-            {
-              name: "description",
-              label: "Description",
-              placeholder: "ex: porté quelques fois, taille bien",
-            },
-            { name: "brand", label: "Marque", placeholder: "ex: Zara" },
-            { name: "size", label: "Taille", placeholder: "ex: L / 40 / 12" },
-            {
-              name: "color",
-              label: "Couleur",
-              placeholder: "ex: Vert, Rouge, Bleu",
-            },
-            {
-              name: "condition",
-              label: "Condition",
-              placeholder: "ex: Neuf avec étiquette",
-            },
-            { name: "city", label: "Ville", placeholder: "ex: Paris" },
-            { name: "price", label: "Prix", placeholder: "ex: 25.00" },
-          ].map(({ name, label, placeholder }) => (
-            <div className="input-publish" key={name}>
-              <h3>{label} :</h3>
-              <input
-                type={name === "price" ? "number" : "text"}
-                name={name}
-                placeholder={placeholder}
-                value={formData[name as keyof FormDataType]}
-                onChange={handleInputChange}
-              />
-            </div>
-          ))}
+          <div className="input-publish">
+            <h3>Titre :</h3>
+            <input
+              type="text"
+              name="title"
+              placeholder="ex: Chemise Zara"
+              value={formData.title}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="input-publish">
+            <h3>Description :</h3>
+            <input
+              type="text"
+              name="description"
+              placeholder="ex: porté quelques fois, taille bien"
+              value={formData.description}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="input-publish">
+            <h3>Marque :</h3>
+            <input
+              type="text"
+              name="brand"
+              placeholder="ex: Zara"
+              value={formData.brand}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="input-publish">
+            <h3>Taille :</h3>
+            <input
+              type="text"
+              name="size"
+              placeholder="ex: L / 40 / 12"
+              value={formData.size}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="input-publish">
+            <h3>Couleur :</h3>
+            <input
+              type="text"
+              name="color"
+              placeholder="ex: Vert, Rouge, Bleu"
+              value={formData.color}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="input-publish">
+            <h3>Condition :</h3>
+            <input
+              type="text"
+              name="condition"
+              placeholder="ex: Neuf avec étiquette"
+              value={formData.condition}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="input-publish">
+            <h3>Ville :</h3>
+            <input
+              type="text"
+              name="city"
+              placeholder="ex: Paris"
+              value={formData.city}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="input-publish">
+            <h3>Prix :</h3>
+            <input
+              type="number"
+              name="price"
+              placeholder="ex: 25.00"
+              value={formData.price}
+              onChange={handleInputChange}
+            />
+          </div>
 
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? "Envoi en cours..." : "Publier"}
