@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { OfferProps } from "../types/types";
+import "../assets/styles/offerpage.css";
 
 const OffersPage: React.FC = () => {
   const [offers, setOffers] = useState<OfferProps[]>([]);
@@ -14,7 +15,7 @@ const OffersPage: React.FC = () => {
           "https://site--sook--dnxhn8mdblq5.code.run/offers"
         );
 
-        setOffers(response.data.offers);
+        setOffers(response.data.offers || []); // Gérer le cas où "offers" est undefined
         setLoading(false);
       } catch (error) {
         console.error("Erreur lors de la récupération des offres :", error);
@@ -26,9 +27,11 @@ const OffersPage: React.FC = () => {
     fetchOffers();
   }, []);
 
-  return loading ? (
-    <main className="offer-main">Chargement...</main>
-  ) : (
+  if (loading) {
+    return <main className="offer-main">Chargement...</main>;
+  }
+
+  return (
     <main className="offer-main">
       {error && <div className="error-message">{error}</div>}
       {offers.length === 0 ? (
@@ -40,24 +43,33 @@ const OffersPage: React.FC = () => {
               <h2>{offer.title}</h2>
               <p>Description : {offer.description}</p>
               <p>Prix : {offer.price}€</p>
-              <p>Posté par : {offer.userId.username}</p>
-              {offer.userId.avatar && (
+              {/* Vérifie si userId et username existent avant d'afficher */}
+              {offer.userId ? (
+                <p>Posté par : {offer.userId.username}</p>
+              ) : (
+                <p>Utilisateur inconnu</p>
+              )}
+              {/* Vérifie et affiche l'avatar de l'utilisateur s'il existe */}
+              {offer.userId?.avatar && (
                 <img
                   src={offer.userId.avatar}
                   alt="Avatar"
                   className="avatar"
                 />
               )}
-              <div>
-                {offer.pictures.map((picture, index) => (
-                  <img
-                    key={index}
-                    src={picture}
-                    alt={`Offer ${offer._id} image`}
-                    className="offer-image"
-                  />
-                ))}
-              </div>
+              {/* Vérifie si des images sont disponibles pour l'offre */}
+              {offer.pictures?.length > 0 && (
+                <div>
+                  {offer.pictures.map((picture, index) => (
+                    <img
+                      key={index}
+                      src={picture}
+                      alt={`Image de l'offre ${offer._id}`}
+                      className="offer-image"
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
