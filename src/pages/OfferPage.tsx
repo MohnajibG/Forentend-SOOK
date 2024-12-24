@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { OfferProps } from "../types/types";
 import "../assets/styles/offerpage.css";
+import backgroundPage from "../assets/img/offerPage.webp";
 
 const OffersPage: React.FC = () => {
   const [offers, setOffers] = useState<OfferProps[]>([]);
@@ -27,12 +28,15 @@ const OffersPage: React.FC = () => {
     fetchOffers();
   }, []);
 
-  if (loading) {
-    return <main className="offer-main">Chargement...</main>;
-  }
-
-  return (
+  return loading ? (
+    <main className="offer-main">Chargement...</main>
+  ) : (
     <main className="offer-main">
+      <img
+        className="background-img"
+        src={backgroundPage}
+        alt="image background"
+      />
       {error && <div className="error-message">{error}</div>}
       {offers.length === 0 ? (
         <p>Soyez le premier à publier sur SOOK.</p>
@@ -59,7 +63,7 @@ const OffersPage: React.FC = () => {
               )}
               {/* Vérifie si des images sont disponibles pour l'offre */}
               {offer.pictures?.length > 0 && (
-                <div>
+                <div className="pictures-offer">
                   {offer.pictures.map((picture, index) => (
                     <img
                       key={index}

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import hero from "../assets/img/hero.jpg";
 import "../assets/styles/home.css";
 import { useUser } from "../contexts/UserContext";
+import OffersPage from "./OfferPage";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -43,6 +44,9 @@ const Home: React.FC = () => {
           </div>
         </div>
       )}
+      <div className="offer">
+        <OffersPage />
+      </div>
     </div>
   );
 };

@@ -97,6 +97,10 @@
 .right-bar {
   color: #ab6415;
 }
+.offer {
+  background-color: #ffffff67;
+  width: 90%;
+}
 
 /* MEDIA QUERIES */
 
