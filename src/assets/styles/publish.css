@@ -10,11 +10,9 @@
 }
 
 .publish-background-img {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
-
   object-fit: cover;
-
   position: fixed;
   top: 0;
   left: 0;
@@ -100,6 +98,26 @@
   max-height: 100px;
   object-fit: cover;
   border-radius: 5px;
+}
+.message {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin: 100px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-align: center;
+}
+
+.message.error {
+  background-color: #f5828b;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.message.success {
+  background-color: #f96666;
+  color: #571515;
+  border: 2px solid #ff0000;
 }
 
 @media (max-width: 768px) {

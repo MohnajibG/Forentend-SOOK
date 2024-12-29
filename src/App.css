@@ -14,3 +14,8 @@ a {
     transform: rotate(360deg);
   }
 }
+
+.message,
+.error {
+  color: red;
+}

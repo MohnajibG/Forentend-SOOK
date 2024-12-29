@@ -4,7 +4,6 @@ import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 
 import background from "../assets/img/background-publish.webp";
-
 import { FormDataType } from "../types/types";
 
 import "../assets/styles/publish.css";
@@ -34,36 +33,28 @@ const Publish: React.FC = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
+    setMessage(null);
 
-    // Validation directe dans handleSubmit
-    const { title, description, price, city, brand, color } = formData;
-    if (!title || !description || !price || !city || !brand || !color) {
-      setMessage("Veuillez remplir tous les champs obligatoires.");
-      return;
-    }
+    const formPayload = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      formPayload.append(key, value);
+    });
+
+    pictures.forEach((picture) => {
+      formPayload.append("pictures", picture);
+    });
+
+    console.log("FormData avant envoi :");
+    formPayload.forEach((value, key) => console.log(`${key}: ${value}`));
 
     try {
-      setLoading(true);
-      setMessage(null);
-
-      const formPayload = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        formPayload.append(key, value);
-      });
-
-      pictures.forEach((picture) => {
-        formPayload.append("pictures", picture);
-      });
-
       const response = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/offers/publish",
         formPayload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -73,9 +64,13 @@ const Publish: React.FC = () => {
       setTimeout(() => {
         navigate("/offer");
       }, 5000);
-    } catch (error) {
-      console.error("Erreur lors de la publication de l'offre :", error);
-      setMessage("Erreur lors de la publication de l'offre.");
+    } catch (error: unknown) {
+      console.log("Erreur lors de la publication de l'offre :", error);
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("Erreur lors de la publication de l'offre.");
+      }
     } finally {
       setLoading(false);
     }
@@ -131,93 +126,45 @@ const Publish: React.FC = () => {
         <div className="publish-content">
           <h2>Publier votre article</h2>
 
-          <div className="input-publish">
-            <h3>Titre :</h3>
-            <input
-              type="text"
-              name="title"
-              placeholder="ex: Chemise Zara"
-              value={formData.title}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="input-publish">
-            <h3>Description :</h3>
-            <input
-              type="text"
-              name="description"
-              placeholder="ex: porté quelques fois, taille bien"
-              value={formData.description}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="input-publish">
-            <h3>Marque :</h3>
-            <input
-              type="text"
-              name="brand"
-              placeholder="ex: Zara"
-              value={formData.brand}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="input-publish">
-            <h3>Taille :</h3>
-            <input
-              type="text"
-              name="size"
-              placeholder="ex: L / 40 / 12"
-              value={formData.size}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="input-publish">
-            <h3>Couleur :</h3>
-            <input
-              type="text"
-              name="color"
-              placeholder="ex: Vert, Rouge, Bleu"
-              value={formData.color}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="input-publish">
-            <h3>Condition :</h3>
-            <input
-              type="text"
-              name="condition"
-              placeholder="ex: Neuf avec étiquette"
-              value={formData.condition}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="input-publish">
-            <h3>Ville :</h3>
-            <input
-              type="text"
-              name="city"
-              placeholder="ex: Paris"
-              value={formData.city}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="input-publish">
-            <h3>Prix :</h3>
-            <input
-              type="number"
-              name="price"
-              placeholder="ex: 25.00"
-              value={formData.price}
-              onChange={handleInputChange}
-            />
-          </div>
+          {[
+            { label: "Titre", name: "title", placeholder: "ex: Chemise Zara" },
+            {
+              label: "Description",
+              name: "description",
+              placeholder: "ex: porté quelques fois, taille bien",
+            },
+            { label: "Marque", name: "brand", placeholder: "ex: Zara" },
+            { label: "Taille", name: "size", placeholder: "ex: L / 40 / 12" },
+            {
+              label: "Couleur",
+              name: "color",
+              placeholder: "ex: Vert, Rouge, Bleu",
+            },
+            {
+              label: "Condition",
+              name: "condition",
+              placeholder: "ex: Neuf avec étiquette",
+            },
+            { label: "Ville", name: "city", placeholder: "ex: Paris" },
+            {
+              label: "Prix",
+              name: "price",
+              placeholder: "ex: 25.00",
+              type: "number",
+            },
+          ].map(({ label, name, placeholder, type = "text" }) => (
+            <div className="input-publish" key={name}>
+              <h3>{label} :</h3>
+              <input
+                type={type}
+                name={name}
+                placeholder={placeholder}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                value={(formData as any)[name]}
+                onChange={handleInputChange}
+              />
+            </div>
+          ))}
 
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? "Envoi en cours..." : "Publier"}
