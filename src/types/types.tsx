@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface UserContextType {
   userId: string | null;
   token: string | null;
@@ -7,6 +9,7 @@ export interface UserContextType {
 }
 
 export interface OfferProps {
+  account: ReactNode;
   _id: string;
   title: string;
   description: string;
@@ -53,3 +56,8 @@ export type FormDataType = {
   size: string;
   color: string;
 };
+
+export interface HeaderProps {
+  search: string;
+  setSearch: (value: string) => void;
+}

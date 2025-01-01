@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { UserProvider, useUser } from "./contexts/UserContext";
 import {
   BrowserRouter as Router,
@@ -18,17 +19,16 @@ import Footer from "./assets/components/Footer";
 import OffersPage from "./pages/OfferPage";
 
 function App() {
+  const [search, setSearch] = useState<string>("");
   const { token } = useUser();
 
   return (
     <UserProvider>
       <Router>
-        <Header />
+        <Header search={search} setSearch={setSearch} />
 
         <Routes>
-          {/* Redirige "/" vers "/home" */}
           <Route path="/" element={<Navigate to="/home" replace />} />
-          {/* Page accessible uniquement si l'utilisateur n'est pas connecté */}
           <Route
             path="/login"
             element={token ? <Navigate to="/home" replace /> : <Login />}
@@ -37,8 +37,10 @@ function App() {
             path="/signup"
             element={token ? <Navigate to="/home" replace /> : <Signup />}
           />
-          {/* Routes normales */}
-          <Route path="/home" element={<Home />} />
+          <Route
+            path="/home"
+            element={<Home search={search} setSearch={setSearch} />}
+          />
           <Route path="/profileUpdate/:userId" element={<ProfileUpdate />} />
           <Route path="/profilePage/:userId" element={<ProfilePage />} />
 

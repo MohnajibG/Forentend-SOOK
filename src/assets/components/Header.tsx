@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
 import logo from "../img/LOGO.png";
@@ -8,16 +8,17 @@ import { BsFillBasket3Fill } from "react-icons/bs";
 import "../styles/header.css";
 import "../styles/burgerMenu.css";
 
-const Header: React.FC = () => {
+import { HeaderProps } from "../../types/types";
+
+const Header: React.FC<HeaderProps> = ({ search, setSearch }) => {
   const navigate = useNavigate();
-  const [address, setAddress] = useState("");
   const { token, userId, logout } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && address.trim()) {
-      navigate(`/search?query=${encodeURIComponent(address)}`);
+    if (e.key === "Enter" && search.trim()) {
+      navigate(`/search?query=${encodeURIComponent(search)}`);
     }
   };
 
@@ -72,7 +73,7 @@ const Header: React.FC = () => {
           </nav>
         )}
 
-        <div className="header-inpt-btn&‡">
+        <div className="header-inpt-btn">
           {token ? (
             <div className="dct-div">
               <button
@@ -109,9 +110,11 @@ const Header: React.FC = () => {
                         Accueil
                       </Link>
                     </li>
-                    <Link to="/offers" onClick={() => setIsMenuOpen(false)}>
-                      Offres
-                    </Link>
+                    <li>
+                      <Link to="/offers" onClick={() => setIsMenuOpen(false)}>
+                        Offres
+                      </Link>
+                    </li>
                     <li>
                       <Link to="/publish" onClick={() => setIsMenuOpen(false)}>
                         Publier
@@ -150,8 +153,8 @@ const Header: React.FC = () => {
         <input
           className="search"
           type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           onKeyDown={handleSearch}
           placeholder="Recherche"
           aria-label="Champ de recherche"
