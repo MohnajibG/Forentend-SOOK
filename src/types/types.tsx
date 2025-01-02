@@ -61,3 +61,11 @@ export interface HeaderProps {
   search: string;
   setSearch: (value: string) => void;
 }
+
+export interface SearchProps {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setIsSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSearchResults: React.Dispatch<React.SetStateAction<OfferProps[]>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}

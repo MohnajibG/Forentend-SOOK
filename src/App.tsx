@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UserProvider, useUser } from "./contexts/UserContext";
+import { UserProvider, useUser } from "./assets/contexts/UserContext";
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,16 +7,16 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Login from "./assets/pages/Login";
+import Signup from "./assets/pages/Signup";
 import Header from "./assets/components/Header";
-import NoMatch from "./pages/noMatch";
-import Home from "./pages/Home";
-import ProfileUpdate from "./pages/ProfileUpdate";
-import ProfilePage from "./pages/ProfilePage";
-import Publish from "./pages/Publish";
+import NoMatch from "./assets/pages/noMatch";
+import Home from "./assets/pages/Home";
+import ProfileUpdate from "./assets/pages/ProfileUpdate";
+import ProfilePage from "./assets/pages/ProfilePage";
+import Publish from "./assets/pages/Publish";
 import Footer from "./assets/components/Footer";
-import OffersPage from "./pages/OfferPage";
+import OffersPage from "./assets/pages/OfferPage";
 
 function App() {
   const [search, setSearch] = useState<string>("");

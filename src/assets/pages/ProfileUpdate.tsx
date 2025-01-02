@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 
-import "../assets/styles/profileUpdate.css";
-import backgroundUpdateProfil from "../assets/img/hero.jpg";
+import "../styles/profileUpdate.css";
+import backgroundUpdateProfil from "../img/hero.jpg";
 
 const ProfileUpdate: React.FC = () => {
   const { username, token, userId } = useUser();

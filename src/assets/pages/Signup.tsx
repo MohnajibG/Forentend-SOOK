@@ -6,10 +6,10 @@ import { ClipLoader } from "react-spinners";
 
 import { useUser } from "../contexts/UserContext";
 
-import signup from "../assets/img/backgroundsignup.jpg";
+import signup from "../img/backgroundsignup.jpg";
 
-import "../assets/styles/signup.css";
-import "../assets/styles/input.css";
+import "../styles/signup.css";
+import "../styles/input.css";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 

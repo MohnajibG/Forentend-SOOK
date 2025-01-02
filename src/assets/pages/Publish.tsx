@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 
-import background from "../assets/img/background-publish.webp";
-import { FormDataType } from "../types/types";
+import background from "../img/background-publish.webp";
+import { FormDataType } from "../../types/types";
 
-import "../assets/styles/publish.css";
-import "../assets/styles/button.css";
+import "../styles/publish.css";
+import "../styles/button.css";
 
 const Publish: React.FC = () => {
   const navigate = useNavigate();

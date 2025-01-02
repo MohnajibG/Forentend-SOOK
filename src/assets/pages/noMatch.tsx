@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../assets/styles/noMatch.css";
+import "../styles/noMatch.css";
 
 const NoMatch = () => {
   const navigate = useNavigate();

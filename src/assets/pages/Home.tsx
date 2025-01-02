@@ -1,38 +1,52 @@
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import hero from "../assets/img/hero.jpg";
-import "../assets/styles/home.css";
+
+import hero from "../img/hero.jpg";
+
+import "../styles/home.css";
+
 import { useUser } from "../contexts/UserContext";
 
-import { HeaderProps, OfferProps } from "../types/types";
+import { HeaderProps, OfferProps } from "../../types/types";
 import { Key, useEffect, useState } from "react";
 
 const Home: React.FC<HeaderProps> = ({ search }) => {
   const [data, setData] = useState<{ offers: OfferProps[] }>({ offers: [] });
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const { username } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
+      setError(null); // Reset error state before starting new fetch
       try {
-        const response = await fetch(
+        const response = await axios.get(
           `https://site--sook--dnxhn8mdblq5.code.run/offers?title=${search}`
         );
-        const result = await response.json();
-        console.log(result);
-
-        setData(result);
-        setIsLoading(false);
+        setData(response.data); // Assuming the response structure matches { offers: [] }
       } catch (error) {
-        console.log(error);
+        console.error("Erreur lors de la récupération des données:", error);
+        setError("Une erreur est survenue lors du chargement des offres.");
+        setData({ offers: [] });
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchData();
+
+    if (search.trim()) {
+      fetchData();
+    } else {
+      setData({ offers: [] }); // Reset data when search is empty
+    }
   }, [search]);
 
   return isLoading ? (
     <p>Loading ...</p>
+  ) : error ? (
+    <p>{error}</p> // Display error message if there's an issue with fetching data
   ) : (
     <div className="home-container">
       <h1>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { OfferProps } from "../types/types";
-import "../assets/styles/offerpage.css";
-import backgroundPage from "../assets/img/offerPage.webp";
+import { OfferProps } from "../../types/types";
+import "../styles/offerPage.css";
+import backgroundPage from "../img/hero.jpg";
 
 const OffersPage: React.FC = () => {
   const [offers, setOffers] = useState<OfferProps[]>([]);

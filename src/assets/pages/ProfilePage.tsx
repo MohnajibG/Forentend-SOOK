@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../contexts/UserContext";
-import "../assets/styles/profilePage.css";
+import "../styles/profileUpdate.css";
 
-import backgroundUpdateProfil from "../assets/img/hero.jpg";
-import logo from "../assets/img/LOGO1.png";
+import backgroundUpdateProfil from "../img/hero.jpg";
+import logo from "../img/LOGO1.png";
 
-import { FaPen } from "react-icons/fa"; // Import de l'icône de crayon
-import { Account } from "../types/types";
+import { FaPen } from "react-icons/fa";
+import { Account } from "../../types/types";
 
 const ProfilePage: React.FC = () => {
   const { token, userId } = useUser();

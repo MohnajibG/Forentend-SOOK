@@ -1,48 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useUser } from "../../contexts/UserContext";
-import logo from "../img/LOGO.png";
+import { useUser } from "../contexts/UserContext";
+
 import { CgProfile } from "react-icons/cg";
 import { BsFillBasket3Fill } from "react-icons/bs";
 
-import "../styles/header.css";
-import "../styles/burgerMenu.css";
+import logo from "../img/LOGO.png";
 
 import { HeaderProps } from "../../types/types";
+import "../styles/header.css";
+import "../styles/burgerMenu.css";
+import Search from "./Search";
 
-const Header: React.FC<HeaderProps> = ({ search, setSearch }) => {
+const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const { token, userId, logout } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [search, setSearch] = useState("");
 
   const menuRef = useRef<HTMLDivElement>(null);
-  const searchRef = useRef<HTMLInputElement>(null);
-
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && search.trim()) {
-      // Lancer la recherche et mettre à jour les résultats
-      setSearchResults([`Résultats pour "${search}"`]); // Exemple de résultat
-      setIsSearchOpen(true);
-    }
-  };
 
   const handleLogout = () => {
     logout();
     navigate("/home");
   };
 
+  // Fermer les menus quand on clique en dehors
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node) &&
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
-        setIsSearchOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -60,31 +47,19 @@ const Header: React.FC<HeaderProps> = ({ search, setSearch }) => {
         {token && (
           <nav className="header-nav">
             <p>
-              <Link
-                to={`/profilePage/${userId}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Profil
-              </Link>
+              <Link to={`/profilePage/${userId}`}>Profil</Link>
             </p>
             <p>
-              <Link to="/offers" onClick={() => setIsMenuOpen(false)}>
-                Offres
-              </Link>
+              <Link to="/offers">Offres</Link>
             </p>
             <p>
-              <Link to="/home" onClick={() => setIsMenuOpen(false)}>
-                Accueil
-              </Link>
+              <Link to="/home">Accueil</Link>
             </p>
             <p>
-              <Link to="/publish" onClick={() => setIsMenuOpen(false)}>
-                Publier
-              </Link>
+              <Link to="/publish">Publier</Link>
             </p>
           </nav>
         )}
-
         <div className="header-inpt-btn">
           {token ? (
             <div className="dct-div">
@@ -107,35 +82,17 @@ const Header: React.FC<HeaderProps> = ({ search, setSearch }) => {
               {isMenuOpen && (
                 <div className="burger-menu" ref={menuRef}>
                   <ul>
-                    {userId && (
-                      <li>
-                        <Link
-                          to={`/profilePage/${userId}`}
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Profil
-                        </Link>
-                      </li>
-                    )}
                     <li>
-                      <Link to="/home" onClick={() => setIsMenuOpen(false)}>
-                        Accueil
-                      </Link>
+                      <Link to={`/profilePage/${userId}`}>Profil</Link>
                     </li>
                     <li>
-                      <Link to="/offers" onClick={() => setIsMenuOpen(false)}>
-                        Offres
-                      </Link>
+                      <Link to="/home">Accueil</Link>
                     </li>
                     <li>
-                      <Link to="/publish" onClick={() => setIsMenuOpen(false)}>
-                        Publier
-                      </Link>
+                      <Link to="/offers">Offres</Link>
                     </li>
                     <li>
-                      <Link to="/settings" onClick={() => setIsMenuOpen(false)}>
-                        Panier <BsFillBasket3Fill />
-                      </Link>
+                      <Link to="/publish">Publier</Link>
                     </li>
                     <li>
                       <button
@@ -170,29 +127,7 @@ const Header: React.FC<HeaderProps> = ({ search, setSearch }) => {
           )}
         </div>
       </div>
-
-      <div className="search-nav">
-        <input
-          ref={searchRef}
-          className="search"
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={handleSearch}
-          onClick={() => setIsSearchOpen(true)}
-          placeholder="Recherche"
-          aria-label="Champ de recherche"
-        />
-      </div>
-      {isSearchOpen && searchResults.length > 0 && (
-        <div className="search-results">
-          {searchResults.map((result, index) => (
-            <div key={index} className="search-result">
-              {result}
-            </div>
-          ))}
-        </div>
-      )}
+      <Search search={search} setSearch={setSearch} />
     </header>
   );
 };
