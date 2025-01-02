@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { OfferProps } from "../../types/types";
-import "../styles/offerPage.css";
+import "../styles/offer.css";
 import backgroundPage from "../img/hero.jpg";
 
 const OffersPage: React.FC = () => {
