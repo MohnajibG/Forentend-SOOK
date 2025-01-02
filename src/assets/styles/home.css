@@ -97,9 +97,39 @@
 .right-bar {
   color: #ab6415;
 }
-.offer {
-  background-color: #ffffff67;
+.offer-home {
+  background-color: #fac3c38c;
   width: 90%;
+  margin-bottom: 40vh;
+}
+.offer-home .offer-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 10px;
+  background-color: #fffefea9;
+  box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
+  width: 15rem;
+}
+.offer-home .offer-item:hover {
+  background-color: #fffefe;
+  transition: 1s;
+}
+.offer-home .offer-item .pictures-offer {
+  width: 30%;
+  height: 30%;
+  object-fit: cover;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.offer-home .offer-item .pictures-offer img {
+  width: 100%;
+  border-radius: 10px;
 }
 
 /* MEDIA QUERIES */

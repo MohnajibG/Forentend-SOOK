@@ -35,7 +35,8 @@ header img {
   border-bottom: 1px solid #dbc4b8;
 }
 
-.search {
+.search,
+.search-results {
   padding-left: 4vw;
   border: none;
   height: 0.8rem;
@@ -105,6 +106,7 @@ a {
 
 .header-nav {
   display: none;
+  padding: 0 1rem;
 }
 
 .header-inpt-btn {
@@ -114,6 +116,12 @@ a {
 }
 .panier {
   display: none;
+}
+.search-results {
+  background-color: #ffffffac;
+  height: 100px;
+  width: 95vw;
+  border-radius: 0 0 15px 15px;
 }
 
 @media (max-width: 768px) {
@@ -200,5 +208,8 @@ a {
     height: 2rem;
     width: 4rem;
     font-size: small;
+  }
+  .deconnexion {
+    display: none;
   }
 }

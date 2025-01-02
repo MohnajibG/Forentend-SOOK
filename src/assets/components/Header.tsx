@@ -14,11 +14,17 @@ const Header: React.FC<HeaderProps> = ({ search, setSearch }) => {
   const navigate = useNavigate();
   const { token, userId, logout } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<string[]>([]);
+
   const menuRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && search.trim()) {
-      navigate(`/search?query=${encodeURIComponent(search)}`);
+      // Lancer la recherche et mettre à jour les résultats
+      setSearchResults([`Résultats pour "${search}"`]); // Exemple de résultat
+      setIsSearchOpen(true);
     }
   };
 
@@ -29,8 +35,14 @@ const Header: React.FC<HeaderProps> = ({ search, setSearch }) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setIsMenuOpen(false);
+        setIsSearchOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -125,6 +137,15 @@ const Header: React.FC<HeaderProps> = ({ search, setSearch }) => {
                         Panier <BsFillBasket3Fill />
                       </Link>
                     </li>
+                    <li>
+                      <button
+                        className="deconnexion-burger"
+                        onClick={handleLogout}
+                        aria-label="Bouton de déconnexion"
+                      >
+                        Déconnexion
+                      </button>
+                    </li>
                   </ul>
                 </div>
               )}
@@ -149,17 +170,29 @@ const Header: React.FC<HeaderProps> = ({ search, setSearch }) => {
           )}
         </div>
       </div>
+
       <div className="search-nav">
         <input
+          ref={searchRef}
           className="search"
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={handleSearch}
+          onClick={() => setIsSearchOpen(true)}
           placeholder="Recherche"
           aria-label="Champ de recherche"
         />
       </div>
+      {isSearchOpen && searchResults.length > 0 && (
+        <div className="search-results">
+          {searchResults.map((result, index) => (
+            <div key={index} className="search-result">
+              {result}
+            </div>
+          ))}
+        </div>
+      )}
     </header>
   );
 };
