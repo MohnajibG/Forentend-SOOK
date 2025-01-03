@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../contexts/UserContext";
-import "../styles/profileUpdate.css";
+import "../styles/profilePage.css";
 
 import backgroundUpdateProfil from "../img/hero.jpg";
 import logo from "../img/LOGO1.png";

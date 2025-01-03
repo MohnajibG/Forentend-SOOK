@@ -16,7 +16,8 @@ import ProfileUpdate from "./assets/pages/ProfileUpdate";
 import ProfilePage from "./assets/pages/ProfilePage";
 import Publish from "./assets/pages/Publish";
 import Footer from "./assets/components/Footer";
-import OffersPage from "./assets/pages/OfferPage";
+import OffersPage from "./assets/pages/OffersPage";
+import OfferPage from "./assets/pages/OfferPage";
 
 function App() {
   const [search, setSearch] = useState<string>("");
@@ -37,15 +38,14 @@ function App() {
             path="/signup"
             element={token ? <Navigate to="/home" replace /> : <Signup />}
           />
-          <Route
-            path="/home"
-            element={<Home search={search} setSearch={setSearch} />}
-          />
+          <Route path="/home" element={<Home />} />
           <Route path="/profileUpdate/:userId" element={<ProfileUpdate />} />
           <Route path="/profilePage/:userId" element={<ProfilePage />} />
 
           <Route path="/publish" element={<Publish />} />
           <Route path="/offers" element={<OffersPage />} />
+          <Route path="/search/:keyword" element={<OffersPage />} />
+          <Route path="/offer/:id" element={<OfferPage />} />
 
           {/* Page 404 */}
           <Route path="*" element={<NoMatch />} />

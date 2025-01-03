@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { OfferProps } from "../../types/types";
 import "../styles/header.css";
+import { Link } from "react-router-dom";
 
 interface SearchProps {
   search: string;
@@ -20,8 +21,7 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
         setIsLoading(true); // Début du chargement
         try {
           const response = await axios.get(
-            "https://site--sook--dnxhn8mdblq5.code.run/offers",
-            { params: { keyword: search } }
+            `https://site--sook--dnxhn8mdblq5.code.run/offers?title=${search}`
           );
           setSearchResults(response.data.offers || []); // Met à jour les résultats
           setIsSearchOpen(true); // Affiche les résultats
@@ -51,11 +51,15 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
         placeholder="Recherche"
         aria-label="Champ de recherche"
       />
-      {isLoading && <div className="loading">Chargement...</div>}{" "}
+      {isLoading && <div className="loading">Chargement...</div>}
       {isSearchOpen && searchResults.length > 0 && (
         <div className="search-results">
-          {searchResults.map((result, index) => (
-            <div key={index} className="search-result">
+          {searchResults.map((result) => (
+            <Link
+              to={`/offer/${result._id}`}
+              key={result._id}
+              className="search-result"
+            >
               <img
                 src={result.pictures[0]}
                 alt={result.title}
@@ -67,7 +71,7 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
                 <p>{result.description}</p>
                 <p>Prix : {result.price}€</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

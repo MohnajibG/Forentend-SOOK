@@ -47,6 +47,7 @@ export interface UserProfile {
 }
 
 export type FormDataType = {
+  pictures: unknown[];
   title: string;
   description: string;
   price: string;

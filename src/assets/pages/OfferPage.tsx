@@ -1,85 +1,66 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { OfferProps } from "../../types/types";
-import "../styles/offerpage.css";
-import backgroundPage from "../img/hero.jpg";
+import { FormDataType } from "../../types/types";
+import { useParams } from "react-router-dom"; // Pour récupérer l'ID depuis l'URL
 
-const OffersPage: React.FC = () => {
-  const [offers, setOffers] = useState<OfferProps[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+import "../styles/offerPage.css";
+import background from "../img/offerPage.webp";
+
+const OfferPage: React.FC = () => {
+  const [offer, setOffer] = useState<FormDataType | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { id } = useParams<{ id: string }>(); // Récupère l'ID depuis l'URL
 
   useEffect(() => {
-    const fetchOffers = async () => {
+    const fetchOffer = async () => {
+      console.log("id====>", id);
       try {
         const response = await axios.get(
-          "https://site--sook--dnxhn8mdblq5.code.run/offers"
+          `https://site--sook--dnxhn8mdblq5.code.run/offers/${id}`
         );
-
-        setOffers(response.data.offers || []); // Gérer le cas où "offers" est undefined
-        setLoading(false);
+        setOffer(response.data);
+        console.log(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des offres :", error);
-        setError("Impossible de charger les offres.");
-        setLoading(false);
+        console.error("Erreur lors de la récupération de l'offre :", error);
+        setLoading(false); // Fin du chargement
       }
     };
 
-    fetchOffers();
-  }, []);
+    fetchOffer();
+  }, [id]); // Exécute l'effet uniquement lorsque l'ID change
 
-  return loading ? (
-    <main className="offer-main">Chargement...</main>
-  ) : (
-    <main className="offer-main">
-      <img
-        className="background-img"
-        src={backgroundPage}
-        alt="image background"
-      />
-      {error && <div className="error-message">{error}</div>}
-      {offers.length === 0 ? (
-        <p>Soyez le premier à publier sur SOOK.</p>
+  return (
+    <div className="offer-main">
+      {loading ? (
+        <h2>CHARGEMENT ...</h2>
+      ) : !offer ? (
+        <p>Aucune offre trouvée ou erreur de chargement.</p>
       ) : (
-        <div>
-          {offers.map((offer) => (
-            <div key={offer._id} className="offer-item">
-              <h2>{offer.title}</h2>
-              <p>Description : {offer.description}</p>
-              <p>Prix : {offer.price}€</p>
-              {/* Vérifie si userId et username existent avant d'afficher */}
-              {offer.userId ? (
-                <p>Posté par : {offer.userId.username}</p>
-              ) : (
-                <p>Utilisateur inconnu</p>
-              )}
-              {/* Vérifie et affiche l'avatar de l'utilisateur s'il existe */}
-              {offer.userId?.avatar && (
+        <>
+          <h2>{offer.title}</h2>
+          <img src={background} alt="Background" className="background-img" />
+          <div className="offer-item">
+            <h1>{offer.brand}</h1>
+            <p>{offer.description}</p>
+            {offer.pictures &&
+            Array.isArray(offer.pictures) &&
+            offer.pictures.length > 0 ? (
+              offer.pictures.map((picture, index) => (
                 <img
-                  src={offer.userId.avatar}
-                  alt="Avatar"
-                  className="avatar"
+                  key={index}
+                  src={offer.pictures}
+                  alt={`Offer ${index}`}
+                  className="offer-image"
                 />
-              )}
-              {/* Vérifie si des images sont disponibles pour l'offre */}
-              {offer.pictures?.length > 0 && (
-                <div className="pictures-offer">
-                  {offer.pictures.map((picture, index) => (
-                    <img
-                      key={index}
-                      src={picture}
-                      alt={`Image de l'offre ${offer._id}`}
-                      className="offer-image"
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+              ))
+            ) : (
+              <p>Aucune image disponible pour cette offre.</p>
+            )}
+          </div>
+        </>
       )}
-    </main>
+    </div>
   );
 };
 
-export default OffersPage;
+export default OfferPage;

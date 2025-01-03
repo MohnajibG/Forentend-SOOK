@@ -101,6 +101,10 @@
   background-color: #fac3c38c;
   width: 90%;
   margin-bottom: 40vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 .offer-home .offer-item {
   display: flex;
@@ -130,6 +134,7 @@
 .offer-home .offer-item .pictures-offer img {
   width: 100%;
   border-radius: 10px;
+  object-fit: cover;
 }
 
 /* MEDIA QUERIES */

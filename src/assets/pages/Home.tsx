@@ -7,10 +7,11 @@ import "../styles/home.css";
 
 import { useUser } from "../contexts/UserContext";
 
-import { HeaderProps, OfferProps } from "../../types/types";
-import { Key, useEffect, useState } from "react";
+import { OfferProps } from "../../types/types";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const Home: React.FC<HeaderProps> = ({ search }) => {
+const Home: React.FC = () => {
   const [data, setData] = useState<{ offers: OfferProps[] }>({ offers: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +25,7 @@ const Home: React.FC<HeaderProps> = ({ search }) => {
       setError(null); // Reset error state before starting new fetch
       try {
         const response = await axios.get(
-          `https://site--sook--dnxhn8mdblq5.code.run/offers?title=${search}`
+          "https://site--sook--dnxhn8mdblq5.code.run/offers"
         );
         setData(response.data); // Assuming the response structure matches { offers: [] }
       } catch (error) {
@@ -36,12 +37,8 @@ const Home: React.FC<HeaderProps> = ({ search }) => {
       }
     };
 
-    if (search.trim()) {
-      fetchData();
-    } else {
-      setData({ offers: [] }); // Reset data when search is empty
-    }
-  }, [search]);
+    fetchData();
+  }, []);
 
   return isLoading ? (
     <p>Loading ...</p>
@@ -100,10 +97,7 @@ const Home: React.FC<HeaderProps> = ({ search }) => {
             {offer.pictures?.length > 0 && (
               <div className="pictures-offer">
                 {offer.pictures.map(
-                  (
-                    picture: string | undefined,
-                    index: Key | null | undefined
-                  ) => (
+                  (picture: string | undefined, index: number) => (
                     <img
                       key={index}
                       src={picture}
@@ -114,6 +108,9 @@ const Home: React.FC<HeaderProps> = ({ search }) => {
                 )}
               </div>
             )}
+            <Link to={`/offer/${offer._id}`}>
+              <button> Voir l'offre</button>
+            </Link>
           </div>
         ))}
       </div>
