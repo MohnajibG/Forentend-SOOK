@@ -44,7 +44,7 @@ const OffersPage: React.FC = () => {
       ) : (
         <div className="offers">
           {offers.map((offer) => (
-            <Link to={`/offers/${offer._id}`} className="offer-link">
+            <Link to={`/offer/${offer._id}`} className="offer-link">
               <div key={offer._id} className="offer-item">
                 <h2>{offer.title}</h2>
                 <p>Description : {offer.description}</p>
