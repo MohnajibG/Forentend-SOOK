@@ -18,6 +18,7 @@ import Publish from "./assets/pages/Publish";
 import Footer from "./assets/components/Footer";
 import OffersPage from "./assets/pages/OffersPage";
 import OfferPage from "./assets/pages/OfferPage";
+import Cart from "./assets/pages/Cart";
 
 function App() {
   const [search, setSearch] = useState<string>("");
@@ -46,6 +47,8 @@ function App() {
           <Route path="/offers" element={<OffersPage />} />
           <Route path="/search/:keyword" element={<OffersPage />} />
           <Route path="/offer/:id" element={<OfferPage />} />
+
+          <Route path="/cart" element={<Cart />} />
 
           {/* Page 404 */}
           <Route path="*" element={<NoMatch />} />

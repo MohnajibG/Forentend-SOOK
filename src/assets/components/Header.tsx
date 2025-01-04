@@ -76,9 +76,11 @@ const Header: React.FC<HeaderProps> = () => {
               >
                 <CgProfile />
               </div>
-              <div className="panier">
-                <BsFillBasket3Fill />
-              </div>
+              <Link to="/cart">
+                <div className="panier">
+                  <BsFillBasket3Fill />
+                </div>
+              </Link>
               {isMenuOpen && (
                 <div className="burger-menu" ref={menuRef}>
                   <ul>
@@ -93,6 +95,11 @@ const Header: React.FC<HeaderProps> = () => {
                     </li>
                     <li>
                       <Link to="/publish">Publier</Link>
+                    </li>
+                    <li>
+                      <Link to="/cart">
+                        Panier <BsFillBasket3Fill />
+                      </Link>
                     </li>
                     <li>
                       <button

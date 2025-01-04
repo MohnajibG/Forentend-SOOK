@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { FormDataType } from "../../types/types";
 import background from "../img/offerPage.webp";
 import "../styles/offerstyle.css";
+import AddToCartButton from "../components/AddToCartButton";
 
 const OfferPage: React.FC = () => {
   const [offer, setOffer] = useState<FormDataType | null>(null);
@@ -26,12 +27,11 @@ const OfferPage: React.FC = () => {
       } catch (err) {
         console.error("Erreur lors de la récupération de l'offre :", err);
         setError("Erreur lors du chargement de l'offre. Veuillez réessayer.");
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
 
-    if (id) fetchOffer();
+    fetchOffer();
   }, [id]);
 
   const renderPictures = () => {
@@ -78,7 +78,7 @@ const OfferPage: React.FC = () => {
           <div className="img-btn">
             {" "}
             <div className="offer-images">{renderPictures()}</div>
-            <button>Ajouter au Panier</button>
+            <AddToCartButton item={item} cart={cart} setCart={setCart} />
           </div>
         </div>
       )}

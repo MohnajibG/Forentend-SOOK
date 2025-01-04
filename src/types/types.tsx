@@ -70,3 +70,10 @@ export interface SearchProps {
   setSearchResults: React.Dispatch<React.SetStateAction<OfferProps[]>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export interface CartItem {
+  id: string; // ou number, selon vos données
+  name: string;
+  price: number;
+  quantity: number;
+}
