@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 import { FormDataType } from "../../types/types";
 import background from "../img/offerPage.webp";
-import "../styles/offerPage.css";
+import "../../assets/styles/offerPage.css";
 
 const OfferPage: React.FC = () => {
   const [offer, setOffer] = useState<FormDataType | null>(null);
