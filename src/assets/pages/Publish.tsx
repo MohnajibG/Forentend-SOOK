@@ -22,6 +22,7 @@ const Publish: React.FC = () => {
     brand: "",
     size: "",
     color: "",
+    pictures: [],
   });
 
   const [pictures, setPictures] = useState<File[]>([]);
@@ -38,7 +39,7 @@ const Publish: React.FC = () => {
 
     const formPayload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      formPayload.append(key, value);
+      formPayload.append(key, value as string);
     });
 
     pictures.forEach((picture) => {

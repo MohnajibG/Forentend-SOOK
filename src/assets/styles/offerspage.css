@@ -21,10 +21,15 @@
   left: 0;
   z-index: -1;
 }
+.offers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5rem;
+}
 
 .offer-item {
   flex: 1 1 calc(33.333% - 40px); /* Taille flexible pour 3 colonnes avec espaces */
-  max-width: 300px; /* Largeur max d'une offre */
+  max-width: 200px; /* Largeur max d'une offre */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre */
   border-radius: 8px; /* Coins arrondis */
   background-color: #fff; /* Fond blanc */

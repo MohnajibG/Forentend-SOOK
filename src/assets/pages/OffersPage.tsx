@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { OfferProps } from "../../types/types";
+import { Link } from "react-router-dom"; // Import du composant Link
 import "../styles/offerspage.css";
 import backgroundPage from "../img/hero.jpg";
 
@@ -41,40 +42,42 @@ const OffersPage: React.FC = () => {
       {offers.length === 0 ? (
         <p>Soyez le premier à publier sur SOOK.</p>
       ) : (
-        <div>
+        <div className="offers">
           {offers.map((offer) => (
-            <div key={offer._id} className="offer-item">
-              <h2>{offer.title}</h2>
-              <p>Description : {offer.description}</p>
-              <p>Prix : {offer.price}€</p>
-              {/* Vérifie si userId et username existent avant d'afficher */}
-              {offer.userId ? (
-                <p>Posté par : {offer.userId.username}</p>
-              ) : (
-                <p>Utilisateur inconnu</p>
-              )}
-              {/* Vérifie et affiche l'avatar de l'utilisateur s'il existe */}
-              {offer.userId?.avatar && (
-                <img
-                  src={offer.userId.avatar}
-                  alt="Avatar"
-                  className="avatar"
-                />
-              )}
-              {/* Vérifie si des images sont disponibles pour l'offre */}
-              {offer.pictures?.length > 0 && (
-                <div className="pictures-offer">
-                  {offer.pictures.map((picture, index) => (
-                    <img
-                      key={index}
-                      src={picture}
-                      alt={`Image de l'offre ${offer._id}`}
-                      className="offer-image"
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+            <Link to={`/offers/${offer._id}`} className="offer-link">
+              <div key={offer._id} className="offer-item">
+                <h2>{offer.title}</h2>
+                <p>Description : {offer.description}</p>
+                <p>Prix : {offer.price}€</p>
+                {/* Vérifie si userId et username existent avant d'afficher */}
+                {offer.userId ? (
+                  <p>Posté par : {offer.userId.username}</p>
+                ) : (
+                  <p>Utilisateur inconnu</p>
+                )}
+                {/* Vérifie et affiche l'avatar de l'utilisateur s'il existe */}
+                {offer.userId?.avatar && (
+                  <img
+                    src={offer.userId.avatar}
+                    alt="Avatar"
+                    className="avatar"
+                  />
+                )}
+                {/* Vérifie si des images sont disponibles pour l'offre */}
+                {offer.pictures?.length > 0 && (
+                  <div className="pictures-offer">
+                    {offer.pictures.map((picture, index) => (
+                      <img
+                        key={index}
+                        src={picture}
+                        alt={`Image de l'offre ${offer._id}`}
+                        className="offer-image"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </Link>
           ))}
         </div>
       )}
