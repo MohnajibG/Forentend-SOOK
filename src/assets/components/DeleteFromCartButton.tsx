@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { CartItem } from "../../types/types";
 
 interface DeleteFromCartButtonProps {
@@ -12,9 +13,22 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
   cart,
   setCart,
 }) => {
-  const handleDeleteFromCart = () => {
-    const updatedCart = cart.filter((cartItem) => cartItem.id !== item.id);
-    setCart(updatedCart);
+  const handleDeleteFromCart = async () => {
+    try {
+      // Suppression de l'article côté backend
+      await axios.delete(
+        `https://site--sook--dnxhn8mdblq5.code.run/carts/${item.id}`
+      );
+
+      // Mise à jour du panier localement
+      const updatedCart = cart.filter((cartItem) => cartItem.id !== item.id);
+      setCart(updatedCart);
+    } catch (error) {
+      console.error(
+        "Erreur lors de la suppression de l'article du panier :",
+        error
+      );
+    }
   };
 
   return <button onClick={handleDeleteFromCart}>Supprimer</button>;

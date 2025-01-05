@@ -1,4 +1,6 @@
+import axios from "axios";
 import { CartItem } from "../../types/types";
+
 interface AddToCartButtonProps {
   item: { id: string; name: string; price: number };
   cart: CartItem[];
@@ -10,9 +12,10 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   cart,
   setCart,
 }) => {
-  const handleAddToCart = (item: CartItem) => {
+  const handleAddToCart = async (item: CartItem) => {
     const addCartCopy = [...cart];
     const foundItem = addCartCopy.find((cartItem) => cartItem.id === item.id);
+
     if (!foundItem) {
       addCartCopy.push({
         ...item,
@@ -21,7 +24,21 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     } else {
       foundItem.quantity++;
     }
-    setCart(addCartCopy);
+
+    try {
+      // Envoi des données mises à jour au backend
+      await axios.post("https://site--sook--dnxhn8mdblq5.code.run/carts", {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: foundItem ? foundItem.quantity : 1,
+      });
+
+      // Met à jour le panier côté frontend
+      setCart(addCartCopy);
+    } catch (error) {
+      console.error("Erreur lors de l'ajout de l'article au panier :", error);
+    }
   };
 
   return (

@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+import { useCart } from "../contexts/CartContext";
+
 import { FormDataType } from "../../types/types";
 import background from "../img/offerPage.webp";
 import "../styles/offerstyle.css";
@@ -13,6 +15,7 @@ const OfferPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const { id } = useParams<{ id: string }>();
+  const { cart, setCart } = useCart();
 
   useEffect(() => {
     const fetchOffer = async () => {
@@ -73,12 +76,21 @@ const OfferPage: React.FC = () => {
             <p>Condition : {offer.condition || "Non spécifiée"}</p>
             <p>Ville : {offer.city || "Non spécifiée"}</p>
 
-            {/* {offer.username && <p>Vendeur : {offer.username}</p>} */}
+            {/* Correction de l'affichage du nom du vendeur */}
+            {offer.userId?.username && <p>Vendeur : {offer.userId.username}</p>}
           </div>
           <div className="img-btn">
-            {" "}
             <div className="offer-images">{renderPictures()}</div>
-            <AddToCartButton item={item} cart={cart} setCart={setCart} />
+            <AddToCartButton
+              cart={cart}
+              setCart={setCart}
+              item={{
+                id: offer._id,
+                name: offer.title,
+                price: offer.price,
+                quantity: 1,
+              }}
+            />
           </div>
         </div>
       )}

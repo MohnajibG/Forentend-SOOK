@@ -47,7 +47,10 @@ export interface UserProfile {
 }
 
 export type FormDataType = {
+  _id: string;
   pictures: string[];
+  userId: string;
+  username: string;
   title: string;
   description: string;
   price: string;

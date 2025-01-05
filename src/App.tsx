@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { UserProvider, useUser } from "./assets/contexts/UserContext";
+import { CartProvider } from "./assets/contexts/CartContext";
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -26,35 +28,37 @@ function App() {
 
   return (
     <UserProvider>
-      <Router>
-        <Header search={search} setSearch={setSearch} />
+      <CartProvider>
+        <Router>
+          <Header search={search} setSearch={setSearch} />
 
-        <Routes>
-          <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route
-            path="/login"
-            element={token ? <Navigate to="/home" replace /> : <Login />}
-          />
-          <Route
-            path="/signup"
-            element={token ? <Navigate to="/home" replace /> : <Signup />}
-          />
-          <Route path="/home" element={<Home />} />
-          <Route path="/profileUpdate/:userId" element={<ProfileUpdate />} />
-          <Route path="/profilePage/:userId" element={<ProfilePage />} />
+          <Routes>
+            <Route path="/" element={<Navigate to="/home" replace />} />
+            <Route
+              path="/login"
+              element={token ? <Navigate to="/home" replace /> : <Login />}
+            />
+            <Route
+              path="/signup"
+              element={token ? <Navigate to="/home" replace /> : <Signup />}
+            />
+            <Route path="/home" element={<Home />} />
+            <Route path="/profileUpdate/:userId" element={<ProfileUpdate />} />
+            <Route path="/profilePage/:userId" element={<ProfilePage />} />
 
-          <Route path="/publish" element={<Publish />} />
-          <Route path="/offers" element={<OffersPage />} />
-          <Route path="/search/:keyword" element={<OffersPage />} />
-          <Route path="/offer/:id" element={<OfferPage />} />
+            <Route path="/publish" element={<Publish />} />
+            <Route path="/offers" element={<OffersPage />} />
+            <Route path="/search/:keyword" element={<OffersPage />} />
+            <Route path="/offer/:id" element={<OfferPage />} />
 
-          <Route path="/cart" element={<Cart />} />
+            <Route path="/cart" element={<Cart />} />
 
-          {/* Page 404 */}
-          <Route path="*" element={<NoMatch />} />
-        </Routes>
-        <Footer />
-      </Router>
+            {/* Page 404 */}
+            <Route path="*" element={<NoMatch />} />
+          </Routes>
+          <Footer />
+        </Router>
+      </CartProvider>
     </UserProvider>
   );
 }
