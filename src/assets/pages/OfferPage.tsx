@@ -4,13 +4,13 @@ import { useParams } from "react-router-dom";
 
 import { useCart } from "../contexts/CartContext";
 
-import { FormDataType } from "../../types/types";
+import { ProfilProps } from "../../types/types";
 import background from "../img/offerPage.webp";
 import "../styles/offerstyle.css";
 import AddToCartButton from "../components/AddToCartButton";
 
 const OfferPage: React.FC = () => {
-  const [offer, setOffer] = useState<FormDataType | null>(null);
+  const [offer, setOffer] = useState<ProfilProps | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,6 +26,8 @@ const OfferPage: React.FC = () => {
         const response = await axios.get(
           `https://site--sook--dnxhn8mdblq5.code.run/offers/${id}`
         );
+        console.log("Réponse de l'API :", response.data);
+
         setOffer(response.data);
       } catch (err) {
         console.error("Erreur lors de la récupération de l'offre :", err);
@@ -77,7 +79,7 @@ const OfferPage: React.FC = () => {
             <p>Ville : {offer.city || "Non spécifiée"}</p>
 
             {/* Correction de l'affichage du nom du vendeur */}
-            {offer.userId?.username && <p>Vendeur : {offer.userId.username}</p>}
+            <p>Vendeur : {offer.account?.username || "lenom"}</p>
           </div>
           <div className="img-btn">
             <div className="offer-images">{renderPictures()}</div>
@@ -85,10 +87,10 @@ const OfferPage: React.FC = () => {
               cart={cart}
               setCart={setCart}
               item={{
-                id: offer._id,
-                name: offer.title,
-                price: offer.price,
-                quantity: 1,
+                id: offer._id || "",
+                name: offer.title || "",
+                price: offer.price || 0,
+                // quantity: 0,
               }}
             />
           </div>

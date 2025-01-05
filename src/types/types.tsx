@@ -1,5 +1,6 @@
-import { ReactNode } from "react";
-
+// ==============================
+// User & Authentication Types
+// ==============================
 export interface UserContextType {
   userId: string | null;
   token: string | null;
@@ -8,34 +9,13 @@ export interface UserContextType {
   logout: () => void;
 }
 
-export interface OfferProps {
-  account: ReactNode;
-  _id: string;
-  title: string;
-  description: string;
-  price: number;
-  pictures: string[];
-  userId: {
-    username: string; // En supposant que le username est peuplé
-    avatar: string;
-  };
-}
-
-export interface Account {
-  username: string;
-  account: Account;
-
-  address: string | null;
-  postalCode: string | null;
-  country: string | null;
-  phoneNumber: string | null;
-  sexe: string | null;
-  dateOfBorn: string | null;
-  avatar: string | null;
+export interface AuthContextType {
+  isAuth: boolean;
+  setIsAuth: (value: boolean) => void;
 }
 
 export interface UserProfile {
-  account: Account;
+  _id: string;
   createdAt: string;
   email: string;
   hash: string;
@@ -43,24 +23,48 @@ export interface UserProfile {
   salt: string;
   token: string;
   updatedAt: string;
-  _id: string;
 }
 
-export type FormDataType = {
-  _id: string;
-  pictures: string[];
-  userId: string;
-  username: string;
-  title: string;
-  description: string;
-  price: string;
-  condition: string;
-  city: string;
-  brand: string;
-  size: string;
-  color: string;
-};
+// ==============================
+// Offer & Product Types
+// ==============================
+export interface ProfilProps {
+  _id?: string | null;
+  title: string | null;
+  description: string | null;
+  price: number | null;
+  condition: string | null;
+  pictures: string[] | null;
+  city: string | null;
+  brand: string | null;
+  color: string | null;
+  size: string | null;
+  account?: {
+    userId: string;
+    username: string;
+    address: string | null;
+    postalCode: string | null;
+    country: string | null;
+    phoneNumber: string | null;
+    sexe: string | null;
+    dateOfBorn: string | null;
+    avatar?: string | null;
+  };
+}
 
+// ==============================
+// Cart Types
+// ==============================
+export interface CartItem {
+  id: string; // ID unique du produit
+  name: string; // Nom du produit
+  price: number; // Prix unitaire
+  quantity: number; // Quantité dans le panier
+}
+
+// ==============================
+// UI & Component Props
+// ==============================
 export interface HeaderProps {
   search: string;
   setSearch: (value: string) => void;
@@ -70,13 +74,6 @@ export interface SearchProps {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   setIsSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setSearchResults: React.Dispatch<React.SetStateAction<OfferProps[]>>;
+  setSearchResults: React.Dispatch<React.SetStateAction<ProfilProps[]>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export interface CartItem {
-  id: string; // ou number, selon vos données
-  name: string;
-  price: number;
-  quantity: number;
 }

@@ -1,79 +1,86 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
-import { useUser } from "../contexts/UserContext";
-
+import { useUser } from "../contexts/UserContext"; // Assurez-vous que le contexte utilisateur est bien importé
 import background from "../img/background-publish.webp";
-import { FormDataType } from "../../types/types";
 
-import "../styles/publish.css";
-import "../styles/button.css";
+import { useNavigate } from "react-router-dom";
+import ImageUpload from "../components/ImgUpload"; // Assurez-vous que le chemin est correct
 
 const Publish: React.FC = () => {
   const navigate = useNavigate();
-  const { token } = useUser();
+  const { token } = useUser(); // Récupérer le token depuis le contexte utilisateur
 
-  const [formData, setFormData] = useState<FormDataType>({
-    title: "",
-    description: "",
-    price: "",
-    condition: "",
-    city: "",
-    brand: "",
-    size: "",
-    color: "",
-    pictures: [],
-  });
+  // Déclaration des états pour chaque champ
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0);
+  const [condition, setCondition] = useState("");
+  const [city, setCity] = useState("");
+  const [brand, setBrand] = useState("");
+  const [size, setSize] = useState("");
+  const [color, setColor] = useState("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null); // URL de l'image téléchargée
+  const [message, setMessage] = useState<string | null>(null); // Message d'erreur ou succès
+  const [loading, setLoading] = useState<boolean>(false); // Indicateur de chargement
 
-  const [pictures, setPictures] = useState<File[]>([]);
-  const [message, setMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  // Fonction pour gérer la soumission du formulaire
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true); // Démarrer le chargement
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
+    // Validation des champs obligatoires
+    if (
+      !title ||
+      !description ||
+      price <= 0 ||
+      !city ||
+      !brand ||
+      !color ||
+      !imageUrl
+    ) {
+      setMessage("Veuillez remplir tous les champs obligatoires.");
+      setLoading(false);
+      return;
+    }
 
-  const handleSubmit = async () => {
-    setMessage(null);
-
-    const formPayload = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      formPayload.append(key, value as string);
-    });
-
-    pictures.forEach((picture) => {
-      formPayload.append("pictures", picture);
-    });
-
-    console.log("FormData avant envoi :");
-    formPayload.forEach((value, key) => console.log(`${key}: ${value}`));
+    // Construction des données à envoyer
+    const formData = {
+      title,
+      description,
+      price,
+      condition,
+      city,
+      brand,
+      size,
+      color,
+      imageUrl, // Utilisation de l'URL de l'image téléchargée
+    };
 
     try {
+      // Envoi de la demande API pour publier l'offre
       const response = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/offers/publish",
-        formPayload,
+        formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Ajout du token Bearer dans l'en-tête
           },
         }
       );
-
-      console.log(response.data);
+      console.log("Publication réussie", response.data);
       setMessage("Votre produit a été publié avec succès !");
       setTimeout(() => {
-        navigate("/offer");
-      }, 5000);
-    } catch (error: unknown) {
-      console.log("Erreur lors de la publication de l'offre :", error);
-      if (axios.isAxiosError(error) && error.response?.data?.message) {
-        setMessage(error.response.data.message);
-      } else {
-        setMessage("Erreur lors de la publication de l'offre.");
-      }
+        navigate("/offer"); // Redirection vers la page des offres
+      }, 3000);
+    } catch (error) {
+      console.error("Erreur lors de la publication", error);
+      setMessage(
+        axios.isAxiosError(error) && error.response?.data?.message
+          ? error.response.data.message
+          : "Erreur lors de la publication de l'offre."
+      );
     } finally {
-      setLoading(false);
+      setLoading(false); // Fin du chargement
     }
   };
 
@@ -84,95 +91,7 @@ const Publish: React.FC = () => {
         src={background}
         alt="Image de fond"
       />
-      <form className="publish" onSubmit={handleSubmit}>
-        <div className="input-picture">
-          <label htmlFor="pictures">+ Ajouter vos photos</label>
-          <input
-            id="pictures"
-            type="file"
-            multiple
-            style={{ display: "none" }}
-            onChange={(e) => {
-              const files = e.target.files ? Array.from(e.target.files) : [];
-              setPictures((prevPictures) => [...prevPictures, ...files]);
-            }}
-          />
-
-          {pictures.length > 0 && (
-            <div className="image-preview">
-              {pictures.map((picture, index) => (
-                <div key={index} className="image-container">
-                  <img
-                    className="pictures"
-                    src={URL.createObjectURL(picture)}
-                    alt={`Aperçu de l'image ${index + 1}`}
-                  />
-                  <button
-                    type="button"
-                    className="remove-image-button"
-                    onClick={() => {
-                      setPictures((prevPictures) =>
-                        prevPictures.filter((_, i) => i !== index)
-                      );
-                    }}
-                  >
-                    x
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="publish-content">
-          <h2>Publier votre article</h2>
-
-          {[
-            { label: "Titre", name: "title", placeholder: "ex: Chemise Zara" },
-            {
-              label: "Description",
-              name: "description",
-              placeholder: "ex: porté quelques fois, taille bien",
-            },
-            { label: "Marque", name: "brand", placeholder: "ex: Zara" },
-            { label: "Taille", name: "size", placeholder: "ex: L / 40 / 12" },
-            {
-              label: "Couleur",
-              name: "color",
-              placeholder: "ex: Vert, Rouge, Bleu",
-            },
-            {
-              label: "Condition",
-              name: "condition",
-              placeholder: "ex: Neuf avec étiquette",
-            },
-            { label: "Ville", name: "city", placeholder: "ex: Paris" },
-            {
-              label: "Prix",
-              name: "price",
-              placeholder: "ex: 25.00",
-              type: "number",
-            },
-          ].map(({ label, name, placeholder, type = "text" }) => (
-            <div className="input-publish" key={name}>
-              <h3>{label} :</h3>
-              <input
-                type={type}
-                name={name}
-                placeholder={placeholder}
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                value={(formData as any)[name]}
-                onChange={handleInputChange}
-              />
-            </div>
-          ))}
-
-          <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Envoi en cours..." : "Publier"}
-          </button>
-        </div>
-      </form>
-
+      <h2>Publier votre produit</h2>
       {message && (
         <div
           className={`message ${
@@ -182,6 +101,69 @@ const Publish: React.FC = () => {
           {message}
         </div>
       )}
+      <form onSubmit={handleSubmit} className="publish-container">
+        <h3>Titre de l'annonce : </h3>
+        <input
+          aria-label="Titre"
+          type="text"
+          placeholder="Titre"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <h3>Description:</h3>
+        <input
+          type="text"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <h3>Prix:</h3>
+        <input
+          type="number"
+          placeholder="Prix"
+          value={price}
+          onChange={(e) => setPrice(Number(e.target.value))}
+        />
+        <h3>Condition</h3>
+        <input
+          type="text"
+          placeholder="Condition"
+          value={condition}
+          onChange={(e) => setCondition(e.target.value)}
+        />
+        <h3>Ville</h3>
+        <input
+          type="text"
+          placeholder="Ville"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+        <h3>Marque</h3>
+        <input
+          type="text"
+          placeholder="Marque"
+          value={brand}
+          onChange={(e) => setBrand(e.target.value)}
+        />
+        <h3>Taille</h3>
+        <input
+          type="text"
+          placeholder="Taille"
+          value={size}
+          onChange={(e) => setSize(e.target.value)}
+        />
+        <h3>Couleur</h3>
+        <input
+          type="text"
+          placeholder="Couleur"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+        />
+        <h3>Photos</h3> <ImageUpload setImageUrl={setImageUrl} />
+        <button type="submit" disabled={loading}>
+          {loading ? "Chargement..." : "Publier l'offre"}
+        </button>
+      </form>
     </main>
   );
 };

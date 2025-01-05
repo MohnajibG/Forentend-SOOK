@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 5rem;
 }
 
 .publish-background-img {
@@ -28,12 +29,23 @@
 }
 
 .publish h2 {
-  font-size: 1em;
+  font-size: 1.3em;
   text-shadow: 0 0 20px rgba(252, 124, 124, 0.8);
 }
 .publish h3 {
   color: #fefefe;
   font-size: 1rem;
+}
+.publish-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.input-publish {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .input-publish input:hover {
