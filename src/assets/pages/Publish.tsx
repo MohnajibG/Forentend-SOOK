@@ -43,18 +43,14 @@ const Publish: React.FC = () => {
       return;
     }
 
-    // Construction des données à envoyer
-    const formData = {
-      title,
-      description,
-      price,
-      condition,
-      city,
-      brand,
-      size,
-      color,
-      imageUrl, // Utilisation de l'URL de l'image téléchargée
-    };
+    const formData = new FormData();
+    formData.append("title", "jean femme");
+    formData.append("description", "jean pour femme");
+    formData.append("price", "17");
+    formData.append("city", "lile");
+    formData.append("brand", "zara");
+    formData.append("color", "bleu");
+    formData.append("pictures", imageUrl); // file est l'objet File sélectionné
 
     try {
       // Envoi de la demande API pour publier l'offre

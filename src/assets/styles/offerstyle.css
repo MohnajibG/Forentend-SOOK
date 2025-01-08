@@ -26,6 +26,8 @@
   gap: 5rem;
 }
 .offer-details {
+  flex: 2;
+
   height: 25rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre */
   border-radius: 8px; /* Coins arrondis */
@@ -38,6 +40,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex: 2;
   flex-direction: column;
   height: 25rem;
   align-items: center;
@@ -47,6 +50,13 @@
   border-radius: 8px; /* Coins arrondis */
   background-color: #ffffffb0; /* Couleur de fond */
   padding: 15px;
+}
+.img-offerPage {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  overflow: scroll;
 }
 
 .offer-container div h2 {

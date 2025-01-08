@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { OfferProps } from "../../types/types";
+import { ProfilProps } from "../../types/types";
 import "../styles/header.css";
 import { Link } from "react-router-dom";
 
@@ -10,7 +10,7 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
-  const [searchResults, setSearchResults] = useState<OfferProps[]>([]);
+  const [searchResults, setSearchResults] = useState<ProfilProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -61,8 +61,8 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
               className="search-result"
             >
               <img
-                src={result.pictures[0]}
-                alt={result.title}
+                src={result.pictures ? result.pictures[0] : ""}
+                alt={result.title || "No title available"}
                 width={50}
                 height={50}
               />

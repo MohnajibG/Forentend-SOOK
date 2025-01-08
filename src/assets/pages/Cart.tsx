@@ -62,6 +62,7 @@ const Cart: React.FC = () => {
               ))}
             </div>
           )}
+          <button>Payer</button>
         </div>
       )}
     </main>
