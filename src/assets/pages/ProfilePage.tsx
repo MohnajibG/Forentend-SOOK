@@ -4,7 +4,7 @@ import { useUser } from "../contexts/UserContext";
 import "../styles/profilePage.css";
 
 import backgroundUpdateProfil from "../img/hero.jpg";
-import logo from "../img/LOGO1.png";
+import Loading from "../img/Loading.gif";
 
 import { FaPen } from "react-icons/fa";
 import { Account } from "../../types/types";
@@ -98,8 +98,8 @@ const ProfilePage: React.FC = () => {
     return (
       <div className="profile-page">
         <img src={backgroundUpdateProfil} alt="Background Update Profil" />
-        <div className="spinner">
-          <img src={logo} alt="Logo de Sook" />
+        <div className="Load">
+          <img src={Loading} alt="" />
         </div>
       </div>
     );

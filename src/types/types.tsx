@@ -77,3 +77,23 @@ export interface SearchProps {
   setSearchResults: React.Dispatch<React.SetStateAction<ProfilProps[]>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+// Define and export the Account type
+
+export interface Account {
+  account: {
+    username: string;
+
+    address: string;
+
+    postalCode: string;
+
+    country: string;
+
+    phoneNumber: string;
+
+    sexe: string;
+
+    dateOfBorn: string;
+  };
+}

@@ -8,6 +8,8 @@ import backgroundCart from "../img/backgroundCart.webp";
 import RemoveFromCartButton from "../components/updateCartButton";
 import DeleteFromCartButton from "../components/DeleteFromCartButton";
 
+import Loading from "../img/Loading.gif";
+
 const Cart: React.FC = () => {
   const { cart, setCart } = useCart(); // Utilisation unique du contexte
   const [loading, setLoading] = useState(false);
@@ -62,7 +64,7 @@ const Cart: React.FC = () => {
               ))}
             </div>
           )}
-          <button>Payer</button>
+          {cart.length > 0 && <button>Payer</button>}
         </div>
       )}
     </main>

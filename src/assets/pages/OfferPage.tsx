@@ -8,6 +8,7 @@ import { ProfilProps } from "../../types/types";
 import background from "../img/offerPage.webp";
 import "../styles/offerstyle.css";
 import AddToCartButton from "../components/AddToCartButton";
+import Loading from "../img/Loading.gif";
 
 const OfferPage: React.FC = () => {
   console.log("montage de OfferPage");
@@ -42,7 +43,12 @@ const OfferPage: React.FC = () => {
     fetchOffer();
   }, [id]);
 
-  if (loading) return <h2>Chargement...</h2>;
+  if (loading)
+    return (
+      <div className="Load">
+        <img src={Loading} alt="" />
+      </div>
+    );
   if (error) return <p className="error-message">{error}</p>;
   if (!offer) return <p>Aucune offre trouvée.</p>;
 
