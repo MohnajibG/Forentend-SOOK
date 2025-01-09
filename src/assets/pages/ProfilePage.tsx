@@ -8,6 +8,7 @@ import Loading from "../img/Loading.gif";
 
 import { FaPen } from "react-icons/fa";
 import { Account } from "../../types/types";
+import ProfileUpdate from "./ProfileUpdate";
 
 const ProfilePage: React.FC = () => {
   const { token, userId } = useUser();
@@ -97,7 +98,11 @@ const ProfilePage: React.FC = () => {
   if (loading) {
     return (
       <div className="profile-page">
-        <img src={backgroundUpdateProfil} alt="Background Update Profil" />
+        <img
+          className="background-img"
+          src={backgroundUpdateProfil}
+          alt="Background Update Profil"
+        />
         <div className="Load">
           <img src={Loading} alt="" />
         </div>
@@ -111,8 +116,19 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className="profile-page">
-      <img src={backgroundUpdateProfil} alt="Background Update Profil" />
+      <img
+        className="background-img"
+        src={backgroundUpdateProfil}
+        alt="Background Update Profil"
+      />
       <h1>Votre Profil</h1>
+      <div>
+        <img
+          className="avatar-preview"
+          src={dataProfile?.account?.avatar || ""}
+          alt=""
+        />
+      </div>
       {editMode ? (
         <div>
           <div className="input-group">

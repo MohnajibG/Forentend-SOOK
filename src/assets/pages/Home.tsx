@@ -24,6 +24,8 @@ const Home: React.FC = () => {
         const response = await axios.get(
           "https://site--sook--dnxhn8mdblq5.code.run/offers"
         );
+        console.log(response.data);
+
         setData(response.data);
       } catch (err) {
         console.error("Erreur lors de la récupération des données:", err);
@@ -98,11 +100,14 @@ const Home: React.FC = () => {
                 <p>Utilisateur inconnu</p>
               )}
               {offer.account?.avatar && (
-                <img
-                  src={offer.account.avatar}
-                  alt="Avatar"
-                  className="avatar"
-                />
+                <div>
+                  <p>avatar</p>
+                  <img
+                    src={offer.account.avatar}
+                    alt="Avatar"
+                    className="avatar"
+                  />
+                </div>
               )}
               {offer.pictures && offer.pictures.length > 0 && (
                 <div className="pictures-offer">

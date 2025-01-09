@@ -3,9 +3,7 @@ import axios from "axios";
 
 import "../styles/publish.css";
 
-interface ImageUploadProps {
-  setImageUrl: React.Dispatch<React.SetStateAction<string | null>>; // Pour passer l'URL de l'image au parent
-}
+import { ImageUploadProps } from "../../types/types";
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ setImageUrl }) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -16,22 +14,30 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ setImageUrl }) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       setLoading(true);
-      setPictures((prevPictures) => [...prevPictures, files[0]]); // Ajoute l'image au tableau des images
+
+      setPictures((prevPictures) => [...prevPictures, ...Array.from(files)]);
 
       const formData = new FormData();
-      formData.append("file", files[0]); // On envoie la première image
-      formData.append("upload_preset", "SookIMG"); // Remplacez par votre upload preset Cloudinary
+      Array.from(files).forEach((file) => {
+        formData.append("file", file); // Ajoute chaque fichier
+      });
+      formData.append("upload_preset", "SookIMG");
 
       try {
         const response = await axios.post(
           "https://api.cloudinary.com/v1_1/mngcloudi/image/upload",
           formData
         );
-        console.log("Image uploadée avec succès:", response.data);
-        setImageUrl(response.data.secure_url); // Récupérez l'URL de l'image et passez-la au parent
+
+        // Si la réponse est un tableau :
+        const imageUrls = Array.isArray(response.data)
+          ? response.data.map((item: any) => item.secure_url)
+          : [response.data.secure_url]; // Si la réponse est un objet unique
+
+        setImageUrl(imageUrls); // Met à jour l'URL des images
       } catch (error) {
-        console.error("Erreur lors de l'upload de l'image:", error);
-        setError("Erreur lors de l'upload de l'image.");
+        console.error("Erreur lors de l'upload des images:", error);
+        setError("Erreur lors de l'upload des images.");
       } finally {
         setLoading(false);
       }
@@ -46,6 +52,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ setImageUrl }) => {
         type="file"
         style={{ display: "none" }}
         onChange={handleImageUpload}
+        multiple
         disabled={loading} // Désactive le champ pendant le chargement
       />
       {pictures.length > 0 && (

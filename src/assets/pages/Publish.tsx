@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useUser } from "../contexts/UserContext"; // Assurez-vous que le contexte utilisateur est bien importé
+import { useUser } from "../contexts/UserContext";
 import background from "../img/background-publish.webp";
-
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "../components/ImgUpload"; // Assurez-vous que le chemin est correct
 
 const Publish: React.FC = () => {
   const navigate = useNavigate();
-  const { token } = useUser(); // Récupérer le token depuis le contexte utilisateur
+  const { token, userId } = useUser(); // Récupérer le token depuis le contexte utilisateur
 
   // Déclaration des états pour chaque champ
   const [title, setTitle] = useState("");
@@ -19,16 +18,14 @@ const Publish: React.FC = () => {
   const [brand, setBrand] = useState("");
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
-  const [imageUrl, setImageUrl] = useState<string | null>(null); // URL de l'image téléchargée
+  const [imageUrls, setImageUrls] = useState<File[]>([]); // Tableau pour stocker les URLs des images
   const [message, setMessage] = useState<string | null>(null); // Message d'erreur ou succès
   const [loading, setLoading] = useState<boolean>(false); // Indicateur de chargement
 
-  // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true); // Démarrer le chargement
 
-    // Validation des champs obligatoires
     if (
       !title ||
       !description ||
@@ -36,7 +33,8 @@ const Publish: React.FC = () => {
       !city ||
       !brand ||
       !color ||
-      !imageUrl
+      imageUrls.length === 0 || // Vérifie que l'array d'images n'est pas vide
+      !userId
     ) {
       setMessage("Veuillez remplir tous les champs obligatoires.");
       setLoading(false);
@@ -44,13 +42,18 @@ const Publish: React.FC = () => {
     }
 
     const formData = new FormData();
-    formData.append("title", "jean femme");
-    formData.append("description", "jean pour femme");
-    formData.append("price", "17");
-    formData.append("city", "lile");
-    formData.append("brand", "zara");
-    formData.append("color", "bleu");
-    formData.append("pictures", imageUrl); // file est l'objet File sélectionné
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("price", price.toString());
+    formData.append("city", city);
+    formData.append("brand", brand);
+    formData.append("color", color);
+    formData.append("userId", userId);
+
+    // Ajout des URLs des images au FormData
+    imageUrls.forEach((url) => {
+      formData.append("pictures", url);
+    });
 
     try {
       // Envoi de la demande API pour publier l'offre
@@ -59,14 +62,14 @@ const Publish: React.FC = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Ajout du token Bearer dans l'en-tête
+            Authorization: `Bearer ${token}`,
           },
         }
       );
       console.log("Publication réussie", response.data);
       setMessage("Votre produit a été publié avec succès !");
       setTimeout(() => {
-        navigate("/offer"); // Redirection vers la page des offres
+        navigate("/offer");
       }, 3000);
     } catch (error) {
       console.error("Erreur lors de la publication", error);
@@ -76,7 +79,7 @@ const Publish: React.FC = () => {
           : "Erreur lors de la publication de l'offre."
       );
     } finally {
-      setLoading(false); // Fin du chargement
+      setLoading(false);
     }
   };
 
@@ -155,9 +158,10 @@ const Publish: React.FC = () => {
           value={color}
           onChange={(e) => setColor(e.target.value)}
         />
-        <h3>Photos</h3> <ImageUpload setImageUrl={setImageUrl} />
+        <h3>Photos</h3>
+        <ImageUpload setImageUrl={setImageUrls} />
         <button type="submit" disabled={loading}>
-          {loading ? "Chargement..." : "Publier l'offre"}
+          {loading ? "Chargement..." : "Publier"}
         </button>
       </form>
     </main>

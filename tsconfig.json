@@ -3,5 +3,9 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "target": "es2015", // ou supérieur
+    "downlevelIteration": true // Permet l'itération des objets
+  }
 }

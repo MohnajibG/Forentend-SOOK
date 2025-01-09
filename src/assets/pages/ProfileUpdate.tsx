@@ -17,9 +17,11 @@ const ProfileUpdate: React.FC = () => {
     phoneNumber: "",
     sexe: "Autre",
     dateOfBorn: "",
+    avatar: "",
   });
 
   const [loading, setLoading] = useState(false);
+  const [loadingAvatar, setLoadingAvatar] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -44,6 +46,7 @@ const ProfileUpdate: React.FC = () => {
         const data = response.data;
         setProfileData((prev) => ({
           ...prev,
+          avatar: data.account?.avatar || "",
           address: data.account?.address || "",
           postalCode: data.account?.postalCode || "",
           country: data.account?.country || "",
@@ -54,9 +57,8 @@ const ProfileUpdate: React.FC = () => {
       } catch (err) {
         setError("Erreur lors de la récupération du profil.");
         console.error(err);
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     fetchProfileData();
@@ -69,6 +71,30 @@ const ProfileUpdate: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     setProfileData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setLoadingAvatar(true);
+      const formData = new FormData();
+      formData.append("file", files[0]); // Ajoute l'avatar
+      formData.append("upload_preset", "SookIMG"); // Remplace par ton upload preset
+
+      try {
+        const response = await axios.post(
+          "https://api.cloudinary.com/v1_1/mngcloudi/image/upload",
+          formData
+        );
+        const avatarUrl = response.data.secure_url;
+        setProfileData((prev) => ({ ...prev, avatar: avatarUrl })); // Met à jour l'avatar
+      } catch (err) {
+        console.error("Erreur lors de l'upload de l'avatar:", err);
+        setError("Erreur lors de l'upload de l'avatar.");
+      } finally {
+        setLoadingAvatar(false);
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,11 +116,11 @@ const ProfileUpdate: React.FC = () => {
         phoneNumber: profileData.phoneNumber,
         sexe: profileData.sexe,
         dateOfBorn: profileData.dateOfBorn,
+        avatar: profileData.avatar,
       };
 
       console.log("Données envoyées :", updatedProfile);
 
-      // Envoi de la requête pour mettre à jour le profil (sans FormData)
       const response = await axios.put(
         `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
         updatedProfile,
@@ -108,9 +134,9 @@ const ProfileUpdate: React.FC = () => {
 
       setProfileData(response.data);
       navigate(`/profilePage/${userId}`);
-    } catch (error) {
+    } catch (err) {
       setError("Erreur lors de la mise à jour du profil.");
-      console.error(error);
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -119,17 +145,22 @@ const ProfileUpdate: React.FC = () => {
   if (loading) {
     return (
       <div className="main-profileUpdate">
-        <img src={backgroundUpdateProfil} alt="Background Update Profil" />
-        <div className="spinner-container">
-          <div className="spinner"></div>
-        </div>
+        <img
+          className="profilbackground"
+          src={backgroundUpdateProfil}
+          alt="Background Update Profil"
+        />
       </div>
     );
   }
 
   return (
-    <div className="main-profileUpdate">
-      <img src={backgroundUpdateProfil} alt="Background Update Profil" />
+    <main className="main-profileUpdate">
+      <img
+        className="profilbackground"
+        src={backgroundUpdateProfil}
+        alt="Background Update Profil"
+      />
       <h2>Mettre à jour le profil</h2>
 
       {error && <p className="error">{error}</p>}
@@ -205,13 +236,33 @@ const ProfileUpdate: React.FC = () => {
             value={profileData.phoneNumber}
             onChange={handleInputChange}
           />
+
+          <div className="avatar-container">
+            <label htmlFor="avatar"> +Ajouter Votre Photo de Profile</label>
+            <input
+              className="avatar"
+              id="avatar"
+              type="file"
+              style={{ display: "none" }}
+              onChange={handleAvatarUpload}
+              disabled={loading}
+            />
+            {loadingAvatar && <div className="spinner-avatar"></div>}
+            {profileData.avatar && (
+              <img
+                src={profileData.avatar}
+                alt="Aperçu de l'avatar"
+                className="avatar-preview"
+              />
+            )}
+          </div>
         </div>
 
         <button type="submit" className="button-profileUpdate">
           Mettre à jour
         </button>
       </form>
-    </div>
+    </main>
   );
 };
 

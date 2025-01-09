@@ -83,17 +83,20 @@ export interface SearchProps {
 export interface Account {
   account: {
     username: string;
-
     address: string;
-
     postalCode: string;
-
     country: string;
-
     phoneNumber: string;
-
     sexe: string;
-
     dateOfBorn: string;
+    avatar: string;
   };
+}
+
+export interface ImageUploadProps {
+  setImageUrl: React.Dispatch<React.SetStateAction<File[]>>; // Modifiez ici pour File[] au lieu de string[]
+}
+
+export interface ImageUploadProp {
+  setImageUrl: React.Dispatch<React.SetStateAction<String[]>>; // Modifiez ici pour File[] au lieu de string[]
 }
