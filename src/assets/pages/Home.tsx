@@ -2,31 +2,41 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import logo from "../img/LOGO.png";
 import hero from "../img/hero.jpg";
 import "../styles/home.css";
 import { useUser } from "../contexts/UserContext";
 import { ProfilProps } from "../../types/types";
 
 const Home: React.FC = () => {
-  const [data, setData] = useState<{ offers: ProfilProps[] }>({ offers: [] });
+  const [dataOffer, setDataOffer] = useState<{ offers: ProfilProps[] }>({
+    offers: [],
+  });
+  const [userInfo, setUserInfo] = useState<{
+    account: any;
+    username: string | null;
+    avatar: string | null;
+  }>({
+    account: null,
+    username: null,
+    avatar: null,
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
-  const { username } = useUser();
+  const { username, userId, token } = useUser();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDataOffer = async () => {
       setIsLoading(true);
       setError(null);
       try {
         const response = await axios.get(
           "https://site--sook--dnxhn8mdblq5.code.run/offers"
         );
-        console.log(response.data);
 
-        setData(response.data);
+        setDataOffer(response.data);
       } catch (err) {
         console.error("Erreur lors de la récupération des données:", err);
         setError("Une erreur est survenue lors du chargement des offres.");
@@ -35,8 +45,34 @@ const Home: React.FC = () => {
       }
     };
 
-    fetchData();
+    fetchDataOffer();
   }, []);
+
+  // Nouveau useEffect pour récupérer les informations de l'utilisateur
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (userId) {
+        try {
+          const response = await axios.get(
+            `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Ajout du token Bearer dans l'en-tête
+              },
+            }
+          );
+          setUserInfo(response.data);
+        } catch (err) {
+          console.error(
+            "Erreur lors de la récupération des informations utilisateur:",
+            err
+          );
+        }
+      }
+    };
+
+    fetchUserInfo();
+  }, [userId]);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -61,15 +97,33 @@ const Home: React.FC = () => {
 
         {username ? (
           <div className="welcom-container">
-            <h2>
-              Bonjour,{" "}
-              {username.charAt(0).toUpperCase() +
-                username.slice(1).toLowerCase()}
-              !
-            </h2>
-            <p>
-              Merci de vous être connecté. Profitez de nos fonctionnalités !
-            </p>
+            <div className="user-home">
+              <h2>
+                Hello{" "}
+                {username.charAt(0).toUpperCase() +
+                  username.slice(1).toLowerCase()}
+                !
+              </h2>
+              {userInfo.account?.avatar ? (
+                <img
+                  src={userInfo.account?.avatar}
+                  alt="Avatar"
+                  className="avatar"
+                />
+              ) : (
+                <div>
+                  <img
+                    src={logo} // Remplace par un chemin vers une image par défaut
+                    alt="Avatar par défaut"
+                    className="avatar"
+                    style={{
+                      filter: "blur(10%)",
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+            <p>Profitez de nos fonctionnalités !</p>
             <button className="home-btn" onClick={() => navigate("/publish")}>
               Publier un article
             </button>
@@ -90,7 +144,7 @@ const Home: React.FC = () => {
           </div>
         )}
         <div className="offer-home">
-          {data.offers.map((offer) => (
+          {dataOffer.offers.map((offer) => (
             <div key={offer._id} className="offer-item">
               <h2>{offer.title}</h2>
               <p>Prix : {offer.price}€</p>

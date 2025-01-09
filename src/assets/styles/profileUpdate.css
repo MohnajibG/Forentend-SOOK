@@ -134,6 +134,7 @@
   width: 20px;
   height: 20px;
   animation: spin 1s linear infinite;
+  filter: blur(20%);
 }
 
 @keyframes spin {

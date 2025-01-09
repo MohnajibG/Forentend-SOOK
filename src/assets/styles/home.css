@@ -18,7 +18,11 @@
   gap: 2rem;
   padding: 2rem;
 }
-
+.user-home {
+  display: flex;
+  gap: 5rem;
+  align-items: center;
+}
 .home-page-title {
   width: 90%;
   text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
@@ -71,12 +75,7 @@
   background-color: rgba(253, 219, 185, 0.659);
   transition: 1s;
 }
-.welcom-container > div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: -2vh;
-}
+
 .welcom-container div span {
   margin: 5px;
 }
@@ -140,6 +139,13 @@
   width: 100%;
   border-radius: 10px;
   object-fit: cover;
+}
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
 }
 
 /* MEDIA QUERIES */
