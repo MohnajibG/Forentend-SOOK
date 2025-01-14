@@ -78,8 +78,8 @@ const ProfileUpdate: React.FC = () => {
     if (files && files.length > 0) {
       setLoadingAvatar(true);
       const formData = new FormData();
-      formData.append("file", files[0]); // Ajoute l'avatar
-      formData.append("upload_preset", "SookIMG"); // Remplace par ton upload preset
+      formData.append("file", files[0]);
+      formData.append("upload_preset", "SookIMG");
 
       try {
         const response = await axios.post(
@@ -87,7 +87,7 @@ const ProfileUpdate: React.FC = () => {
           formData
         );
         const avatarUrl = response.data.secure_url;
-        setProfileData((prev) => ({ ...prev, avatar: avatarUrl })); // Met à jour l'avatar
+        setProfileData((prev) => ({ ...prev, avatar: avatarUrl }));
       } catch (err) {
         console.error("Erreur lors de l'upload de l'avatar:", err);
         setError("Erreur lors de l'upload de l'avatar.");

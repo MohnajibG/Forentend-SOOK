@@ -16,28 +16,36 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (search.trim()) {
-      const fetchData = async () => {
-        setIsLoading(true); // Début du chargement
+    const fetchData = async () => {
+      if (search.trim()) {
+        setIsLoading(true);
         try {
           const response = await axios.get(
-            `https://site--sook--dnxhn8mdblq5.code.run/offers?title=${search}`
+            `https://site--sook--dnxhn8mdblq5.code.run/offers?title=${encodeURIComponent(
+              search
+            )}`
           );
-          setSearchResults(response.data.offers || []); // Met à jour les résultats
-          setIsSearchOpen(true); // Affiche les résultats
+          console.log("API Response:", response.data);
+          const offers = response.data.offers || [];
+          setSearchResults(Array.isArray(offers) ? offers : []);
+          setIsSearchOpen(true);
         } catch (error) {
           console.error("Erreur lors de la recherche :", error);
-          setSearchResults([]); // Vide les résultats en cas d'erreur
+          setSearchResults([]);
         }
-        setIsLoading(false); // Fin du chargement
-      };
+        setIsLoading(false);
+      } else {
+        setSearchResults([]);
+        setIsSearchOpen(false);
+      }
+    };
 
-      fetchData();
-    } else {
-      setSearchResults([]);
-      setIsSearchOpen(false); // Ferme les résultats
-    }
+    fetchData();
   }, [search]);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value); // Mettre à jour le champ de recherche
+  };
 
   return (
     <div className="search-container">
@@ -46,33 +54,41 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
         className="search"
         type="text"
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={handleSearch}
         onClick={() => setIsSearchOpen(true)}
         placeholder="Recherche"
         aria-label="Champ de recherche"
       />
       {isLoading && <div className="loading">Chargement...</div>}
-      {isSearchOpen && searchResults.length > 0 && (
+      {isSearchOpen && (
         <div className="search-results">
-          {searchResults.map((result) => (
-            <Link
-              to={`/offer/${result._id}`}
-              key={result._id}
-              className="search-result"
-            >
-              <img
-                src={result.pictures ? result.pictures[0] : ""}
-                alt={result.title || "No title available"}
-                width={50}
-                height={50}
-              />
-              <div>
-                <h3>{result.title}</h3>
-                <p>{result.description}</p>
-                <p>Prix : {result.price}€</p>
-              </div>
-            </Link>
-          ))}
+          {searchResults.length > 0 ? (
+            searchResults
+              .filter((val) =>
+                val.title?.toLowerCase().includes(search.toLowerCase())
+              )
+              .map((result) => (
+                <Link
+                  to={`/offer/${result._id}`}
+                  key={result._id}
+                  className="search-result"
+                >
+                  <img
+                    src={result.pictures ? result.pictures[0] : ""}
+                    alt={result.title || "No title available"}
+                    width={50}
+                    height={50}
+                  />
+                  <div>
+                    <h3>{result.title}</h3>
+                    <p>{result.description}</p>
+                    <p>Prix : {result.price}€</p>
+                  </div>
+                </Link>
+              ))
+          ) : (
+            <p>Aucun résultat trouvé.</p> // Message lorsque la recherche ne retourne rien
+          )}
         </div>
       )}
     </div>

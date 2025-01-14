@@ -11,8 +11,6 @@ import AddToCartButton from "../components/AddToCartButton";
 import Loading from "../img/Loading.gif";
 
 const OfferPage: React.FC = () => {
-  console.log("montage de OfferPage");
-
   const [offer, setOffer] = useState<ProfilProps | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

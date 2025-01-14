@@ -9,15 +9,17 @@ import {
   Navigate,
 } from "react-router-dom";
 
+import Header from "./assets/components/Header";
+import Footer from "./assets/components/Footer";
+// import Chat from "./assets/components/Chat";
+
+import NoMatch from "./assets/pages/noMatch";
 import Login from "./assets/pages/Login";
 import Signup from "./assets/pages/Signup";
-import Header from "./assets/components/Header";
-import NoMatch from "./assets/pages/noMatch";
 import Home from "./assets/pages/Home";
 import ProfileUpdate from "./assets/pages/ProfileUpdate";
 import ProfilePage from "./assets/pages/ProfilePage";
 import Publish from "./assets/pages/Publish";
-import Footer from "./assets/components/Footer";
 import OffersPage from "./assets/pages/OffersPage";
 import OfferPage from "./assets/pages/OfferPage";
 import Cart from "./assets/pages/Cart";
@@ -52,6 +54,8 @@ function App() {
             <Route path="/offer/:id" element={<OfferPage />} />
 
             <Route path="/cart" element={<Cart />} />
+
+            {/* <Route path="/chat" element={<Chat />} /> */}
 
             {/* Page 404 */}
             <Route path="*" element={<NoMatch />} />

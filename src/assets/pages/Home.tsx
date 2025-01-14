@@ -7,6 +7,7 @@ import hero from "../img/hero.jpg";
 import "../styles/home.css";
 import { useUser } from "../contexts/UserContext";
 import { ProfilProps } from "../../types/types";
+import Loading from "../img/Loading.gif";
 
 const Home: React.FC = () => {
   const [dataOffer, setDataOffer] = useState<{ offers: ProfilProps[] }>({
@@ -82,7 +83,11 @@ const Home: React.FC = () => {
     return <p>{error}</p>;
   }
 
-  return (
+  return isLoading ? (
+    <div className="Load">
+      <img src={Loading} alt="" />
+    </div>
+  ) : (
     <main>
       <div className="hero">
         <img src={hero} alt="Hero" />

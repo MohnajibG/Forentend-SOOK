@@ -58,6 +58,9 @@ const Header: React.FC<HeaderProps> = () => {
             <p>
               <Link to="/publish">Publier</Link>
             </p>
+            {/* <p>
+              <Link to="/Chat">Chat</Link>
+            </p> */}
           </nav>
         )}
         <div className="header-inpt-btn">
