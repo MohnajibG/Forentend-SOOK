@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+
+import { useUser } from "../contexts/UserContext";
 
 import "../styles/profileUpdate.css";
 import backgroundUpdateProfil from "../img/hero.jpg";
@@ -91,9 +92,8 @@ const ProfileUpdate: React.FC = () => {
       } catch (err) {
         console.error("Erreur lors de l'upload de l'avatar:", err);
         setError("Erreur lors de l'upload de l'avatar.");
-      } finally {
-        setLoadingAvatar(false);
       }
+      setLoadingAvatar(false);
     }
   };
 

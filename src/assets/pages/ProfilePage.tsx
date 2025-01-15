@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../contexts/UserContext";
-import "../styles/profilePage.css";
 
 import backgroundUpdateProfil from "../img/hero.jpg";
 import Loading from "../img/Loading.gif";
+
+import "../styles/profilePage.css";
 
 import { FaPen } from "react-icons/fa";
 import { Account } from "../../types/types";

@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 import background from "../img/background-publish.webp";
 import { useNavigate } from "react-router-dom";
-import ImageUpload from "../components/ImgUpload"; // Assurez-vous que le chemin est correct
+import ImageUpload from "../components/ImgUpload";
 
 const Publish: React.FC = () => {
   const navigate = useNavigate();
-  const { token, userId } = useUser(); // Récupérer le token depuis le contexte utilisateur
+  const { token, userId } = useUser();
 
-  // Déclaration des états pour chaque champ
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
@@ -18,14 +17,11 @@ const Publish: React.FC = () => {
   const [brand, setBrand] = useState("");
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
-  const [imageUrls, setImageUrls] = useState<File[]>([]); // Tableau pour stocker les URLs des images
-  const [message, setMessage] = useState<string | null>(null); // Message d'erreur ou succès
-  const [loading, setLoading] = useState<boolean>(false); // Indicateur de chargement
+  const [imageUrls, setImageUrls] = useState<File[]>([]);
+  const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true); // Démarrer le chargement
-
+  const isFormValid = () => {
     if (
       !title ||
       !description ||
@@ -33,14 +29,20 @@ const Publish: React.FC = () => {
       !city ||
       !brand ||
       !color ||
-      imageUrls.length === 0 || // Vérifie que l'array d'images n'est pas vide
+      imageUrls.length === 0 ||
       !userId
     ) {
       setMessage("Veuillez remplir tous les champs obligatoires.");
-      setLoading(false);
-      return;
+      return false;
     }
+    return true;
+  };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!isFormValid()) return;
+
+    setLoading(true);
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
@@ -48,29 +50,25 @@ const Publish: React.FC = () => {
     formData.append("city", city);
     formData.append("brand", brand);
     formData.append("color", color);
-    formData.append("userId", userId);
-
-    // Ajout des URLs des images au FormData
-    imageUrls.forEach((url) => {
-      formData.append("pictures", url);
-    });
+    formData.append("condition", condition);
+    formData.append("size", size);
+    if (userId) {
+      formData.append("userId", userId);
+    }
+    imageUrls.forEach((url) => formData.append("pictures", url));
+    console.log("encours");
 
     try {
-      // Envoi de la demande API pour publier l'offre
       const response = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/offers/publish",
         formData,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       console.log("Publication réussie", response.data);
       setMessage("Votre produit a été publié avec succès !");
-      setTimeout(() => {
-        navigate("/offer");
-      }, 3000);
+      navigate("/offer");
     } catch (error) {
       console.error("Erreur lors de la publication", error);
       setMessage(
@@ -78,9 +76,8 @@ const Publish: React.FC = () => {
           ? error.response.data.message
           : "Erreur lors de la publication de l'offre."
       );
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   return (
