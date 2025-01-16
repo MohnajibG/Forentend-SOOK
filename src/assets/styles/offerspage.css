@@ -28,7 +28,6 @@
 }
 
 .offer-item {
-  flex: 1 1 calc(33.333% - 40px); /* Taille flexible pour 3 colonnes avec espaces */
   max-width: 200px; /* Largeur max d'une offre */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre */
   border-radius: 8px; /* Coins arrondis */
@@ -55,12 +54,6 @@
   color: #666;
 }
 
-.offer-item img {
-  max-width: 100%;
-  border-radius: 8px;
-  margin-top: 10px;
-}
-
 .error-message {
   color: red;
   text-align: center;
@@ -76,5 +69,12 @@
 
 .pictures-offer {
   display: flex;
-  overflow: auto;
+  gap: 5px;
+  overflow: scroll;
+}
+.offer-item img {
+  width: 200%;
+  height: 50vh;
+  border-radius: 8px;
+  margin-top: 10px;
 }

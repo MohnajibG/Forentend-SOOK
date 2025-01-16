@@ -68,7 +68,8 @@ const Publish: React.FC = () => {
       );
       console.log("Publication réussie", response.data);
       setMessage("Votre produit a été publié avec succès !");
-      navigate("/offer");
+      const offerId = response.data._id;
+      navigate(`/offer/${offerId}`);
     } catch (error) {
       console.error("Erreur lors de la publication", error);
       setMessage(

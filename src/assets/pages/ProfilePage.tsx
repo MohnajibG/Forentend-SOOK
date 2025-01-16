@@ -8,12 +8,12 @@ import Loading from "../img/Loading.gif";
 import "../styles/profilePage.css";
 
 import { FaPen } from "react-icons/fa";
-import { Account } from "../../types/types";
+import { Account, ProfilProps } from "../../types/types";
 
 const ProfilePage: React.FC = () => {
   const { token, userId } = useUser();
 
-  const [dataProfile, setDataProfile] = useState<Account | null>(null);
+  const [dataProfile, setDataProfile] = useState<ProfilProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [updatedProfile, setUpdatedProfile] = useState<
@@ -23,6 +23,7 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     const fetchProfile = async () => {
+      const _id = userId;
       try {
         setLoading(true);
 
@@ -32,12 +33,13 @@ const ProfilePage: React.FC = () => {
           return;
         }
 
-        const response = await axios.get<Account>(
-          `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
+        const response = await axios.get<ProfilProps>(
+          `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${_id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        console.log("userID===>", response.data._id);
 
         setDataProfile(response.data);
       } catch (error) {
@@ -49,7 +51,7 @@ const ProfilePage: React.FC = () => {
     };
 
     fetchProfile();
-  }, [token, userId]);
+  }, [token]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -256,7 +258,16 @@ const ProfilePage: React.FC = () => {
           </p>
           <button
             onClick={() => {
-              setUpdatedProfile(dataProfile?.account || {});
+              setUpdatedProfile({
+                username: dataProfile?.account?.username,
+                address: dataProfile?.account?.address ?? undefined,
+                postalCode: dataProfile?.account?.postalCode ?? undefined,
+                country: dataProfile?.account?.country ?? undefined,
+                phoneNumber: dataProfile?.account?.phoneNumber ?? undefined,
+                sexe: dataProfile?.account?.sexe ?? undefined,
+                dateOfBorn: dataProfile?.account?.dateOfBorn ?? undefined,
+                avatar: dataProfile?.account?.avatar ?? undefined,
+              });
               setEditMode(true);
             }}
           >

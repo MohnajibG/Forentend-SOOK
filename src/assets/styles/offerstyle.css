@@ -1,7 +1,7 @@
 .offer-page {
   display: flex;
-  gap: 20px; /* Espacement entre les offres */
-  justify-content: center; /* Centrer les offres */
+  gap: 20px;
+  justify-content: center;
   padding: 20px;
   margin-top: 5rem;
   padding-bottom: 150px;
@@ -52,11 +52,10 @@
   padding: 15px;
 }
 .img-offerPage {
-  width: 50%;
   display: flex;
-  justify-content: center;
-  width: 100%;
-  overflow: scroll;
+  gap: 5px;
+  overflow: auto;
+  width: 8rem;
 }
 
 .offer-container div h2 {
@@ -91,6 +90,9 @@
 }
 
 .pictures-offer {
-  display: flex;
-  overflow: auto;
+  width: auto;
+  height: 50vh;
+  border-radius: 8px;
+  margin-top: 10px;
+  object-fit: cover;
 }

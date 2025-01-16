@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+
+import { Link } from "react-router-dom";
+
+import { useEffect, useState } from "react";
+
 import { ProfilProps } from "../../types/types";
-import { Link } from "react-router-dom"; // Import du composant Link
-import "../styles/offerspage.css";
+
 import backgroundPage from "../img/hero.jpg";
+
+import "../styles/offerspage.css";
 
 const OffersPage: React.FC = () => {
   const [offers, setOffers] = useState<ProfilProps[]>([]);
@@ -17,7 +22,7 @@ const OffersPage: React.FC = () => {
           "https://site--sook--dnxhn8mdblq5.code.run/offers"
         );
 
-        setOffers(response.data.offers || []); // Gérer le cas où "offers" est undefined
+        setOffers(response.data.offers || []);
         setLoading(false);
       } catch (error) {
         console.error("Erreur lors de la récupération des offres :", error);
@@ -47,10 +52,9 @@ const OffersPage: React.FC = () => {
             <Link to={`/offer/${offer._id}`} className="offer-link">
               <div key={offer._id} className="offer-item">
                 <h2>{offer.title}</h2>
-                <p>Description : {offer.description}</p>
-                <p>Prix : {offer.price}€</p>
+                <p>{offer.price}€</p>
                 {offer.account ? (
-                  <p>Posté par : {offer.account.username}</p>
+                  <p>{offer.account.username}</p>
                 ) : (
                   <p>Utilisateur inconnu</p>
                 )}
