@@ -11,7 +11,7 @@ import DeleteFromCartButton from "../components/DeleteFromCartButton";
 import Loading from "../img/Loading.gif";
 
 const Cart: React.FC = () => {
-  const { cart, setCart } = useCart(); // Utilisation unique du contexte
+  const { cart, setCart } = useCart();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -19,14 +19,15 @@ const Cart: React.FC = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://site--sook--dnxhn8mdblq5.code.run/carts"
+          "https://site--sook--dnxhn8mdblq5.code.run/cart"
         );
+        console.log("cart==>", response.data.cart);
+
         setCart(response.data.cart || []);
       } catch (error) {
         console.error("Erreur lors de la récupération du panier :", error);
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     fetchCart();
@@ -36,7 +37,7 @@ const Cart: React.FC = () => {
       <img src={backgroundCart} alt="background" className="background-img" />
       <h1>Mon Panier</h1>
       {loading ? (
-        <h2>Chargement .......</h2>
+        <img src={Loading} alt="Loading" />
       ) : (
         <div className="cart-container">
           {cart.length === 0 ? (

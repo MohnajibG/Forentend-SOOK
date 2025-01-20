@@ -61,8 +61,8 @@
 }
 
 .avatar {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   margin: 10px auto;
 }
@@ -72,9 +72,13 @@
   gap: 5px;
   overflow: scroll;
 }
-.offer-item img {
+.pictures-offer img {
   width: 200%;
   height: 50vh;
   border-radius: 8px;
   margin-top: 10px;
+}
+.username-avatar {
+  display: flex;
+  align-items: center;
 }

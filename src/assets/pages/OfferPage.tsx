@@ -88,7 +88,7 @@ const OfferPage: React.FC = () => {
               id: offer._id || "",
               name: offer.title || "",
               price: offer.price || 0,
-              // quantity: 0,
+              quantity: 0,
             }}
           />
         </div>

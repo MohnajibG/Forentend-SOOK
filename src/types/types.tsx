@@ -96,3 +96,10 @@ export interface Account {
 export interface ImageUploadProps {
   setImageUrl: React.Dispatch<React.SetStateAction<File[]>>; // Modifiez ici pour File[] au lieu de string[]
 }
+
+export interface ProdeuctsProps {
+  id: string;
+  userId: string;
+  prodeuctId: string;
+  quantity: number;
+}

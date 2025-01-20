@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ProfilProps } from "../../types/types";
 
 import backgroundPage from "../img/hero.jpg";
+import LOGO from "../img/LOGO.png";
 
 import "../styles/offerspage.css";
 
@@ -49,36 +50,44 @@ const OffersPage: React.FC = () => {
       ) : (
         <div className="offers">
           {offers.map((offer) => (
-            <Link to={`/offer/${offer._id}`} className="offer-link">
-              <div key={offer._id} className="offer-item">
-                <h2>{offer.title}</h2>
-                <p>{offer.price}€</p>
+            <div>
+              <Link to={`/offer/${offer._id}`} className="offer-link">
+                <div key={offer._id} className="offer-item">
+                  <h2>{offer.title}</h2>
+                  <p>{offer.price}€</p>
+
+                  {offer.pictures && offer.pictures.length > 0 && (
+                    <div className="pictures-offer">
+                      {offer.pictures.map((picture, index) => (
+                        <img
+                          key={index}
+                          src={picture}
+                          alt={`Image de l'offre ${offer._id}`}
+                          className="offer-image"
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Link>
+              <div className="username-avatar">
+                {" "}
                 {offer.account ? (
                   <p>{offer.account.username}</p>
                 ) : (
                   <p>Utilisateur inconnu</p>
                 )}
-                {offer.account?.avatar && (
+                {offer.account?.avatar ? (
                   <img
                     src={offer.account.avatar}
                     alt="Avatar"
                     className="avatar"
                   />
+                ) : (
+                  <img src={LOGO} alt="avatar" className="avatar" />
                 )}
-                {offer.pictures && offer.pictures.length > 0 && (
-                  <div className="pictures-offer">
-                    {offer.pictures.map((picture, index) => (
-                      <img
-                        key={index}
-                        src={picture}
-                        alt={`Image de l'offre ${offer._id}`}
-                        className="offer-image"
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            </Link>
+              </div>{" "}
+            </div>
           ))}
         </div>
       )}

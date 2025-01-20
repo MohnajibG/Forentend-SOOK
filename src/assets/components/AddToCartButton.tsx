@@ -2,7 +2,7 @@ import axios from "axios";
 import { CartItem } from "../../types/types";
 
 interface AddToCartButtonProps {
-  item: { id: string; name: string; price: number };
+  item: { id: string; name: string; price: number; quantity: number };
   cart: CartItem[];
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
 }
@@ -27,7 +27,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
 
     try {
       // Envoi des données mises à jour au backend
-      await axios.post("https://site--sook--dnxhn8mdblq5.code.run/carts", {
+      await axios.post("https://site--sook--dnxhn8mdblq5.code.run/cart/add", {
         id: item.id,
         name: item.name,
         price: item.price,
