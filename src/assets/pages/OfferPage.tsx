@@ -27,12 +27,10 @@ const OfferPage: React.FC = () => {
         const response = await axios.get(
           `https://site--sook--dnxhn8mdblq5.code.run/offers/${id}`
         );
-        console.log("Réponse de l'API :", response.data);
 
         setOffer(response.data.offer);
-        console.log("Valeur de offer après setOffer :", response.data);
-      } catch (err) {
-        console.error("Erreur lors de la récupération de l'offre :", err);
+      } catch (error) {
+        console.log("Erreur lors de la récupération de l'offre :", error);
         setError("Erreur lors du chargement de l'offre. Veuillez réessayer.");
       }
       setLoading(false);
@@ -88,7 +86,6 @@ const OfferPage: React.FC = () => {
               id: offer._id || "",
               name: offer.title || "",
               price: offer.price || 0,
-              quantity: 0,
             }}
           />
         </div>

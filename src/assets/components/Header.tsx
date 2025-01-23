@@ -53,14 +53,14 @@ const Header: React.FC<HeaderProps> = () => {
               <Link to="/offers">Offres</Link>
             </p>
             <p>
+              <Link to="/my-offers">Mes Offres</Link>
+            </p>
+            <p>
               <Link to="/home">Accueil</Link>
             </p>
             <p>
               <Link to="/publish">Publier</Link>
             </p>
-            {/* <p>
-              <Link to="/Chat">Chat</Link>
-            </p> */}
           </nav>
         )}
         <div className="header-inpt-btn">
@@ -95,6 +95,9 @@ const Header: React.FC<HeaderProps> = () => {
                     </li>
                     <li>
                       <Link to="/offers">Offres</Link>
+                    </li>
+                    <li>
+                      <Link to="/my-offers">Mes Offres</Link>
                     </li>
                     <li>
                       <Link to="/publish">Publier</Link>

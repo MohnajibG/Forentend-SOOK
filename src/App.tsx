@@ -23,6 +23,8 @@ import Publish from "./assets/pages/Publish";
 import OffersPage from "./assets/pages/OffersPage";
 import OfferPage from "./assets/pages/OfferPage";
 import Cart from "./assets/pages/Cart";
+import MyOffers from "./assets/pages/MyOffers";
+import EditOffer from "./assets/pages/EditOffer";
 
 function App() {
   const [search, setSearch] = useState<string>("");
@@ -52,6 +54,8 @@ function App() {
             <Route path="/offers" element={<OffersPage />} />
             <Route path="/search/:keyword" element={<OffersPage />} />
             <Route path="/offer/:id" element={<OfferPage />} />
+            <Route path="/my-offers" element={<MyOffers />} />
+            <Route path="/edit/:id" element={<EditOffer />} />
 
             <Route path="/cart" element={<Cart />} />
 

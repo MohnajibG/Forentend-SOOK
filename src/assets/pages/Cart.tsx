@@ -21,9 +21,9 @@ const Cart: React.FC = () => {
         const response = await axios.get(
           "https://site--sook--dnxhn8mdblq5.code.run/cart"
         );
-        console.log("cart==>", response.data.cart);
+        console.log("cart==>", response);
 
-        setCart(response.data.cart || []);
+        setCart(response.data || []);
       } catch (error) {
         console.error("Erreur lors de la récupération du panier :", error);
       }

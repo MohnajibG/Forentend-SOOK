@@ -1,8 +1,9 @@
+import React from "react";
 import axios from "axios";
 import { CartItem } from "../../types/types";
 
 interface AddToCartButtonProps {
-  item: { id: string; name: string; price: number; quantity: number };
+  item: { id: string; name: string; price: number };
   cart: CartItem[];
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
 }
@@ -12,40 +13,52 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   cart,
   setCart,
 }) => {
-  const handleAddToCart = async (item: CartItem) => {
+  const handleAddToCart = async () => {
     const addCartCopy = [...cart];
     const foundItem = addCartCopy.find((cartItem) => cartItem.id === item.id);
 
+    // Si l'article n'est pas dans le panier, on l'ajoute
     if (!foundItem) {
       addCartCopy.push({
         ...item,
-        quantity: 1,
+        quantity: 0,
       });
     } else {
-      foundItem.quantity++;
+      console.log("Cet article est déjà dans le panier.");
     }
 
     try {
-      // Envoi des données mises à jour au backend
-      await axios.post("https://site--sook--dnxhn8mdblq5.code.run/cart/add", {
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: foundItem ? foundItem.quantity : 1,
-      });
+      // Envoi des données au backend
+      const response = await axios.post(
+        "https://site--sook--dnxhn8mdblq5.code.run/cart/add",
+        {
+          id: item.id, // Assurez-vous que ces champs sont bien attendus côté backend
+          name: item.name,
+          price: item.price,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-      // Met à jour le panier côté frontend
-      setCart(addCartCopy);
+      // Vérification de la réponse du serveur
+      if (response.status === 200 || response.status === 201) {
+        console.log("Produit ajouté au panier:", response.data);
+        // Mise à jour du panier local
+        setCart(addCartCopy);
+      } else {
+        console.error(
+          "Problème avec l'ajout au panier:",
+          response.data.message
+        );
+      }
     } catch (error) {
-      console.error("Erreur lors de l'ajout de l'article au panier :", error);
+      console.error("Erreur lors de l'ajout au panier:", error);
+      alert("Une erreur est survenue. Veuillez réessayer.");
     }
   };
 
-  return (
-    <button onClick={() => handleAddToCart({ ...item, quantity: 1 })}>
-      Ajouter au panier
-    </button>
-  );
+  return <button onClick={handleAddToCart}>Ajouter au panier</button>;
 };
 
 export default AddToCartButton;
