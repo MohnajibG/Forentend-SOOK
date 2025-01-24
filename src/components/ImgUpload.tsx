@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../styles/publish.css";
+import "../assets/styles/publish.css";
 import { ImageUploadProps } from "../types/types";
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ setImageUrl }) => {
