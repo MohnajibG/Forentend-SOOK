@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 import { ProfilProps } from "../types/types";
 
-import backgroundPage from "../img/hero.jpg";
+import backgroundPage from "../assets/img/hero.jpg";
 import LOGO from "../assets/img/LOGO.png";
 
 import "../assets/styles/offerspage.css";
