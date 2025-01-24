@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 
-import { ProfilProps } from "../../types/types";
+import { ProfilProps } from "../types/types";
 
 import backgroundPage from "../img/hero.jpg";
 import LOGO from "../img/LOGO.png";

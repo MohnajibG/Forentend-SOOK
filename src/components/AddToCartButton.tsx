@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { CartItem } from "../../types/types";
+import { CartItem } from "../types/types";
 
 interface AddToCartButtonProps {
   item: { id: string; name: string; price: number };

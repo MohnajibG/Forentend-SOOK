@@ -7,7 +7,7 @@ import {
 } from "react";
 import Cookies from "js-cookie";
 
-import { UserContextType } from "../../types/types";
+import { UserContextType } from "../types/types";
 
 const UserContext = createContext<UserContextType | null>(null);
 

@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
-import useOffers from "../../hooks/useOffers";
-import useUserInfo from "../../hooks/useUserInfo";
+import useOffers from "../hooks/useOffers";
+import useUserInfo from "../hooks/useUserInfo";
 import logo from "../img/LOGO.png";
 import hero from "../img/hero.jpg";
 import Loading from "../img/Loading.gif";

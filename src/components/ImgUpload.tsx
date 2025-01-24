@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../styles/publish.css";
-import { ImageUploadProps } from "../../types/types";
+import { ImageUploadProps } from "../types/types";
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ setImageUrl }) => {
   const [loading, setLoading] = useState<boolean>(false);

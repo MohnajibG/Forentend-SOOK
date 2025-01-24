@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { UserProvider, useUser } from "./assets/contexts/UserContext";
-import { CartProvider } from "./assets/contexts/CartContext";
+import { UserProvider, useUser } from "./contexts/UserContext";
+import { CartProvider } from "./contexts/CartContext";
 
 import {
   BrowserRouter as Router,
@@ -9,22 +9,22 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import Header from "./assets/components/Header";
-import Footer from "./assets/components/Footer";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 // import Chat from "./assets/components/Chat";
 
-import NoMatch from "./assets/pages/noMatch";
-import Login from "./assets/pages/Login";
-import Signup from "./assets/pages/Signup";
-import Home from "./assets/pages/Home";
-import ProfileUpdate from "./assets/pages/ProfileUpdate";
-import ProfilePage from "./assets/pages/ProfilePage";
-import Publish from "./assets/pages/Publish";
-import OffersPage from "./assets/pages/OffersPage";
-import OfferPage from "./assets/pages/OfferPage";
-import Cart from "./assets/pages/Cart";
-import MyOffers from "./assets/pages/MyOffers";
-import EditOffer from "./assets/pages/EditOffer";
+import NoMatch from "./pages/noMatch";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Home from "./pages/Home";
+import ProfileUpdate from "./pages/ProfileUpdate";
+import ProfilePage from "./pages/ProfilePage";
+import Publish from "./pages/Publish";
+import OffersPage from "./pages/OffersPage";
+import OfferPage from "./pages/OfferPage";
+import Cart from "./pages/Cart";
+import MyOffers from "./pages/MyOffers";
+import EditOffer from "./pages/EditOffer";
 
 function App() {
   const [search, setSearch] = useState<string>("");

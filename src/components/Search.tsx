@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { ProfilProps } from "../../types/types";
+import { ProfilProps } from "../types/types";
 import "../styles/header.css";
 import { Link } from "react-router-dom";
 

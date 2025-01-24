@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 import { useCart } from "../contexts/CartContext";
 
-import { ProfilProps } from "../../types/types";
+import { ProfilProps } from "../types/types";
 import background from "../img/offerPage.webp";
 import "../styles/offerstyle.css";
 import "../styles/button.css";

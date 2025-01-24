@@ -7,7 +7,7 @@ import { BsFillBasket3Fill } from "react-icons/bs";
 
 import logo from "../img/LOGO.png";
 
-import { HeaderProps } from "../../types/types";
+import { HeaderProps } from "../types/types";
 import "../styles/header.css";
 import "../styles/burgerMenu.css";
 import Search from "./Search";

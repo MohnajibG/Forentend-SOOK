@@ -8,7 +8,7 @@ import Loading from "../img/Loading.gif";
 import "../styles/profilePage.css";
 
 import { FaPen } from "react-icons/fa";
-import { Account, ProfilProps } from "../../types/types";
+import { Account, ProfilProps } from "../types/types";
 
 const ProfilePage: React.FC = () => {
   const { token, userId } = useUser();
