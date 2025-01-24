@@ -29,6 +29,8 @@ export interface UserProfile {
 // Offer & Product Types
 // ==============================
 export interface ProfilProps {
+  userId: any;
+  id: string;
   _id?: string | null;
   title: string | null;
   description: string | null;

@@ -71,15 +71,14 @@ const OffersPage: React.FC = () => {
                 </div>
               </Link>
               <div className="username-avatar">
-                {" "}
-                {offer.account ? (
-                  <p>{offer.account.username}</p>
+                {offer.userId.account ? (
+                  <p>{offer.userId.account.username}</p>
                 ) : (
                   <p>Utilisateur inconnu</p>
                 )}
-                {offer.account?.avatar ? (
+                {offer.userId.account?.avatar ? (
                   <img
-                    src={offer.account.avatar}
+                    src={offer.userId.account.avatar}
                     alt="Avatar"
                     className="avatar"
                   />

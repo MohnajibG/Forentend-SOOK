@@ -38,6 +38,7 @@ const Home: React.FC = () => {
         );
 
         setDataOffer(response.data);
+        console.log(response.data);
       } catch (err) {
         console.error("Erreur lors de la récupération des données:", err);
         setError("Une erreur est survenue lors du chargement des offres.");
@@ -150,40 +151,40 @@ const Home: React.FC = () => {
         )}
         <div className="offer-home">
           {dataOffer.offers.map((offer) => (
-            <div key={offer._id} className="offer-item">
-              <h2>{offer.title}</h2>
-              <p>Prix : {offer.price}€</p>
-              {offer.account?.username ? (
-                <p>Posté par : {offer.account.username}</p>
-              ) : (
-                <p>Utilisateur inconnu</p>
-              )}
-              {offer.account?.avatar && (
-                <div>
-                  <p>avatar</p>
-                  <img
-                    src={offer.account.avatar}
-                    alt="Avatar"
-                    className="avatar"
-                  />
-                </div>
-              )}
-              {offer.pictures && offer.pictures.length > 0 && (
-                <div className="pictures-offer">
-                  {offer.pictures.map((picture, index) => (
+            <Link to={`/offer/${offer._id}`}>
+              <div key={offer._id} className="offer-item">
+                <h2>{offer.title}</h2>
+                <p>Prix : {offer.price}€</p>
+                <p>Marque: {offer.brand}</p>
+                <div className="userInfo">
+                  {offer.userId?.account?.username ? (
+                    <p>{offer.userId?.account.username}</p>
+                  ) : (
+                    <p>Utilisateur inconnu</p>
+                  )}
+                  {offer.userId?.account?.avatar && (
                     <img
-                      key={index}
-                      src={picture}
-                      alt={`Image de l'offre ${offer._id}`}
-                      className="offer-image"
+                      src={offer.userId?.account.avatar}
+                      alt="Avatar"
+                      className="avatar"
                     />
-                  ))}
+                  )}
                 </div>
-              )}
-              <Link to={`/offer/${offer._id}`}>
-                <button>Voir l'offre</button>
-              </Link>
-            </div>
+
+                {offer.pictures && offer.pictures.length > 0 && (
+                  <div className="pictures-offer">
+                    {offer.pictures.map((picture, index) => (
+                      <img
+                        key={index}
+                        src={picture}
+                        alt={`Image de l'offre ${offer._id}`}
+                        className="offer-image"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </Link>
           ))}
         </div>
       </div>

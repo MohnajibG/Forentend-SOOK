@@ -29,6 +29,7 @@ const OfferPage: React.FC = () => {
         );
 
         setOffer(response.data.offer);
+        console.log(response.data);
       } catch (error) {
         console.log("Erreur lors de la récupération de l'offre :", error);
         setError("Erreur lors du chargement de l'offre. Veuillez réessayer.");
@@ -61,7 +62,11 @@ const OfferPage: React.FC = () => {
           <p>Couleur : {offer.color || "Non spécifiée"}</p>
           <p>Condition : {offer.condition || "Non spécifiée"}</p>
           <p>Ville : {offer.city || "Non spécifiée"}</p>
-          <p>Vendeur : {offer.account?.username || "Non spécifié"}</p>
+          <p>Vendeur : {offer.userId.account?.username || "Non spécifié"}</p>
+          <img
+            src={offer.userId.account?.avatar || "Non spécifiée"}
+            alt="avatar"
+          />
         </div>
 
         <div className="img-btn">
