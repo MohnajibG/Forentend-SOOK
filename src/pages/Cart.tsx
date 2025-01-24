@@ -10,7 +10,7 @@ import backgroundCart from "../assets/img/backgroundCart.webp";
 import RemoveFromCartButton from "../components/updateCartButton";
 import DeleteFromCartButton from "../components/DeleteFromCartButton";
 
-import Loading from "../img/Loading.gif";
+import Loading from "../assets/img/Loading.gif";
 
 const Cart: React.FC = () => {
   const { cart, setCart } = useCart();
