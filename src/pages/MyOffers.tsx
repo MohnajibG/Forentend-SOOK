@@ -21,12 +21,12 @@ const MyOffers: React.FC = () => {
         console.log(userId);
 
         const response = await axios.get(
-          `https://site--sook--dnxhn8mdblq5.code.run/myOffers/${userId}`,
+          `https://site--sook--dnxhn8mdblq5.code.run/offers/user`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("data", response.data);
+        console.log("data", response.data || "rien");
 
         setMyOffers(response.data.offers || []);
       } catch (error) {

@@ -46,7 +46,7 @@ const EditOffer: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      navigate("/my-offers");
+      navigate("/MyOffers");
     } catch (error) {
       console.error("Erreur lors de la mise à jour :", error);
     }

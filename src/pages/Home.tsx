@@ -5,6 +5,7 @@ import { useUser } from "../contexts/UserContext";
 
 import useOffers from "../hooks/useOffers";
 import useUserInfo from "../hooks/useUserInfo";
+
 import logo from "../assets/img/LOGO.png";
 
 import hero from "../assets/img/hero.jpg";

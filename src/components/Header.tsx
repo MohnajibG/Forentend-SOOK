@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = () => {
               <Link to="/offers">Offres</Link>
             </p>
             <p>
-              <Link to="/my-offers">Mes Offres</Link>
+              <Link to="/mesoffres">Mes Offres</Link>
             </p>
             <p>
               <Link to="/home">Accueil</Link>
@@ -97,7 +97,7 @@ const Header: React.FC<HeaderProps> = () => {
                       <Link to="/offers">Offres</Link>
                     </li>
                     <li>
-                      <Link to="/my-offers">Mes Offres</Link>
+                      <Link to="/mesoffres">Mes Offres</Link>
                     </li>
                     <li>
                       <Link to="/publish">Publier</Link>
