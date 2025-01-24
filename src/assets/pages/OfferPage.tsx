@@ -7,6 +7,7 @@ import { useCart } from "../contexts/CartContext";
 import { ProfilProps } from "../../types/types";
 import background from "../img/offerPage.webp";
 import "../styles/offerstyle.css";
+import "../styles/button.css";
 import AddToCartButton from "../components/AddToCartButton";
 import Loading from "../img/Loading.gif";
 
@@ -54,19 +55,32 @@ const OfferPage: React.FC = () => {
       <img src={background} alt="Background" className="background-img" />
       <div className="offer-container">
         <div className="offer-details">
-          <h1>{offer.title || "Titre non disponible"}</h1>
-          <p>Marque : {offer.brand || "Non spécifiée"}</p>
-          <p>Description : {offer.description || "Non spécifiée"}</p>
-          <p>Prix : {offer.price ? `${offer.price} €` : "Non spécifié"}</p>
-          <p>Taille : {offer.size || "Non spécifiée"}</p>
-          <p>Couleur : {offer.color || "Non spécifiée"}</p>
-          <p>Condition : {offer.condition || "Non spécifiée"}</p>
-          <p>Ville : {offer.city || "Non spécifiée"}</p>
-          <p>Vendeur : {offer.userId.account?.username || "Non spécifié"}</p>
-          <img
-            src={offer.userId.account?.avatar || "Non spécifiée"}
-            alt="avatar"
-          />
+          <div className="title-details-offer">
+            <h1>{offer.title || "Titre non disponible"}</h1>
+            <div>
+              <p>Marque : {offer.brand || "Non spécifiée"}</p>
+              <p>Description : {offer.description || "Non spécifiée"}</p>
+              <p>Prix : {offer.price ? `${offer.price} €` : "Non spécifié"}</p>
+              <p>Taille : {offer.size || "Non spécifiée"}</p>
+              <p>Couleur : {offer.color || "Non spécifiée"}</p>
+              <p>Condition : {offer.condition || "Non spécifiée"}</p>
+              <p>Ville : {offer.city || "Non spécifiée"}</p>
+            </div>
+          </div>
+
+          <div className="offer-user-info">
+            <p className="username-offer">
+              {offer.userId.account?.username
+                ? offer.userId.account.username.charAt(0).toUpperCase() +
+                  offer.userId.account.username.slice(1)
+                : "Non spécifié"}
+            </p>
+            <img
+              src={offer.userId.account?.avatar || "Non spécifiée"}
+              alt="avatar"
+              className="offer-user-info-img"
+            />
+          </div>
         </div>
 
         <div className="img-btn">

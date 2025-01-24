@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 
+import "../styles/button.css";
+
 const EditOffer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();

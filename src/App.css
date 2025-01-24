@@ -18,17 +18,3 @@ a {
 .error {
   color: red;
 }
-
-button {
-  margin: 0 5px;
-  background-color: rgba(133, 149, 166, 0.618);
-  color: white;
-  font-weight: bold;
-  font-size: 1em;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  height: 3rem;
-  width: 10rem;
-}

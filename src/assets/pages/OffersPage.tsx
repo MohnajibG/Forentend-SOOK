@@ -72,7 +72,12 @@ const OffersPage: React.FC = () => {
               </Link>
               <div className="username-avatar">
                 {offer.userId.account ? (
-                  <p>{offer.userId.account.username}</p>
+                  <p>
+                    {offer.userId.account?.username
+                      ? offer.userId.account.username.charAt(0).toUpperCase() +
+                        offer.userId.account.username.slice(1)
+                      : "Non spécifié"}
+                  </p>
                 ) : (
                   <p>Utilisateur inconnu</p>
                 )}
