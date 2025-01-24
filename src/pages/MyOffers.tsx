@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
-import { useUser } from "../contexts/UserContext";
 import axios from "axios";
+import { useState, useEffect } from "react";
+
+import { useUser } from "../contexts/UserContext";
+
 import Loading from "../assets/img/Loading.gif";
 import background from "../assets/img/offerPage.webp";
 

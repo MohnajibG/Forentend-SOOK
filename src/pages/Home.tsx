@@ -1,13 +1,15 @@
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Key } from "react";
+import { useNavigate, Link } from "react-router-dom";
+
 import { useUser } from "../contexts/UserContext";
+
 import useOffers from "../hooks/useOffers";
 import useUserInfo from "../hooks/useUserInfo";
-import logo from "../img/LOGO.png";
-import hero from "../img/hero.jpg";
-import Loading from "../img/Loading.gif";
+import logo from "../assets/img/LOGO.png";
+
+import hero from "../assets/img/hero.jpg";
+import Loading from "../assets/img/Loading.gif";
 import "../assets/styles/home.css";
-import { Key } from "react";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();

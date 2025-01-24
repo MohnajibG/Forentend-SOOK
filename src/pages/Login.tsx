@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useState } from "react";
 import { useUser } from "../contexts/UserContext";
+
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
-import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
 
 import "../assets/styles/login.css";
 import "../assets/styles/input.css";
-import "react-toastify/dist/ReactToastify.css";
 
 import login from "../img/backgroudLogin.webp";
 
@@ -24,13 +23,6 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { setUser } = useUser();
 
-  const showErrorToast = (message: string) => {
-    toast.error(message, {
-      position: "top-right",
-      autoClose: 5000,
-    });
-  };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage("");
@@ -39,7 +31,6 @@ const Login: React.FC = () => {
     // Validation simple des champs côté client
     if (!email || !password) {
       setErrorMessage("Veuillez remplir tous les champs.");
-      showErrorToast("Veuillez remplir tous les champs.");
       setIsLoading(false);
       return;
     }
@@ -48,7 +39,6 @@ const Login: React.FC = () => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(email)) {
       setErrorMessage("Veuillez entrer un email valide.");
-      showErrorToast("Veuillez entrer un email valide.");
       setIsLoading(false);
       return;
     }
@@ -56,7 +46,6 @@ const Login: React.FC = () => {
     // Validation du mot de passe
     if (password.length < 8) {
       setErrorMessage("Le mot de passe doit comporter au moins 8 caractères.");
-      showErrorToast("Le mot de passe doit comporter au moins 8 caractères.");
       setIsLoading(false);
       return;
     }
@@ -93,10 +82,8 @@ const Login: React.FC = () => {
     } catch (error: any) {
       if (error.response && error.response.data) {
         setErrorMessage(error.response.data.message);
-        showErrorToast(error.response.data.message);
       } else {
         setErrorMessage("Erreur lors de la connexion. Veuillez réessayer.");
-        showErrorToast("Erreur lors de la connexion. Veuillez réessayer.");
       }
     } finally {
       setIsLoading(false);

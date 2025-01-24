@@ -1,6 +1,7 @@
+import axios from "axios";
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useUser } from "../contexts/UserContext";
 
 import "../assets/styles/button.css";

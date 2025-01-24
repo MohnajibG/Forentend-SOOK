@@ -1,9 +1,13 @@
-import { useState } from "react";
 import axios from "axios";
-import { useUser } from "../contexts/UserContext";
-import background from "../img/background-publish.webp";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import ImageUpload from "../components/ImgUpload";
+
+import { useUser } from "../contexts/UserContext";
+
+import background from "../assets/img/background-publish.webp";
 
 const Publish: React.FC = () => {
   const navigate = useNavigate();

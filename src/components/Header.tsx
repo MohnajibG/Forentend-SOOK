@@ -5,11 +5,11 @@ import { useUser } from "../contexts/UserContext";
 import { CgProfile } from "react-icons/cg";
 import { BsFillBasket3Fill } from "react-icons/bs";
 
-import logo from "../img/LOGO.png";
+import logo from "../assets/img/LOGO.png";
 
 import { HeaderProps } from "../types/types";
-import "../styles/header.css";
-import "../styles/burgerMenu.css";
+import "../assets/styles/header.css";
+import "../assets/styles/burgerMenu.css";
 import Search from "./Search";
 
 const Header: React.FC<HeaderProps> = () => {

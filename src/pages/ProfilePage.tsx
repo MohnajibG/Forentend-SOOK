@@ -1,14 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+
+import { Account, ProfilProps } from "../types/types";
+
 import { useUser } from "../contexts/UserContext";
 
 import backgroundUpdateProfil from "../img/hero.jpg";
-import Loading from "../img/Loading.gif";
+import Loading from "../assets/img/Loading.gif";
+import { FaPen } from "react-icons/fa";
 
 import "../assets/styles/profilePage.css";
-
-import { FaPen } from "react-icons/fa";
-import { Account, ProfilProps } from "../types/types";
 
 const ProfilePage: React.FC = () => {
   const { token, userId } = useUser();

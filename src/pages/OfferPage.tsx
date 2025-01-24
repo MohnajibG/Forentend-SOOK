@@ -2,14 +2,17 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+import { ProfilProps } from "../types/types";
+
 import { useCart } from "../contexts/CartContext";
 
-import { ProfilProps } from "../types/types";
-import background from "../img/offerPage.webp";
 import "../assets/styles/offerstyle.css";
 import "../assets/styles/button.css";
+
 import AddToCartButton from "../components/AddToCartButton";
-import Loading from "../img/Loading.gif";
+
+import Loading from "../assets/img/Loading.gif";
+import background from "../assets/img/offerPage.webp";
 
 const OfferPage: React.FC = () => {
   const [offer, setOffer] = useState<ProfilProps | null>(null);

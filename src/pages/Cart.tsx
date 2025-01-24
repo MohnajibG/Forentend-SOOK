@@ -5,7 +5,7 @@ import axios from "axios";
 import "../assets/styles/cart.css";
 import "../assets/styles/button.css";
 
-import backgroundCart from "../img/backgroundCart.webp";
+import backgroundCart from "../assets/img/backgroundCart.webp";
 
 import RemoveFromCartButton from "../components/updateCartButton";
 import DeleteFromCartButton from "../components/DeleteFromCartButton";
