@@ -1,94 +1,34 @@
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
+import useOffers from "../../hooks/useOffers";
+import useUserInfo from "../../hooks/useUserInfo";
 import logo from "../img/LOGO.png";
 import hero from "../img/hero.jpg";
-import "../styles/home.css";
-import { useUser } from "../contexts/UserContext";
-import { ProfilProps } from "../../types/types";
 import Loading from "../img/Loading.gif";
+import "../styles/home.css";
+import { Key } from "react";
 
 const Home: React.FC = () => {
-  const [dataOffer, setDataOffer] = useState<{ offers: ProfilProps[] }>({
-    offers: [],
-  });
-  const [userInfo, setUserInfo] = useState<{
-    account: any;
-    username: string | null;
-    avatar: string | null;
-  }>({
-    account: null,
-    username: null,
-    avatar: null,
-  });
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
   const navigate = useNavigate();
   const { username, userId, token } = useUser();
 
-  useEffect(() => {
-    const fetchDataOffer = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await axios.get(
-          "https://site--sook--dnxhn8mdblq5.code.run/offers"
-        );
-
-        setDataOffer(response.data);
-        console.log(response.data);
-      } catch (err) {
-        console.error("Erreur lors de la récupération des données:", err);
-        setError("Une erreur est survenue lors du chargement des offres.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchDataOffer();
-  }, []);
-
-  // Nouveau useEffect pour récupérer les informations de l'utilisateur
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (userId) {
-        try {
-          const response = await axios.get(
-            `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`, // Ajout du token Bearer dans l'en-tête
-              },
-            }
-          );
-          setUserInfo(response.data);
-        } catch (err) {
-          console.error(
-            "Erreur lors de la récupération des informations utilisateur:",
-            err
-          );
-        }
-      }
-    };
-
-    fetchUserInfo();
-  }, [userId]);
+  const { dataOffer, isLoading, error } = useOffers();
+  const { userInfo } = useUserInfo(userId, token);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="Load">
+        <img src={Loading} alt="Loading..." />
+      </div>
+    );
   }
 
   if (error) {
     return <p>{error}</p>;
   }
 
-  return isLoading ? (
-    <div className="Load">
-      <img src={Loading} alt="" />
-    </div>
-  ) : (
+  return (
     <main>
       <div className="hero">
         <img src={hero} alt="Hero" />
@@ -96,8 +36,8 @@ const Home: React.FC = () => {
       <div className="home-container">
         <div className="home-page-title">
           <h1>
-            <span className="left-bar">|</span>
-            SOOK !<span className="right-bar">|</span>
+            <span className="left-bar">|</span>SOOK !
+            <span className="right-bar">|</span>
           </h1>
         </div>
 
@@ -112,21 +52,17 @@ const Home: React.FC = () => {
               </h2>
               {userInfo.account?.avatar ? (
                 <img
-                  src={userInfo.account?.avatar}
+                  src={userInfo.account.avatar}
                   alt="Avatar"
                   className="avatar"
                 />
               ) : (
-                <div>
-                  <img
-                    src={logo} // Remplace par un chemin vers une image par défaut
-                    alt="Avatar par défaut"
-                    className="avatar"
-                    style={{
-                      filter: "blur(10%)",
-                    }}
-                  />
-                </div>
+                <img
+                  src={logo}
+                  alt="Avatar par défaut"
+                  className="avatar"
+                  style={{ filter: "blur(10%)" }}
+                />
               )}
             </div>
             <p>Profitez de nos fonctionnalités !</p>
@@ -149,29 +85,26 @@ const Home: React.FC = () => {
             </div>
           </div>
         )}
+
         <div className="offer-home">
           {dataOffer.offers.map((offer) => (
-            <Link to={`/offer/${offer._id}`}>
-              <div key={offer._id} className="offer-item">
+            <Link key={offer._id} to={`/offer/${offer._id}`}>
+              <div className="offer-item">
                 <h2>{offer.title}</h2>
                 <p>Prix : {offer.price}€</p>
                 <p>Marque: {offer.brand}</p>
                 <div className="userInfo">
                   {offer.userId?.account?.username ? (
                     <p>
-                      {offer.userId.account?.username
-                        ? offer.userId.account.username
-                            .charAt(0)
-                            .toUpperCase() +
-                          offer.userId.account.username.slice(1)
-                        : "Non spécifié"}
+                      {offer.userId.account.username.charAt(0).toUpperCase() +
+                        offer.userId.account.username.slice(1)}
                     </p>
                   ) : (
                     <p>Utilisateur inconnu</p>
                   )}
                   {offer.userId?.account?.avatar && (
                     <img
-                      src={offer.userId?.account.avatar}
+                      src={offer.userId.account.avatar}
                       alt="Avatar"
                       className="avatar"
                     />
@@ -180,14 +113,19 @@ const Home: React.FC = () => {
 
                 {offer.pictures && offer.pictures.length > 0 && (
                   <div className="pictures-offer">
-                    {offer.pictures.map((picture, index) => (
-                      <img
-                        key={index}
-                        src={picture}
-                        alt={`Image de l'offre ${offer._id}`}
-                        className="offer-image"
-                      />
-                    ))}
+                    {offer.pictures.map(
+                      (
+                        picture: string | undefined,
+                        index: Key | null | undefined
+                      ) => (
+                        <img
+                          key={index}
+                          src={picture}
+                          alt={`Image de l'offre ${offer._id}`}
+                          className="offer-image"
+                        />
+                      )
+                    )}
                   </div>
                 )}
               </div>

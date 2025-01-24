@@ -54,7 +54,7 @@ function App() {
             <Route path="/offers" element={<OffersPage />} />
             <Route path="/search/:keyword" element={<OffersPage />} />
             <Route path="/offer/:id" element={<OfferPage />} />
-            <Route path="/my-offers" element={<MyOffers />} />
+            <Route path="/mesoffres" element={<MyOffers />} />
             <Route path="/edit/:id" element={<EditOffer />} />
 
             <Route path="/cart" element={<Cart />} />
