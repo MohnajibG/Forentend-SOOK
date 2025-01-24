@@ -11,7 +11,7 @@ import { FaEyeSlash } from "react-icons/fa6";
 import "../assets/styles/login.css";
 import "../assets/styles/input.css";
 
-import login from "../img/backgroudLogin.webp";
+import login from "../assets/img/backgroudLogin.webp";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
