@@ -6,8 +6,8 @@ import { useCart } from "../contexts/CartContext";
 
 import { ProfilProps } from "../types/types";
 import background from "../img/offerPage.webp";
-import "../styles/offerstyle.css";
-import "../styles/button.css";
+import "../assets/styles/offerstyle.css";
+import "../assets/styles/button.css";
 import AddToCartButton from "../components/AddToCartButton";
 import Loading from "../img/Loading.gif";
 

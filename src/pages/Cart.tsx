@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useCart } from "../contexts/CartContext";
 import axios from "axios";
 
-import "../styles/cart.css";
-import "../styles/button.css";
+import "../assets/styles/cart.css";
+import "../assets/styles/button.css";
 
 import backgroundCart from "../img/backgroundCart.webp";
 

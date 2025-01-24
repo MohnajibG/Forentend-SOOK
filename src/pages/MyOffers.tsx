@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
-import { useParams } from "react-router-dom";
 import axios from "axios";
-import Loading from "../img/Loading.gif";
-import background from "../img/offerPage.webp";
+import Loading from "../assets/img/Loading.gif";
+import background from "../assets/img/offerPage.webp";
 
 const MyOffers: React.FC = () => {
   const { token, userId } = useUser();

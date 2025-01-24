@@ -7,8 +7,8 @@ import { useUser } from "../contexts/UserContext";
 
 import signup from "../img/backgroundsignup.jpg";
 
-import "../styles/signup.css";
-import "../styles/input.css";
+import "../assets/styles/signup.css";
+import "../assets/styles/input.css";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 

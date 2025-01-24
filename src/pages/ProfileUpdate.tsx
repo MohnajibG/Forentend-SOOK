@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useUser } from "../contexts/UserContext";
 
-import "../styles/profileUpdate.css";
+import "../assets/styles/profileUpdate.css";
 import backgroundUpdateProfil from "../img/hero.jpg";
 
 const ProfileUpdate: React.FC = () => {

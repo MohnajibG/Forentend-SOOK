@@ -9,7 +9,7 @@ import { ProfilProps } from "../types/types";
 import backgroundPage from "../img/hero.jpg";
 import LOGO from "../img/LOGO.png";
 
-import "../styles/offerspage.css";
+import "../assets/styles/offerspage.css";
 
 const OffersPage: React.FC = () => {
   const [offers, setOffers] = useState<ProfilProps[]>([]);

@@ -8,8 +8,8 @@ import { FaEyeSlash } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 
-import "../styles/login.css";
-import "../styles/input.css";
+import "../assets/styles/login.css";
+import "../assets/styles/input.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import login from "../img/backgroudLogin.webp";

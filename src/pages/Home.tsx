@@ -6,7 +6,7 @@ import useUserInfo from "../hooks/useUserInfo";
 import logo from "../img/LOGO.png";
 import hero from "../img/hero.jpg";
 import Loading from "../img/Loading.gif";
-import "../styles/home.css";
+import "../assets/styles/home.css";
 import { Key } from "react";
 
 const Home: React.FC = () => {
