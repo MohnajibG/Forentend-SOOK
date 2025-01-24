@@ -5,7 +5,7 @@ import { Account, ProfilProps } from "../types/types";
 
 import { useUser } from "../contexts/UserContext";
 
-import backgroundUpdateProfil from "../img/hero.jpg";
+import backgroundUpdateProfil from "../assets/img/hero.jpg";
 import Loading from "../assets/img/Loading.gif";
 import { FaPen } from "react-icons/fa";
 
