@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import { CartItem } from "../types/types";
 
+import "../assets/styles/style.css";
+
 interface DeleteFromCartButtonProps {
   item: CartItem;
   cart: CartItem[];
@@ -24,14 +26,18 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
       const updatedCart = cart.filter((cartItem) => cartItem.id !== item.id);
       setCart(updatedCart);
     } catch (error) {
-      console.error(
+      console.log(
         "Erreur lors de la suppression de l'article du panier :",
         error
       );
     }
   };
 
-  return <button onClick={handleDeleteFromCart}>Supprimer</button>;
+  return (
+    <button className="delete" onClick={handleDeleteFromCart}>
+      X
+    </button>
+  );
 };
 
 export default DeleteFromCartButton;

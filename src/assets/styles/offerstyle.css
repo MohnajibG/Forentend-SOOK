@@ -19,37 +19,41 @@
 }
 .offer-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 5rem;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+  width: 90%;
+  border-radius: 10px;
+  height: 60vh;
+}
+.offer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  width: 90%;
+  border-radius: 10px;
+  height: 60vh;
 }
 .offer-details {
-  flex: 2;
-  height: 25rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre */
-  border-radius: 8px; /* Coins arrondis */
-  background-color: #ffffffb0; /* Couleur de fond */
-  padding: 15px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  border-radius: 10px;
+  height: 40vh;
+  width: calc((100% / 2));
+  padding: 1rem;
+  background-color: rgba(251, 248, 238, 0.598);
 }
 
 .img-btn {
+  padding: 1rem;
+  height: 40vh;
+  width: calc((100% / 2));
+  border-radius: 10px;
   display: flex;
-  justify-content: space-between;
+  gap: 2rem;
   align-items: center;
-  flex: 2;
   flex-direction: column;
-  height: 25rem;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1); /* Ombre */
-  border-radius: 8px; /* Coins arrondis */
-  background-color: #ffffffb0; /* Couleur de fond */
-  padding: 15px;
+  background-color: rgba(251, 248, 238, 0.598);
 }
 .img-offerPage {
   display: flex;
@@ -57,11 +61,27 @@
   overflow: auto;
   width: 8rem;
 }
+.title-details-offer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.title-details-offer h1 {
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 1rem;
+  color: #e97510;
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.929);
+}
+.title-details-offer div {
+  overflow-y: scroll;
+}
 
 .offer-container div h2 {
   font-size: 18px;
   margin-bottom: 10px;
-  color: #333;
+  color: #fff;
 }
 
 .offer-container div p {
@@ -70,8 +90,9 @@
   color: #666;
 }
 
-.img-offerPage div img {
-  max-width: 100%;
+.img-offer {
+  height: 200px;
+  width: 100%;
   border-radius: 8px;
   margin-top: 10px;
 }
@@ -90,28 +111,25 @@
 }
 
 .offer-user-info {
-  background-color: #fc84c438;
+  background-color: #fbcfe680;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding: 1rem;
+  width: 95%;
 }
 
 .offer-container div .username-offer {
   font-weight: bolder;
+  text-shadow: 0px 0px 10px 2px rgb(255, 255, 255);
   font-size: 1.2rem;
-  color: #000;
+  color: #ffffff;
 }
 .offer-user-info-img {
   width: 40px;
   height: 40px;
   border-radius: 100%;
   object-fit: cover;
-}
-
-.title-details-offer {
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
+  box-shadow: 0px 0px 10px 2px rgb(255, 255, 255);
 }

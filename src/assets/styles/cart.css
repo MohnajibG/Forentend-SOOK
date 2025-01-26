@@ -31,12 +31,28 @@
   background-color: #ffffffb0; /* Couleur de fond */
   gap: 2rem;
   border-radius: 10px;
-  padding: 2rem;
+  padding: 4rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9); /* Ombre */
 }
 
 .cart-container h1 {
+  text-align: start;
   font-size: 18px;
   margin-bottom: 10px;
   color: #333;
+}
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  color: black;
+}
+
+.total {
+  border-top: 1px solid saddlebrown;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  text-align: end;
+  color: black;
 }
