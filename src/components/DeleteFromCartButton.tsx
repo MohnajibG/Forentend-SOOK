@@ -17,19 +17,13 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
 }) => {
   const handleDeleteFromCart = async () => {
     try {
-      // Suppression de l'article côté backend
       await axios.delete(
-        `https://site--sook--dnxhn8mdblq5.code.run/carts/${item.id}`
+        `https://site--sook--dnxhn8mdblq5.code.run/cart/${item.id}`
       );
 
-      // Mise à jour du panier localement
-      const updatedCart = cart.filter((cartItem) => cartItem.id !== item.id);
-      setCart(updatedCart);
+      setCart(cart.filter((cartItem) => cartItem.id !== item.id));
     } catch (error) {
-      console.log(
-        "Erreur lors de la suppression de l'article du panier :",
-        error
-      );
+      console.error("Erreur lors de la suppression de l'article :", error);
     }
   };
 
