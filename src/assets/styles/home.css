@@ -188,6 +188,10 @@
   .home-btn {
     height: 5vh;
   }
+  .offer-home .offer-item {
+    width: 20rem;
+    height: 5rem;
+  }
   @media (max-width: 480px) {
   }
   @media (max-width: 375px) {
