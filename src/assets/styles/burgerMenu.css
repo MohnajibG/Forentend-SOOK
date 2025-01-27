@@ -5,7 +5,6 @@
   right: 2vw;
   background-color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
   z-index: 1000;
   padding: 10px;
   display: flex;
@@ -22,7 +21,6 @@
   padding: 1vh;
   margin: 1vh;
   background-color: #ffc1bddc;
-  border-radius: 10px;
   transition: 300ms ease-in-out;
   border: #000000f9 2px solid;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -52,9 +50,8 @@
 
 .burger-menu li a:hover,
 .burger-menu li button:hover {
-  background-color: #f0f0f0;
-  font-size: 14px;
-  transition: 1300ms;
+  color: #f74b4b7c;
+  transition: 200ms;
 }
 
 .burger-bar {
@@ -83,7 +80,6 @@
   right: 20px;
   background-color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
   overflow: hidden;
   z-index: 1000;
 }

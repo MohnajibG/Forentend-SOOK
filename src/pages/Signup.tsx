@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
+import Cookies from "js-cookie";
 import { useNavigate, Link } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 
 import { useUser } from "../contexts/UserContext";
-
 import signup from "../assets/img/backgroundsignup.jpg";
 
 import "../assets/styles/signup.css";
@@ -13,72 +13,115 @@ import "../assets/styles/input.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    newsletter: false,
+  });
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
-  const [newsletter, setNewsletter] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const { setUser } = useUser();
   const navigate = useNavigate();
 
+  // Gestion du changement des champs
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value, type, checked } = event.target;
+    setFormData({
+      ...formData,
+      [id]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const validateInputs = () => {
+    const newErrors: string[] = [];
+
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      newErrors.push("Tous les champs sont requis.");
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(formData.email)) {
+      newErrors.push("L'email est invalide.");
+    }
+
+    // Validation du mot de passe
+    if (formData.password.length < 6) {
+      newErrors.push("Le mot de passe doit contenir au moins 6 caractères.");
+    }
+    if (!/[A-Z]/.test(formData.password)) {
+      newErrors.push(
+        "Le mot de passe doit contenir au moins une lettre majuscule."
+      );
+    }
+    if (!/[a-z]/.test(formData.password)) {
+      newErrors.push(
+        "Le mot de passe doit contenir au moins une lettre minuscule."
+      );
+    }
+    if (!/[0-9]/.test(formData.password)) {
+      newErrors.push("Le mot de passe doit contenir au moins un chiffre.");
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+      newErrors.push(
+        "Le mot de passe doit contenir au moins un caractère spécial."
+      );
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.push("Les mots de passe ne correspondent pas.");
+    }
+
+    setErrors(newErrors);
+    return newErrors.length === 0;
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setErrorMessage("");
+    setErrors([]);
 
-    if (password !== confirmPassword) {
-      setErrorMessage("Les mots de passe ne correspondent pas.");
-      return;
-    }
-
-    const isValidEmail =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-    if (!isValidEmail) {
-      setErrorMessage("Email invalide.");
-      return;
-    }
-
-    if (!username || !email || !password || !confirmPassword) {
-      setErrorMessage("Tous les champs sont requis.");
-      return;
-    }
+    if (!validateInputs()) return;
 
     setIsLoading(true);
 
     try {
       const response = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/user/signup",
-        {
-          username,
-          email,
-          password,
-          confirmPassword,
-          newsletter,
-        }
+        formData
       );
 
       if (response.data.token && response.data.account.username) {
         const { token, userId } = response.data;
         const username = response.data.account.username;
 
+        // Stocker le token dans les cookies
+        Cookies.set("token", token, { expires: 1 }); // expire dans 1 jour
         setUser(userId, token, username);
-
         navigate(`/profileUpdate/${userId}`);
       } else {
-        setErrorMessage("Erreur inattendue lors de l'inscription.");
+        setErrors(["Erreur inattendue lors de l'inscription."]);
       }
     } catch (err: any) {
       if (err.response?.data?.message) {
-        setErrorMessage(err.response.data.message);
+        setErrors(
+          Array.isArray(err.response.data.message)
+            ? err.response.data.message
+            : [err.response.data.message]
+        );
       } else {
-        setErrorMessage("Erreur lors de l'inscription. Veuillez réessayer.");
+        setErrors(["Erreur lors de l'inscription. Veuillez réessayer."]);
       }
-    } finally {
       setIsLoading(false);
     }
   };
@@ -88,12 +131,21 @@ const Signup: React.FC = () => {
       <img src={signup} alt="image-background-signup" />
       <h2>S'inscrire</h2>
       <form onSubmit={handleSubmit}>
+        {errors.length > 0 && (
+          <div>
+            {errors.map((error, index) => (
+              <p className="error-message" key={index}>
+                {error}
+              </p>
+            ))}
+          </div>
+        )}
         <input
           type="text"
           id="username"
           placeholder="Votre nom"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          value={formData.username}
+          onChange={handleChange}
           disabled={isLoading}
         />
 
@@ -102,50 +154,56 @@ const Signup: React.FC = () => {
           id="email"
           placeholder="Votre Email"
           autoComplete="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          value={formData.email}
+          onChange={handleChange}
           disabled={isLoading}
         />
 
-        <input
-          type={isPasswordVisible ? "text" : "password"}
-          id="password"
-          placeholder="Votre Mot de passe"
-          autoComplete="new-password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          disabled={isLoading}
-        />
-        <span
-          className="toggle-visibility-icon-password "
-          onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-        >
-          {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
-        </span>
+        <div className="password-field">
+          <input
+            type={isPasswordVisible ? "text" : "password"}
+            id="password"
+            placeholder="Votre Mot de passe"
+            autoComplete="new-password"
+            value={formData.password}
+            onChange={handleChange}
+            disabled={isLoading}
+          />
+          <span
+            className="toggle-visibility-icon"
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
+          </span>
+        </div>
 
-        <input
-          type={isConfirmPasswordVisible ? "text" : "password"}
-          id="confirmPassword"
-          placeholder="Confirmer Votre Mot de passe"
-          autoComplete="new-password"
-          value={confirmPassword}
-          onChange={(event) => setConfirmPassword(event.target.value)}
-          disabled={isLoading}
-        />
-        <span
-          className="toggle-visibility-icon-confirmPassword "
-          onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
-        >
-          {isConfirmPasswordVisible ? <FaEye /> : <FaEyeSlash />}
-        </span>
+        <div className="password-field">
+          <input
+            type={isConfirmPasswordVisible ? "text" : "password"}
+            id="confirmPassword"
+            placeholder="Confirmer Votre Mot de passe"
+            autoComplete="new-password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            disabled={isLoading}
+          />
+          <span
+            className="toggle-visibility-icon"
+            onClick={() =>
+              setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
+            }
+          >
+            {isConfirmPasswordVisible ? <FaEye /> : <FaEyeSlash />}
+          </span>
+        </div>
 
-        <div className="nl-countainer">
+        <div className="nl-container">
           <input
             className="checkbox-newsletter"
             type="checkbox"
             id="newsletter"
-            checked={newsletter}
-            onChange={() => setNewsletter(!newsletter)}
+            checked={formData.newsletter}
+            onChange={handleChange}
             disabled={isLoading}
           />
           <span>S'abonner à la newsletter</span>
@@ -157,7 +215,6 @@ const Signup: React.FC = () => {
           <span>SOUK!</span>. Je déclare également avoir au moins 18 ans.
         </p>
 
-        {/* Affichage du bouton ou du spinner */}
         <button disabled={isLoading}>
           {isLoading ? (
             <ClipLoader size={20} color="#fff" loading={isLoading} />
@@ -165,12 +222,11 @@ const Signup: React.FC = () => {
             "S'inscrire"
           )}
         </button>
+
         <p className="signup-link">
-          vous avez déja un compte? connectez vous ici{" "}
+          Vous avez déjà un compte ? Connectez-vous ici{" "}
           <Link to="/login">Se connecter</Link>
         </p>
-
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
       </form>
     </main>
   );

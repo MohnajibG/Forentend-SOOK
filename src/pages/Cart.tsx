@@ -1,13 +1,17 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { useCart } from "../contexts/CartContext";
-import axios from "axios";
+
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+import CheckoutForm from "../components/CheckoutForm";
 
 import "../assets/styles/cart.css";
 import "../assets/styles/button.css";
 
 import backgroundCart from "../assets/img/backgroundCart.webp";
 
-import RemoveFromCartButton from "../components/updateCartButton";
 import DeleteFromCartButton from "../components/DeleteFromCartButton";
 
 import Loading from "../assets/img/Loading.gif";
