@@ -1,7 +1,6 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-
+import { useParams, Link } from "react-router-dom";
+import axios from "axios";
 import { ProfilProps } from "../types/types";
 import { useCart } from "../contexts/CartContext";
 
@@ -35,6 +34,7 @@ const OfferPage: React.FC = () => {
         );
 
         setOffer(response.data.offer);
+        console.log(response.data.offer);
       } catch (error) {
         setError("Erreur lors du chargement de l'offre. Veuillez réessayer.");
       }
@@ -137,12 +137,14 @@ const OfferPage: React.FC = () => {
           <div className="images-offer">
             {offer.pictures && offer.pictures.length > 0 ? (
               offer.pictures.map((picture: string, index: number) => (
-                <img
-                  key={index}
-                  src={picture}
-                  alt={`Image ${index + 1}`}
-                  className="modal-img"
-                />
+                <Link to={picture}>
+                  <img
+                    key={index}
+                    src={picture}
+                    alt={`Image ${index + 1}`}
+                    className="modal-img"
+                  />
+                </Link>
               ))
             ) : (
               <p>Aucune image disponible.</p>
