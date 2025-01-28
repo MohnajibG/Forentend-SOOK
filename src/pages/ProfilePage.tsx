@@ -7,7 +7,6 @@ import { useUser } from "../contexts/UserContext";
 
 import backgroundUpdateProfil from "../assets/img/hero.jpg";
 import Loading from "../assets/img/Loading.gif";
-import { FaPen } from "react-icons/fa";
 
 import "../assets/styles/profilePage.css";
 
@@ -21,6 +20,7 @@ const ProfilePage: React.FC = () => {
     Partial<Account["account"]>
   >({});
   const [error, setError] = useState<string | null>(null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null); // pour gérer le fichier de l'avatar
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -40,8 +40,6 @@ const ProfilePage: React.FC = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("userID===>", response.data._id);
-
         setDataProfile(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération du profil :", error);
@@ -61,6 +59,13 @@ const ProfilePage: React.FC = () => {
     setUpdatedProfile((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAvatarFile(file);
+    }
+  };
+
   const handleSave = async () => {
     try {
       if (
@@ -77,12 +82,25 @@ const ProfilePage: React.FC = () => {
         return;
       }
 
+      const formData = new FormData();
+      // Ajout de l'avatar dans les données si un fichier a été sélectionné
+      if (avatarFile) {
+        formData.append("avatar", avatarFile);
+      }
+      // Ajout des autres données de profil
+      Object.keys(updatedProfile).forEach((key) => {
+        formData.append(
+          key,
+          updatedProfile[key as keyof typeof updatedProfile] as string
+        );
+      });
+
       const response = await axios.put(
         `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
-        updatedProfile,
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -90,6 +108,7 @@ const ProfilePage: React.FC = () => {
       setDataProfile(response.data);
       setEditMode(false);
       setUpdatedProfile({});
+      setAvatarFile(null); // Réinitialise le fichier avatar
     } catch (error) {
       setError("Erreur lors de la mise à jour du profil.");
       console.error(error);
@@ -98,26 +117,20 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="profile-page">
-        <img
-          className="background-img"
-          src={backgroundUpdateProfil}
-          alt="Background Update Profil"
-        />
-        <div className="Load">
-          <img src={Loading} alt="" />
-        </div>
+  return loading ? (
+    <div className="profile-page">
+      <img
+        className="background-img"
+        src={backgroundUpdateProfil}
+        alt="Background Update Profil"
+      />
+      <div className="Load">
+        <img src={Loading} alt="" />
       </div>
-    );
-  }
-
-  if (error) {
-    return <p className="error-message">{error}</p>;
-  }
-
-  return (
+    </div>
+  ) : error ? (
+    <p className="error-message">{error}</p>
+  ) : (
     <div className="profile-page">
       <img
         className="background-img"
@@ -125,157 +138,149 @@ const ProfilePage: React.FC = () => {
         alt="Background Update Profil"
       />
       <h1>Votre Profil</h1>
-      <div>
+      <div className="profil-content">
         <img
-          className="avatar-preview"
+          className="avatar-profil"
           src={dataProfile?.account?.avatar || ""}
-          alt=""
+          alt="Avatar"
         />
-      </div>
-      {editMode ? (
-        <div>
-          <div className="input-group">
+
+        {editMode ? (
+          <div className="profile-informations">
             <input
-              name="username"
-              value={
-                updatedProfile.username || dataProfile?.account?.username || ""
-              }
-              onChange={handleInputChange}
-              placeholder="Nom d'utilisateur"
+              type="file"
+              name="avatar"
+              accept="image/*"
+              onChange={handleAvatarChange}
             />
-            <button onClick={() => setEditMode(true)}>
-              <FaPen />
-            </button>
+            <div className="input-group">
+              <input
+                name="username"
+                value={
+                  updatedProfile.username ||
+                  dataProfile?.account?.username ||
+                  ""
+                }
+                onChange={handleInputChange}
+                placeholder="Nom d'utilisateur"
+              />
+            </div>
+            <div className="input-group">
+              <input
+                name="address"
+                value={
+                  updatedProfile.address || dataProfile?.account?.address || ""
+                }
+                onChange={handleInputChange}
+                placeholder="Adresse"
+              />
+            </div>
+            <div className="input-group">
+              <input
+                name="postalCode"
+                value={
+                  updatedProfile.postalCode ||
+                  dataProfile?.account?.postalCode ||
+                  ""
+                }
+                onChange={handleInputChange}
+                placeholder="Code postal"
+              />
+            </div>
+            <div className="input-group">
+              <input
+                name="country"
+                value={
+                  updatedProfile.country || dataProfile?.account?.country || ""
+                }
+                onChange={handleInputChange}
+                placeholder="Pays"
+              />
+            </div>
+            <div className="input-group">
+              <input
+                name="phoneNumber"
+                value={
+                  updatedProfile.phoneNumber ||
+                  dataProfile?.account?.phoneNumber ||
+                  ""
+                }
+                onChange={handleInputChange}
+                placeholder="Numéro de téléphone"
+              />
+            </div>
+            <div className="input-group">
+              <select
+                name="sexe"
+                value={updatedProfile.sexe || dataProfile?.account?.sexe || ""}
+                onChange={handleInputChange}
+              >
+                <option value="" disabled>
+                  Sélectionnez votre sexe
+                </option>
+                <option value="homme">Homme</option>
+                <option value="femme">Femme</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            <div className="input-group">
+              <input
+                type="date"
+                name="dateOfBorn"
+                value={
+                  updatedProfile.dateOfBorn ||
+                  dataProfile?.account?.dateOfBorn ||
+                  ""
+                }
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="input-group">
+              {avatarFile && <p>Avatar sélectionné: {avatarFile.name}</p>}
+            </div>
+            <button onClick={handleSave}>Enregistrer</button>
           </div>
-          <div className="input-group">
-            <input
-              name="address"
-              value={
-                updatedProfile.address || dataProfile?.account?.address || ""
-              }
-              onChange={handleInputChange}
-              placeholder="Adresse"
-            />
-            <button onClick={() => setEditMode(true)}>
-              <FaPen />
-            </button>
-          </div>
-          <div className="input-group">
-            <input
-              name="postalCode"
-              value={
-                updatedProfile.postalCode ||
-                dataProfile?.account?.postalCode ||
-                ""
-              }
-              onChange={handleInputChange}
-              placeholder="Code postal"
-            />
-            <button onClick={() => setEditMode(true)}>
-              <FaPen />
-            </button>
-          </div>
-          <div className="input-group">
-            <input
-              name="country"
-              value={
-                updatedProfile.country || dataProfile?.account?.country || ""
-              }
-              onChange={handleInputChange}
-              placeholder="Pays"
-            />
-            <button onClick={() => setEditMode(true)}>
-              <FaPen />
-            </button>
-          </div>
-          <div className="input-group">
-            <input
-              name="phoneNumber"
-              value={
-                updatedProfile.phoneNumber ||
-                dataProfile?.account?.phoneNumber ||
-                ""
-              }
-              onChange={handleInputChange}
-              placeholder="Numéro de téléphone"
-            />
-            <button onClick={() => setEditMode(true)}>
-              <FaPen />
-            </button>
-          </div>
-          <div className="input-group">
-            <select
-              name="sexe"
-              value={updatedProfile.sexe || dataProfile?.account?.sexe || ""}
-              onChange={handleInputChange}
+        ) : (
+          <div className="profile-informations">
+            <p>
+              Nom d'utilisateur :{" "}
+              {dataProfile?.account?.username || "Non renseigné"}
+            </p>
+            <p>Adresse : {dataProfile?.account?.address || "Non renseigné"}</p>
+            <p>
+              Code postal :{" "}
+              {dataProfile?.account?.postalCode || "Non renseigné"}
+            </p>
+            <p>Pays : {dataProfile?.account?.country || "Non renseigné"}</p>
+            <p>
+              Numéro de téléphone :{" "}
+              {dataProfile?.account?.phoneNumber || "Non renseigné"}
+            </p>
+            <p>Sexe : {dataProfile?.account?.sexe || "Non renseigné"}</p>
+            <p>
+              Date de naissance :{" "}
+              {dataProfile?.account?.dateOfBorn || "Non renseigné"}
+            </p>
+            <button
+              onClick={() => {
+                setUpdatedProfile({
+                  username: dataProfile?.account?.username,
+                  address: dataProfile?.account?.address ?? undefined,
+                  postalCode: dataProfile?.account?.postalCode ?? undefined,
+                  country: dataProfile?.account?.country ?? undefined,
+                  phoneNumber: dataProfile?.account?.phoneNumber ?? undefined,
+                  sexe: dataProfile?.account?.sexe ?? undefined,
+                  dateOfBorn: dataProfile?.account?.dateOfBorn ?? undefined,
+                  avatar: dataProfile?.account?.avatar ?? undefined,
+                });
+                setEditMode(true);
+              }}
             >
-              <option value="" disabled>
-                Sélectionnez votre sexe
-              </option>
-              <option value="homme">Homme</option>
-              <option value="femme">Femme</option>
-              <option value="autre">Autre</option>
-            </select>
-            <button onClick={() => setEditMode(true)}>
-              <FaPen />
+              Modifier
             </button>
           </div>
-          <div className="input-group">
-            <input
-              type="date"
-              name="dateOfBorn"
-              value={
-                updatedProfile.dateOfBorn ||
-                dataProfile?.account?.dateOfBorn ||
-                ""
-              }
-              onChange={handleInputChange}
-            />
-            <button onClick={() => setEditMode(true)}>
-              <FaPen />
-            </button>
-          </div>
-          <button onClick={handleSave}>Enregistrer</button>
-        </div>
-      ) : (
-        <div className="profile-informations">
-          <p>
-            Nom d'utilisateur :{" "}
-            {dataProfile?.account?.username || "Non renseigné"}
-          </p>
-          <p>Adresse : {dataProfile?.account?.address || "Non renseigné"}</p>
-          <p>
-            Code postal : {dataProfile?.account?.postalCode || "Non renseigné"}
-          </p>
-          <p>Pays : {dataProfile?.account?.country || "Non renseigné"}</p>
-          <p>
-            Numéro de téléphone :{" "}
-            {dataProfile?.account?.phoneNumber || "Non renseigné"}
-          </p>
-          <p>Sexe : {dataProfile?.account?.sexe || "Non renseigné"}</p>
-          <p>
-            Date de naissance :{" "}
-            {dataProfile?.account?.dateOfBorn || "Non renseigné"}
-          </p>
-          <button
-            onClick={() => {
-              setUpdatedProfile({
-                username: dataProfile?.account?.username,
-                address: dataProfile?.account?.address ?? undefined,
-                postalCode: dataProfile?.account?.postalCode ?? undefined,
-                country: dataProfile?.account?.country ?? undefined,
-                phoneNumber: dataProfile?.account?.phoneNumber ?? undefined,
-                sexe: dataProfile?.account?.sexe ?? undefined,
-                dateOfBorn: dataProfile?.account?.dateOfBorn ?? undefined,
-                avatar: dataProfile?.account?.avatar ?? undefined,
-              });
-              setEditMode(true);
-            }}
-          >
-            Modifier
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

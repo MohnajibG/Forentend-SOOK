@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CartItem } from "../types/types";
@@ -9,29 +10,33 @@ interface AddToCartButtonProps {
   token: string;
 }
 
-const AddToCartButton: React.FC<AddToCartButtonProps> = ({
+const AddToCartButton: React.FC<AddToCartButtonProps> = (
   token,
-  item,
-  cart,
-  setCart,
-}) => {
+  { item, cart, setCart }
+) => {
   const navigate = useNavigate();
 
-  if (!token) {
-    navigate("/login");
-  }
+  // Vérification du token dans un useEffect pour éviter de bloquer le rendu
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
+
   const handleAddToCart = async () => {
     const addCartCopy = [...cart];
     const foundItem = addCartCopy.find((cartItem) => cartItem.id === item.id);
 
-    // Si l'article n'est pas dans le panier, on l'ajoute
-    if (!foundItem) {
+    // Si l'article est déjà dans le panier, on ne l'ajoute pas
+    if (foundItem) {
+      console.log("Cet article est déjà dans le panier.");
+      return;
+    } else {
+      // Si l'article n'est pas dans le panier, on l'ajoute
       addCartCopy.push({
         ...item,
         quantity: 0,
       });
-    } else {
-      console.log("Cet article est déjà dans le panier.");
     }
 
     try {
