@@ -101,6 +101,7 @@ const OfferPage: React.FC = () => {
                 <p>Aucune image disponible.</p>
               )}
             </div>
+
             <AddToCartButton
               cart={cart}
               setCart={setCart}
@@ -109,6 +110,7 @@ const OfferPage: React.FC = () => {
                 name: offer.title || "",
                 price: offer.price || 0,
               }}
+              token={""}
             />
           </div>
         </div>

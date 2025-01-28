@@ -1,4 +1,4 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CartItem } from "../types/types";
 
@@ -6,13 +6,20 @@ interface AddToCartButtonProps {
   item: { id: string; name: string; price: number };
   cart: CartItem[];
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  token: string;
 }
 
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({
+  token,
   item,
   cart,
   setCart,
 }) => {
+  const navigate = useNavigate();
+
+  if (!token) {
+    navigate("/login");
+  }
   const handleAddToCart = async () => {
     const addCartCopy = [...cart];
     const foundItem = addCartCopy.find((cartItem) => cartItem.id === item.id);
