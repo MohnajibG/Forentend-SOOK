@@ -186,6 +186,7 @@ const ProfileUpdate: React.FC = () => {
             name="sexe"
             value={profileData.sexe}
             onChange={handleInputChange}
+            className="input-textarea"
           >
             <option value="Homme">Homme</option>
             <option value="Femme">Femme</option>
@@ -207,6 +208,7 @@ const ProfileUpdate: React.FC = () => {
             name="address"
             value={profileData.address}
             onChange={handleInputChange}
+            className="input-textarea"
           />
 
           <label htmlFor="postalCode">Code postal</label>

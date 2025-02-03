@@ -9,19 +9,19 @@
 }
 
 .home-container {
-  color: #fff;
   font-family: "Krub", sans-serif;
   display: flex;
   justify-content: space-around;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-  padding: 2rem;
+  padding: 5rem;
 }
-.user-home {
+.user-home .userInfo {
   display: flex;
   gap: 5rem;
   align-items: center;
+  justify-content: space-between;
 }
 .home-page-title {
   width: 90%;
@@ -48,10 +48,13 @@
 }
 
 .home-container p {
-  padding: 10px;
   font-size: 1rem;
-  margin-bottom: 1rem;
   color: #ffffff;
+}
+.home-container p:hover {
+  color: #000;
+  font-weight: 400;
+  transition: color 3000ms;
 }
 
 .welcom-container,
@@ -103,39 +106,38 @@
 .offer-home {
   background-color: #fac3c38c;
   display: flex;
-  flex-direction: row;
+  justify-content: space-around;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  flex-direction: row;
+  box-shadow: 0 0 13px 4px rgba(255, 255, 255, 0.75);
+  transition: background-color 1s;
 }
-.offer-home .offer-item {
+
+.offer-items {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
+  justify-content: space-around;
   padding: 1rem;
   margin: 1rem;
-  background-color: #fffefea9;
-  box-shadow: 0px 0px 13px 4px rgba(255, 255, 255, 0.75);
+  background-color: #fffefe79;
+  box-shadow: 0 0 13px 4px rgba(255, 255, 255, 0.75);
   width: 15rem;
+  transition: background-color 1s;
 }
-.offer-home .offer-item:hover {
-  background-color: #fffefe;
-  transition: 1s;
+
+.offer-home .offer-items:hover {
+  background-color: #fffefe9a;
+  transition: 2s;
 }
-.offer-home .offer-item .pictures-offer {
-  width: 90%;
-  height: 30%;
-  object-fit: cover;
+
+.offer-home {
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.offer-home .offer-item .pictures-offer img {
-  width: 100%;
-  height: 20rem;
-  object-fit: cover;
-}
 .userInfo {
   display: flex;
   align-items: center;
@@ -163,7 +165,9 @@
     width: 100%;
     object-fit: cover;
   }
-
+  .home-container {
+    padding: 1rem;
+  }
   .home-container h1 {
     font-size: 1rem;
     margin: 2vw;
@@ -177,20 +181,33 @@
   }
 
   .welcom-container {
-    width: 50%;
+    width: 90%;
     top: 30vh;
     left: 50%;
-  }
-  .home-container p {
-    display: none;
   }
 
   .home-btn {
     height: 5vh;
   }
-  .offer-home .offer-item {
+  .offer-home {
+    width: 90%;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .offer-items {
     width: 20rem;
-    height: 5rem;
+    height: 10rem;
+    padding: 2px;
+    box-shadow: 0px 0px 13px 4px rgb(255, 255, 255);
+    display: flex;
+    flex-direction: row;
+  }
+  .pictures-offer {
+    width: 40%;
+    padding: 1rem;
+    object-fit: cover;
   }
   @media (max-width: 480px) {
   }

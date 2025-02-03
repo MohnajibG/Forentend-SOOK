@@ -5,3 +5,32 @@
   border-radius: 20px;
   color: black;
 }
+/* Style par défaut pour le bouton */
+.button-add-to-cart {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+.button-add-to-cart:hover {
+  background-color: #45a049;
+}
+
+/* Style pour le bouton quand l'article est déjà dans le panier */
+.button-in-cart {
+  background-color: #ccc;
+  color: #666;
+  padding: 10px 20px;
+  border: none;
+  font-size: 12px;
+  border-radius: 5px;
+  cursor: not-allowed;
+}
+
+.button-in-cart:hover {
+  background-color: #ccc; /* Pas de changement au survol */
+}

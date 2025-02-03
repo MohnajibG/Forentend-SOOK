@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
@@ -22,6 +24,7 @@ const OfferPage: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const { cart, setCart } = useCart();
+  const token = Cookies.get("token"); // Récupère le token depuis le cookie
 
   useEffect(() => {
     const fetchOffer = async () => {
@@ -34,7 +37,7 @@ const OfferPage: React.FC = () => {
         );
 
         setOffer(response.data.offer);
-        console.log(response.data.offer);
+        // console.log(response.data.offer);
       } catch (error) {
         setError("Erreur lors du chargement de l'offre. Veuillez réessayer.");
       }
@@ -110,7 +113,8 @@ const OfferPage: React.FC = () => {
                 name: offer.title || "",
                 price: offer.price || 0,
               }}
-              token={""}
+              token={token || ""}
+              userId={offer.userId._id} //
             />
           </div>
         </div>

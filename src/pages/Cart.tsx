@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useCart } from "../contexts/CartContext";
+import { useUser } from "../contexts/UserContext";
 
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -18,6 +19,7 @@ import Loading from "../assets/img/Loading.gif";
 
 const Cart: React.FC = () => {
   const { cart, setCart } = useCart();
+  const { userId } = useUser();
   const [loading, setLoading] = useState(false);
 
   const total = cart.reduce((acc, item) => acc + item.price, 0).toFixed(2);
@@ -27,7 +29,7 @@ const Cart: React.FC = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://site--sook--dnxhn8mdblq5.code.run/cart"
+          "https://site--sook--dnxhn8mdblq5.code.run/cart/userId"
         );
         console.log("cart==>", response);
 

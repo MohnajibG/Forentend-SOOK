@@ -5,4 +5,12 @@ input {
   padding: 0.8rem;
   font-size: 0.8rem;
   background-color: rgba(255, 255, 255, 0.91);
+  caret-color: red;
+  outline: none;
+}
+
+.input-textarea {
+  width: 16.2rem;
+  border: none;
+  height: 2.5rem;
 }

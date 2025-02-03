@@ -92,26 +92,31 @@ const Home: React.FC = () => {
         <div className="offer-home">
           {dataOffer.offers.map((offer) => (
             <Link key={offer._id} to={`/offer/${offer._id}`}>
-              <div className="offer-item">
-                <h2>{offer.title}</h2>
-                <p>Prix : {offer.price}€</p>
-                <p>Marque: {offer.brand}</p>
-                <div className="userInfo">
-                  {offer.userId?.account?.username ? (
-                    <p>
-                      {offer.userId.account.username.charAt(0).toUpperCase() +
-                        offer.userId.account.username.slice(1)}
-                    </p>
-                  ) : (
-                    <p>Utilisateur inconnu</p>
-                  )}
-                  {offer.userId?.account?.avatar && (
-                    <img
-                      src={offer.userId.account.avatar}
-                      alt="Avatar"
-                      className="avatar"
-                    />
-                  )}
+              <div className="offer-items">
+                <div>
+                  <h2>{offer.title}</h2>
+                  <div>
+                    <p>Prix : {offer.price}€</p>
+                    <p>Marque: {offer.brand}</p>
+                  </div>
+
+                  <div className="userInfo">
+                    {offer.userId?.account?.username ? (
+                      <p>
+                        {offer.userId.account.username.charAt(0).toUpperCase() +
+                          offer.userId.account.username.slice(1)}
+                      </p>
+                    ) : (
+                      <p>Utilisateur inconnu</p>
+                    )}
+                    {offer.userId?.account?.avatar && (
+                      <img
+                        src={offer.userId.account.avatar}
+                        alt="Avatar"
+                        className="avatar"
+                      />
+                    )}
+                  </div>
                 </div>
 
                 {offer.pictures && offer.pictures.length > 0 && (

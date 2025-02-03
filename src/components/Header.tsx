@@ -103,7 +103,7 @@ const Header: React.FC<HeaderProps> = () => {
                       <Link to="/publish">Publier</Link>
                     </li>
                     <li>
-                      <Link to="/cart">
+                      <Link to={`/cart/${userId}`}>
                         Panier <BsFillBasket3Fill />
                       </Link>
                     </li>

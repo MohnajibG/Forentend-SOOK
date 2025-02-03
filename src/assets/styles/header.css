@@ -1,6 +1,5 @@
 header {
   margin: 1rem 2rem;
-
   position: static;
   display: flex;
   justify-content: center;
@@ -147,6 +146,9 @@ a {
 }
 
 @media (max-width: 768px) {
+  .header {
+    width: 100%;
+  }
   .header-btn {
     gap: 10px;
     display: flex;
