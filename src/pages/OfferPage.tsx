@@ -1,10 +1,11 @@
-import Cookies from "js-cookie";
-
-import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { ProfilProps } from "../types/types";
 import { useCart } from "../contexts/CartContext";
+import { toast } from "react-hot-toast";
+import { ClipLoader } from "react-spinners";
 
 import "../assets/styles/offerstyle.css";
 import "../assets/styles/button.css";
@@ -12,7 +13,6 @@ import "../assets/styles/button.css";
 import AddToCartButton from "../components/AddToCartButton";
 import Modal from "../components/Modal";
 
-import Loading from "../assets/img/Loading.gif";
 import background from "../assets/img/offerPage.webp";
 
 const OfferPage: React.FC = () => {
@@ -23,10 +23,16 @@ const OfferPage: React.FC = () => {
   const [showImagesModal, setShowImagesModal] = useState(false);
 
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { cart, setCart } = useCart();
-  const token = Cookies.get("token"); // Récupère le token depuis le cookie
+  const token = Cookies.get("token");
 
   useEffect(() => {
+    if (!id) {
+      navigate("/offers");
+      return;
+    }
+
     const fetchOffer = async () => {
       setLoading(true);
       setError(null);
@@ -35,24 +41,32 @@ const OfferPage: React.FC = () => {
         const response = await axios.get(
           `https://site--sook--dnxhn8mdblq5.code.run/offers/${id}`
         );
-
         setOffer(response.data.offer);
-        // console.log(response.data.offer);
-      } catch (error) {
-        setError("Erreur lors du chargement de l'offre. Veuillez réessayer.");
+      } catch (err: any) {
+        setError(
+          axios.isAxiosError(err) && err.response?.data?.message
+            ? err.response.data.message
+            : "Erreur lors du chargement de l'offre. Veuillez réessayer."
+        );
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchOffer();
-  }, [id]);
+  }, [id, navigate]);
+
+  const handleAddToCartSuccess = () => {
+    toast.success("Produit ajouté au panier !");
+  };
 
   if (loading)
     return (
       <div className="Load">
-        <img src={Loading} alt="" />
+        <ClipLoader size={50} color="#f10303" loading={loading} />
       </div>
     );
+
   if (error) return <p className="error-message">{error}</p>;
   if (!offer) return <p>Aucune offre trouvée.</p>;
 
@@ -65,7 +79,7 @@ const OfferPage: React.FC = () => {
             {offer.userId.account?.username.toUpperCase() || "Non spécifié"}
           </p>
           <img
-            src={offer.userId.account?.avatar || "Non spécifiée"}
+            src={offer.userId.account?.avatar || ""}
             alt="avatar"
             className="offer-user-info-img"
           />
@@ -93,12 +107,13 @@ const OfferPage: React.FC = () => {
             >
               {offer.pictures && offer.pictures.length > 0 ? (
                 offer.pictures.map((picture: string, index: number) => (
-                  <img
-                    key={index}
-                    src={picture}
-                    alt={`Image ${index + 1}`}
-                    className="img-offer"
-                  />
+                  <Link to={picture} key={index}>
+                    <img
+                      src={picture}
+                      alt={`Image ${index + 1}`}
+                      className="img-offer"
+                    />
+                  </Link>
                 ))
               ) : (
                 <p>Aucune image disponible.</p>
@@ -114,9 +129,17 @@ const OfferPage: React.FC = () => {
                 price: offer.price || 0,
               }}
               token={token || ""}
-              userId={offer.userId._id} //
+              userId={offer.userId._id}
+              onSuccess={handleAddToCartSuccess}
             />
           </div>
+        </div>
+
+        {/* Bouton Retour */}
+        <div className="return-button-container">
+          <button className="return-button" onClick={() => navigate("/offers")}>
+            ← Retour aux Offres
+          </button>
         </div>
       </div>
 
@@ -141,9 +164,8 @@ const OfferPage: React.FC = () => {
           <div className="images-offer">
             {offer.pictures && offer.pictures.length > 0 ? (
               offer.pictures.map((picture: string, index: number) => (
-                <Link to={picture}>
+                <Link to={picture} key={index}>
                   <img
-                    key={index}
                     src={picture}
                     alt={`Image ${index + 1}`}
                     className="modal-img"

@@ -5,12 +5,12 @@ import { useNavigate, Link } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 
 import { useUser } from "../contexts/UserContext";
-import signup from "../assets/img/backgroundsignup.jpg";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
+import signupBackground from "../assets/img/backgroundsignup.jpg";
 
 import "../assets/styles/signup.css";
 import "../assets/styles/input.css";
-
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -30,16 +30,15 @@ const Signup: React.FC = () => {
   const { setUser } = useUser();
   const navigate = useNavigate();
 
-  // Gestion du changement des champs
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value, type, checked } = event.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [id]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
-  const validateInputs = () => {
+  const validateInputs = (): boolean => {
     const newErrors: string[] = [];
 
     if (
@@ -56,7 +55,6 @@ const Signup: React.FC = () => {
       newErrors.push("L'email est invalide.");
     }
 
-    // Validation du mot de passe
     if (formData.password.length < 6) {
       newErrors.push("Le mot de passe doit contenir au moins 6 caractères.");
     }
@@ -105,8 +103,7 @@ const Signup: React.FC = () => {
         const { token, userId } = response.data;
         const username = response.data.account.username;
 
-        // Stocker le token dans les cookies
-        Cookies.set("token", token, { expires: 1 }); // expire dans 1 jour
+        Cookies.set("token", token, { expires: 1 }); // Token valable 1 jour
         setUser(userId, token, username);
         navigate(`/profileUpdate/${userId}`);
       } else {
@@ -122,15 +119,18 @@ const Signup: React.FC = () => {
       } else {
         setErrors(["Erreur lors de l'inscription. Veuillez réessayer."]);
       }
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
     <main className="main-signup">
-      <img src={signup} alt="image-background-signup" />
+      <img src={signupBackground} alt="Background signup" />
       <h2>S'inscrire</h2>
+
       <form onSubmit={handleSubmit}>
+        {/* Affichage des erreurs */}
         {errors.length > 0 && (
           <div>
             {errors.map((error, index) => (
@@ -140,6 +140,7 @@ const Signup: React.FC = () => {
             ))}
           </div>
         )}
+
         <input
           type="text"
           id="username"
@@ -159,6 +160,7 @@ const Signup: React.FC = () => {
           disabled={isLoading}
         />
 
+        {/* Mot de passe */}
         <div className="password-field">
           <input
             type={isPasswordVisible ? "text" : "password"}
@@ -177,11 +179,12 @@ const Signup: React.FC = () => {
           </span>
         </div>
 
+        {/* Confirmation mot de passe */}
         <div className="password-field">
           <input
             type={isConfirmPasswordVisible ? "text" : "password"}
             id="confirmPassword"
-            placeholder="Confirmer Votre Mot de passe"
+            placeholder="Confirmer votre mot de passe"
             autoComplete="new-password"
             value={formData.confirmPassword}
             onChange={handleChange}
@@ -197,6 +200,7 @@ const Signup: React.FC = () => {
           </span>
         </div>
 
+        {/* Newsletter */}
         <div className="nl-container">
           <input
             className="checkbox-newsletter"
@@ -209,12 +213,14 @@ const Signup: React.FC = () => {
           <span>S'abonner à la newsletter</span>
         </div>
 
+        {/* Terms and conditions */}
         <p>
           En m'inscrivant, je certifie avoir pris connaissance et accepté les
           Termes et Conditions ainsi que la Politique de Confidentialité de{" "}
-          <span>SOUK!</span>. Je déclare également avoir au moins 18 ans.
+          <span>SOOK!</span>. Je déclare également avoir au moins 18 ans.
         </p>
 
+        {/* Bouton s'inscrire */}
         <button disabled={isLoading}>
           {isLoading ? (
             <ClipLoader size={20} color="#fff" loading={isLoading} />
@@ -223,6 +229,7 @@ const Signup: React.FC = () => {
           )}
         </button>
 
+        {/* Lien connexion */}
         <p className="signup-link">
           Vous avez déjà un compte ? Connectez-vous ici{" "}
           <Link to="/login">Se connecter</Link>

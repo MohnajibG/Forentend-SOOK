@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UserProvider, useUser } from "./contexts/UserContext";
+import { UserProvider } from "./contexts/UserContext";
 import { CartProvider } from "./contexts/CartContext";
 
 import {
@@ -26,48 +26,55 @@ import Cart from "./pages/Cart";
 import MyOffers from "./pages/MyOffers";
 import EditOffer from "./pages/EditOffer";
 
+import { useUser } from "./contexts/UserContext"; // déplacé ici pour la sous-composante
+
 function App() {
   const [search, setSearch] = useState<string>("");
-  const { token } = useUser();
 
   return (
     <UserProvider>
       <CartProvider>
         <Router>
           <Header search={search} setSearch={setSearch} />
-
-          <Routes>
-            <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route
-              path="/login"
-              element={token ? <Navigate to="/home" replace /> : <Login />}
-            />
-            <Route
-              path="/signup"
-              element={token ? <Navigate to="/home" replace /> : <Signup />}
-            />
-            <Route path="/home" element={<Home />} />
-            <Route path="/profileUpdate/:userId" element={<ProfileUpdate />} />
-            <Route path="/profilePage/:userId" element={<ProfilePage />} />
-
-            <Route path="/publish" element={<Publish />} />
-            <Route path="/offers" element={<OffersPage />} />
-            <Route path="/search/:keyword" element={<OffersPage />} />
-            <Route path="/offer/:id" element={<OfferPage />} />
-            <Route path="/mesoffres" element={<MyOffers />} />
-            <Route path="/edit/:id" element={<EditOffer />} />
-
-            <Route path="/cart" element={<Cart />} />
-
-            {/* <Route path="/chat" element={<Chat />} /> */}
-
-            {/* Page 404 */}
-            <Route path="*" element={<NoMatch />} />
-          </Routes>
+          <AppRoutes />
           <Footer />
         </Router>
       </CartProvider>
     </UserProvider>
+  );
+}
+
+function AppRoutes() {
+  const { token } = useUser(); // Safe ici sous UserProvider
+
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/home" replace />} />
+      <Route
+        path="/login"
+        element={token ? <Navigate to="/home" replace /> : <Login />}
+      />
+      <Route
+        path="/signup"
+        element={token ? <Navigate to="/home" replace /> : <Signup />}
+      />
+      <Route path="/home" element={<Home />} />
+      <Route path="/profileUpdate/:userId" element={<ProfileUpdate />} />
+      <Route path="/profilePage/:userId" element={<ProfilePage />} />
+      <Route path="/publish" element={<Publish />} />
+      <Route path="/offers" element={<OffersPage />} />
+      <Route path="/search/:keyword" element={<OffersPage />} />
+      <Route path="/offer/:id" element={<OfferPage />} />
+      <Route path="/mesoffres" element={<MyOffers />} />
+      <Route path="/edit/:id" element={<EditOffer />} />
+      <Route path="/cart" element={<Cart />} />
+
+      {/* Si tu veux remettre le chat plus tard */}
+      {/* <Route path="/chat" element={<Chat />} /> */}
+
+      {/* Page 404 */}
+      <Route path="*" element={<NoMatch />} />
+    </Routes>
   );
 }
 

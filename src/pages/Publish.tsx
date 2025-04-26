@@ -1,10 +1,8 @@
 import axios from "axios";
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ImageUpload from "../components/ImgUpload";
-
 import { useUser } from "../contexts/UserContext";
 
 import background from "../assets/img/background-publish.webp";
@@ -25,7 +23,7 @@ const Publish: React.FC = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const isFormValid = () => {
+  const isFormValid = (): boolean => {
     if (
       !title ||
       !description ||
@@ -47,6 +45,7 @@ const Publish: React.FC = () => {
     if (!isFormValid()) return;
 
     setLoading(true);
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
@@ -59,8 +58,8 @@ const Publish: React.FC = () => {
     if (userId) {
       formData.append("userId", userId);
     }
-    imageUrls.forEach((url) => formData.append("pictures", url));
-    console.log("encours");
+
+    imageUrls.forEach((file) => formData.append("pictures", file));
 
     try {
       const response = await axios.post(
@@ -70,9 +69,8 @@ const Publish: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log("Publication réussie", response.data);
-      setMessage("Votre produit a été publié avec succès !");
       const offerId = response.data._id;
+      setMessage("Votre produit a été publié avec succès !");
       navigate(`/offer/${offerId}`);
     } catch (error) {
       console.error("Erreur lors de la publication", error);
@@ -81,8 +79,9 @@ const Publish: React.FC = () => {
           ? error.response.data.message
           : "Erreur lors de la publication de l'offre."
       );
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -93,75 +92,85 @@ const Publish: React.FC = () => {
         alt="Image de fond"
       />
       <h2>Publier votre produit</h2>
+
       {message && (
         <div
           className={`message ${
-            message.includes("erreur") ? "error" : "success"
+            message.toLowerCase().includes("erreur") ? "error" : "success"
           }`}
         >
           {message}
         </div>
       )}
+
       <form onSubmit={handleSubmit} className="publish-container">
-        <h3>Titre de l'annonce : </h3>
+        <h3>Titre de l'annonce :</h3>
         <input
-          aria-label="Titre"
           type="text"
           placeholder="Titre"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <h3>Description:</h3>
+
+        <h3>Description :</h3>
         <input
           type="text"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <h3>Prix:</h3>
+
+        <h3>Prix :</h3>
         <input
           type="number"
           placeholder="Prix"
           value={price}
           onChange={(e) => setPrice(Number(e.target.value))}
         />
-        <h3>Condition</h3>
+
+        <h3>Condition :</h3>
         <input
           type="text"
           placeholder="Condition"
           value={condition}
           onChange={(e) => setCondition(e.target.value)}
         />
-        <h3>Ville</h3>
+
+        <h3>Ville :</h3>
         <input
           type="text"
           placeholder="Ville"
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
-        <h3>Marque</h3>
+
+        <h3>Marque :</h3>
         <input
           type="text"
           placeholder="Marque"
           value={brand}
           onChange={(e) => setBrand(e.target.value)}
         />
-        <h3>Taille</h3>
+
+        <h3>Taille :</h3>
         <input
           type="text"
           placeholder="Taille"
           value={size}
           onChange={(e) => setSize(e.target.value)}
         />
-        <h3>Couleur</h3>
+
+        <h3>Couleur :</h3>
         <input
           type="text"
           placeholder="Couleur"
           value={color}
           onChange={(e) => setColor(e.target.value)}
         />
-        <h3>Photos</h3>
+
+        <h3>Photos :</h3>
         <ImageUpload setImageUrl={setImageUrls} />
+
         <button type="submit" disabled={loading}>
           {loading ? "Chargement..." : "Publier"}
         </button>

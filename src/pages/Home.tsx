@@ -7,9 +7,9 @@ import useOffers from "../hooks/useOffers";
 import useUserInfo from "../hooks/useUserInfo";
 
 import logo from "../assets/img/LOGO.png";
-
 import hero from "../assets/img/hero.jpg";
 import Loading from "../assets/img/Loading.gif";
+
 import "../assets/styles/home.css";
 
 const Home: React.FC = () => {
@@ -36,7 +36,9 @@ const Home: React.FC = () => {
       <div className="hero">
         <img src={hero} alt="Hero" />
       </div>
+
       <div className="home-container">
+        {/* Titre principal */}
         <div className="home-page-title">
           <h1>
             <span className="left-bar">|</span>SOOK !
@@ -44,6 +46,7 @@ const Home: React.FC = () => {
           </h1>
         </div>
 
+        {/* Message d'accueil */}
         {username ? (
           <div className="welcom-container">
             <div className="user-home">
@@ -53,6 +56,7 @@ const Home: React.FC = () => {
                   username.slice(1).toLowerCase()}
                 !
               </h2>
+
               {userInfo.account?.avatar ? (
                 <img
                   src={userInfo.account.avatar}
@@ -68,6 +72,7 @@ const Home: React.FC = () => {
                 />
               )}
             </div>
+
             <p>Profitez de nos fonctionnalités !</p>
             <button className="home-btn" onClick={() => navigate("/publish")}>
               Publier un article
@@ -89,6 +94,7 @@ const Home: React.FC = () => {
           </div>
         )}
 
+        {/* Offres disponibles */}
         <div className="offer-home">
           {dataOffer.offers.map((offer) => (
             <Link key={offer._id} to={`/offer/${offer._id}`}>
@@ -97,7 +103,7 @@ const Home: React.FC = () => {
                   <h2>{offer.title}</h2>
                   <div>
                     <p>Prix : {offer.price}€</p>
-                    <p>Marque: {offer.brand}</p>
+                    <p>Marque : {offer.brand}</p>
                   </div>
 
                   <div className="userInfo">
@@ -112,27 +118,29 @@ const Home: React.FC = () => {
                     {offer.userId?.account?.avatar && (
                       <img
                         src={offer.userId.account.avatar}
-                        alt="Avatar"
+                        alt="Avatar utilisateur"
                         className="avatar"
                       />
                     )}
                   </div>
                 </div>
 
+                {/* Images de l'offre */}
                 {offer.pictures && offer.pictures.length > 0 && (
                   <div className="pictures-offer">
                     {offer.pictures.map(
                       (
                         picture: string | undefined,
                         index: Key | null | undefined
-                      ) => (
-                        <img
-                          key={index}
-                          src={picture}
-                          alt={`Image de l'offre ${offer._id}`}
-                          className="offer-image"
-                        />
-                      )
+                      ) =>
+                        picture && (
+                          <img
+                            key={index}
+                            src={picture}
+                            alt={`Image de l'offre ${offer._id}`}
+                            className="offer-image"
+                          />
+                        )
                     )}
                   </div>
                 )}

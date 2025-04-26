@@ -51,25 +51,6 @@ const OffersPage: React.FC = () => {
         <div className="offers">
           {offers.map((offer) => (
             <div>
-              <Link to={`/offer/${offer._id}`} className="offer-link">
-                <div key={offer._id} className="offer-item">
-                  <h2>{offer.title}</h2>
-                  <p>{offer.price}€</p>
-
-                  {offer.pictures && offer.pictures.length > 0 && (
-                    <div className="pictures-offer">
-                      {offer.pictures.map((picture, index) => (
-                        <img
-                          key={index}
-                          src={picture}
-                          alt={`Image de l'offre ${offer._id}`}
-                          className="offer-image"
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </Link>
               <div className="username-avatar">
                 {offer.userId.account ? (
                   <p>
@@ -90,7 +71,27 @@ const OffersPage: React.FC = () => {
                 ) : (
                   <img src={LOGO} alt="avatar" className="avatar" />
                 )}
-              </div>{" "}
+              </div>
+              <Link to={`/offer/${offer._id}`} className="offer-link">
+                <div key={offer._id} className="offers-item">
+                  <div>
+                    <h2>{offer.title}</h2>
+                    <p>{offer.price}€</p>
+                  </div>
+                  {offer.pictures && offer.pictures.length > 0 && (
+                    <div className="pictures-offer">
+                      {offer.pictures.map((picture, index) => (
+                        <img
+                          key={index}
+                          src={picture}
+                          alt={`Image de l'offre ${offer._id}`}
+                          className="offer-image"
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Link>
             </div>
           ))}
         </div>

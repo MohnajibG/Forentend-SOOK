@@ -20,6 +20,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-facebook-login": "^4.1.1",
+    "react-hot-toast": "^2.5.2",
     "react-icons": "^5.3.0",
     "react-router-dom": "^7.0.1",
     "react-spinners": "^0.14.1",
@@ -44,5 +45,6 @@
   },
   "engines": {
     "node": ">=22.12.0"
-  }
+  },
+  "packageManager": "yarn@3.2.3+sha512.f26f951f67de0c6a33ee381e5ff364709c87e70eb5e65c694e4facde3512f1fa80b8679e6ba31ce7d340fbb46f08dd683af9457e240f25a204be7427940d767e"
 }

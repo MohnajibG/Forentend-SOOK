@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 
-import { FaEye } from "react-icons/fa";
-import { FaEyeSlash } from "react-icons/fa6";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import "../assets/styles/login.css";
 import "../assets/styles/input.css";
 
-import login from "../assets/img/backgroudLogin.webp";
+import loginBackground from "../assets/img/backgroudLogin.webp";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -28,14 +26,14 @@ const Login: React.FC = () => {
     setErrorMessage("");
     setIsLoading(true);
 
-    // Validation simple des champs côté client
+    // Validation client simple
     if (!email || !password) {
       setErrorMessage("Veuillez remplir tous les champs.");
       setIsLoading(false);
       return;
     }
 
-    // Validation basique de l'email
+    // Vérification du format de l'email
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(email)) {
       setErrorMessage("Veuillez entrer un email valide.");
@@ -43,30 +41,27 @@ const Login: React.FC = () => {
       return;
     }
 
-    // Validation du mot de passe
+    // Vérification de la longueur du mot de passe
     if (password.length < 8) {
       setErrorMessage("Le mot de passe doit comporter au moins 8 caractères.");
       setIsLoading(false);
       return;
     }
+
     try {
       const response = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/user/login",
-        {
-          email,
-          password,
-        }
+        { email, password }
       );
 
       if (response.data.token) {
-        // Mettez à jour le contexte et les cookies avec les données reçues
         setUser(
           response.data.userId,
           response.data.token,
           response.data.account.username
         );
 
-        // Vérifiez si le profil est complet
+        // Vérifier si le profil est complet
         const isProfileComplete =
           response.data.account.sexe &&
           response.data.account.address &&
@@ -93,10 +88,11 @@ const Login: React.FC = () => {
   return (
     <main className="main-login">
       <h2>Connexion</h2>
+
       <form onSubmit={handleSubmit}>
+        {/* Champ Email */}
         <div>
           <input
-            // className="input"
             type="email"
             id="email"
             autoComplete="email"
@@ -106,9 +102,10 @@ const Login: React.FC = () => {
             required
           />
         </div>
+
+        {/* Champ Mot de passe */}
         <div className="password-input">
           <input
-            // className="input"
             type={isPasswordVisible ? "text" : "password"}
             id="password"
             placeholder="Mot de passe"
@@ -124,20 +121,27 @@ const Login: React.FC = () => {
             {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
           </span>
         </div>
+
+        {/* Bouton de connexion */}
         <button className="login-btn" disabled={isLoading}>
           {isLoading ? "Connexion en cours..." : "Se connecter"}
         </button>
+
+        {/* Lien vers l'inscription */}
         <p className="signup-link">
           Pas encore de compte ? Créez-en un dès maintenant en cliquant ici{" "}
           <Link to="/signup">S'inscrire</Link>
         </p>
       </form>
+
+      {/* Image de fond */}
       <img
         className="img-background"
-        src={login}
+        src={loginBackground}
         alt="image-background-signup"
       />
-      {/* Affichage des erreurs via toast */}
+
+      {/* Message d'erreur */}
       {errorMessage && <div className="error-message">{errorMessage}</div>}
     </main>
   );

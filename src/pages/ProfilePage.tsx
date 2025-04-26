@@ -9,9 +9,11 @@ import backgroundUpdateProfil from "../assets/img/hero.jpg";
 import Loading from "../assets/img/Loading.gif";
 
 import "../assets/styles/profilePage.css";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage: React.FC = () => {
   const { token, userId } = useUser();
+  const navigate = useNavigate();
 
   const [dataProfile, setDataProfile] = useState<ProfilProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -281,6 +283,9 @@ const ProfilePage: React.FC = () => {
           </div>
         )}
       </div>
+      <button className="back-home-btn" onClick={() => navigate("/home")}>
+        Retour à l'accueil
+      </button>
     </div>
   );
 };

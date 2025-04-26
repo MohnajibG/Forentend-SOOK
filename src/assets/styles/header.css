@@ -8,6 +8,7 @@ header {
   gap: 5px;
   font-family: "Krub", sans-serif;
 }
+
 header div {
   display: flex;
 }
