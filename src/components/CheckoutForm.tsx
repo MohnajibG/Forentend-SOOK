@@ -21,7 +21,7 @@ const CheckoutForm: React.FC = () => {
     if (!elements) return;
     setIsLoading(true);
 
-    // 1) Validation côté Stripe (PaymentElement)
+    // 1) Validation côté Stripe
     const { error: submitError } = await elements.submit();
     if (submitError) {
       setErrorMessage(
@@ -32,7 +32,7 @@ const CheckoutForm: React.FC = () => {
     }
 
     try {
-      // 2) Crée l'intention de paiement côté backend -> client_secret
+      // 2) Création de l'intent côté backend
       const { data } = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/payment"
       );
@@ -52,7 +52,6 @@ const CheckoutForm: React.FC = () => {
         elements,
         clientSecret,
         confirmParams: {
-          // Utilise l’origine courante plutôt que localhost en dur
           return_url: `${window.location.origin}/`,
         },
         redirect: "if_required",
@@ -82,11 +81,11 @@ const CheckoutForm: React.FC = () => {
 
   if (completed) {
     return (
-      <div className="w-full max-w-md mx-auto rounded-xl bg-white/90 p-6 text-center shadow-md">
-        <h2 className="text-lg font-semibold text-green-700 mb-1">
+      <div className="w-full max-w-md mx-auto bg-white/90 rounded-2xl p-6 shadow-lg text-center">
+        <h2 className="text-2xl font-semibold text-green-700 mb-2">
           Paiement effectué ✅
         </h2>
-        <p className="text-sm text-black/70">Merci pour votre achat.</p>
+        <p className="text-gray-700">Merci pour votre achat !</p>
       </div>
     );
   }
@@ -94,30 +93,33 @@ const CheckoutForm: React.FC = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-md mx-auto rounded-xl bg-white/90 p-6 shadow-md space-y-4"
+      className="w-full max-w-md mx-auto bg-white/90 rounded-2xl p-6 shadow-lg space-y-4"
     >
-      {/* Astuce test mode (retire si tu n’en veux pas) */}
-      <div className="text-xs text-black/60">
-        Mode test Stripe : utilisez la carte{" "}
-        <span className="font-semibold">4242 4242 4242 4242</span>, une date
-        future, CVC et code postal quelconques.
+      {/* Mode test */}
+      <div className="text-xs text-gray-600">
+        Mode test Stripe : carte{" "}
+        <span className="font-semibold">4242 4242 4242 4242</span>, date future,
+        CVC et code postal au choix.
       </div>
 
-      <div className="rounded-md border border-black/10 bg-white p-3">
+      {/* PaymentElement */}
+      <div className="rounded-md border border-gray-300 bg-white p-3">
         <PaymentElement />
       </div>
 
+      {/* Erreurs */}
       {errorMessage && (
-        <div className="text-sm font-semibold text-red-600 bg-red-50 border border-red-200 rounded-md p-3">
+        <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md p-3">
           {errorMessage}
         </div>
       )}
 
+      {/* Bouton payer */}
       <button
         type="submit"
         disabled={!stripe || !elements || isLoading}
         className="
-          w-full h-11 rounded-md font-bold text-white
+          w-full h-12 rounded-md font-bold text-white
           bg-[#dfa080bd] hover:bg-[#c87660]
           disabled:opacity-60 disabled:cursor-not-allowed
           transition-colors
