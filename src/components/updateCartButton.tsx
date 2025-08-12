@@ -20,19 +20,16 @@ const UpdateCartButton: React.FC<UpdateCartButtonProps> = ({
     }
 
     try {
-      // Effectuer la requête PUT pour mettre à jour la quantité côté backend
       const response = await axios.put<{ updatedItem: CartItem }>(
         `https://site--sook--dnxhn8mdblq5.code.run/carts/${item.id}`,
         { quantity: newQuantity }
       );
 
-      // Mettre à jour le panier dans l'état local après une réponse réussie
       const updatedCart = cart.map((cartItem) =>
         cartItem.id === item.id
           ? { ...cartItem, quantity: response.data.updatedItem.quantity }
           : cartItem
       );
-
       setCart(updatedCart);
     } catch (error) {
       console.error("Erreur lors de la mise à jour de l'article :", error);
@@ -40,12 +37,35 @@ const UpdateCartButton: React.FC<UpdateCartButtonProps> = ({
   };
 
   return (
-    <div>
-      <button onClick={() => handleUpdateCart(item.quantity + 1)}>
-        Augmenter
+    <div className="flex items-center gap-3">
+      <button
+        onClick={() => handleUpdateCart(item.quantity - 1)}
+        disabled={item.quantity <= 1}
+        className="
+          px-3 py-1 rounded-md font-bold text-white
+          bg-[#dfa080bd] hover:bg-[#c87660]
+          disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
+          transition-colors
+        "
+        aria-label="Diminuer la quantité"
+      >
+        –
       </button>
-      <button onClick={() => handleUpdateCart(item.quantity - 1)}>
-        Diminuer
+
+      <span className="min-w-[2rem] text-center font-medium text-gray-800">
+        {item.quantity}
+      </span>
+
+      <button
+        onClick={() => handleUpdateCart(item.quantity + 1)}
+        className="
+          px-3 py-1 rounded-md font-bold text-white
+          bg-[#dfa080bd] hover:bg-[#c87660]
+          transition-colors
+        "
+        aria-label="Augmenter la quantité"
+      >
+        +
       </button>
     </div>
   );

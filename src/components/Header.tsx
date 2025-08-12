@@ -1,23 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
-
 import { CgProfile } from "react-icons/cg";
 import { BsFillBasket3Fill } from "react-icons/bs";
-
 import logo from "../assets/img/LOGO.png";
-
-import { HeaderProps } from "../types/types";
-import "../assets/styles/header.css";
-import "../assets/styles/burgerMenu.css";
 import Search from "./Search";
+import { HeaderProps } from "../types/types";
+import Nav from "./Nav";
 
-const Header: React.FC<HeaderProps> = () => {
+function Header({ search, setSearch }: HeaderProps) {
   const navigate = useNavigate();
   const { token, userId, logout } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [search, setSearch] = useState("");
-
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = () => {
@@ -25,7 +19,7 @@ const Header: React.FC<HeaderProps> = () => {
     navigate("/home");
   };
 
-  // Fermer les menus quand on clique en dehors
+  // Fermer le menu au clic extérieur
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -33,106 +27,122 @@ const Header: React.FC<HeaderProps> = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <header className="header">
-      <div className="logo-nav-btn">
+    <header className="flex flex-col  justify-center p-4 font-[Krub]">
+      <div className="flex items-center justify-center  border-b border-[#dbc4b8] ">
+        {/* Logo */}
         <Link to="/home">
-          <img src={logo} alt="Le logo de Sook!" />
+          <img
+            src={logo}
+            alt="Sook logo"
+            className="h-12 w-12 rounded-full object-cover border-2 border-black"
+          />
         </Link>
-        {token && (
-          <nav className="header-nav">
-            <p>
-              <Link to={`/profilePage/${userId}`}>Profil</Link>
-            </p>
-            <p>
-              <Link to="/offers">Offres</Link>
-            </p>
-            <p>
-              <Link to="/mesoffres">Mes Offres</Link>
-            </p>
-            <p>
-              <Link to="/home">Accueil</Link>
-            </p>
-            <p>
-              <Link to="/publish">Publier</Link>
-            </p>
-          </nav>
-        )}
-        <div className="header-inpt-btn">
+
+        {/* Navigation desktop */}
+        {token && <Nav />}
+
+        {/* Zone boutons */}
+        <div className="flex items-center gap-4">
           {token ? (
-            <div className="dct-div">
+            <>
+              {/* Déconnexion (desktop) */}
               <button
-                className="deconnexion"
+                className="hidden md:block px-4 py-2 bg-[#da0d0df9] text-white font-bold hover:bg-[#ff2f2ff4] transition-colors"
                 onClick={handleLogout}
-                aria-label="Bouton de déconnexion"
               >
                 Déconnexion
               </button>
-              <div
-                className="profileUpdate-icon"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+
+              {/* Icône panier */}
+              <Link
+                to={`/cart/${userId}`}
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-[#ffc1bdf2] border-2 border-black"
               >
-                <CgProfile />
-              </div>
-              <Link to="/cart">
-                <div className="panier">
-                  <BsFillBasket3Fill />
-                </div>
+                <BsFillBasket3Fill className="text-black" />
               </Link>
-              {isMenuOpen && (
-                <div className="burger-menu" ref={menuRef}>
-                  <ul>
-                    <li>
-                      <Link to={`/profilePage/${userId}`}>Profil</Link>
-                    </li>
-                    <li>
-                      <Link to="/home">Accueil</Link>
-                    </li>
-                    <li>
-                      <Link to="/offers">Offres</Link>
-                    </li>
-                    <li>
-                      <Link to="/mesoffres">Mes Offres</Link>
-                    </li>
-                    <li>
-                      <Link to="/publish">Publier</Link>
-                    </li>
-                    <li>
-                      <Link to={`/cart/${userId}`}>
-                        Panier <BsFillBasket3Fill />
-                      </Link>
-                    </li>
-                    <li>
-                      <button
-                        className="deconnexion-burger"
-                        onClick={handleLogout}
-                        aria-label="Bouton de déconnexion"
-                      >
-                        Déconnexion
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
+
+              {/* Burger menu mobile */}
+              <div className="relative md:hidden" ref={menuRef}>
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="grid gap-1.5 p-2 rounded-md hover:bg-black/5"
+                >
+                  <span
+                    className={`block h-[3px] w-6 bg-[#333] transition-transform duration-300 ${
+                      isMenuOpen ? "translate-y-[7px] rotate-45" : ""
+                    }`}
+                  />
+                  <span
+                    className={`block h-[3px] w-6 bg-[#333] transition-opacity duration-300 ${
+                      isMenuOpen ? "opacity-0" : "opacity-100"
+                    }`}
+                  />
+                  <span
+                    className={`block h-[3px] w-6 bg-[#333] transition-transform duration-300 ${
+                      isMenuOpen ? "-translate-y-[7px] -rotate-45" : ""
+                    }`}
+                  />
+                </button>
+
+                {isMenuOpen && (
+                  <div className="absolute right-0 top-12 z-50 rounded-md shadow-lg overflow-hidden border-2 border-black bg-[#ffc1bddc]">
+                    <ul className="min-w-48 text-sm">
+                      {[
+                        { to: `/profilePage/${userId}`, label: "Profil" },
+                        { to: "/home", label: "Accueil" },
+                        { to: "/offers", label: "Offres" },
+                        { to: "/mesoffres", label: "Mes Offres" },
+                        { to: "/publish", label: "Publier" },
+                        { to: `/cart/${userId}`, label: "Panier" },
+                      ].map((item, i, arr) => (
+                        <li
+                          key={item.to}
+                          className={`px-5 py-2 border-b ${
+                            i === arr.length - 1
+                              ? "border-transparent"
+                              : "border-[#e66b19]"
+                          }`}
+                        >
+                          <Link
+                            to={item.to}
+                            onClick={() => setIsMenuOpen(false)}
+                            className="block text-[#333] hover:text-[#f74b4b7c] transition-colors"
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                      <li className="px-5 py-2">
+                        <button
+                          onClick={() => {
+                            handleLogout();
+                            setIsMenuOpen(false);
+                          }}
+                          className="w-full text-left text-[#333] hover:text-[#f74b4b7c]"
+                        >
+                          Déconnexion
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </>
           ) : (
-            <div className="header-btn">
+            <div className="flex gap-2">
               <button
                 onClick={() => navigate("/signup")}
-                className="cnt-btn"
-                aria-label="Bouton d'inscription"
+                className="px-4 py-2 bg-[#dfa080ed] text-white font-bold hover:bg-[#c87660] transition-colors"
               >
                 Signup
               </button>
               <button
                 onClick={() => navigate("/login")}
-                className="cnt-btn"
-                aria-label="Bouton de connexion"
+                className="px-4 py-2 bg-[#dfa080ed] text-white font-bold hover:bg-[#c87660] transition-colors"
               >
                 Login
               </button>
@@ -140,9 +150,11 @@ const Header: React.FC<HeaderProps> = () => {
           )}
         </div>
       </div>
+
+      {/* Barre de recherche */}
       <Search search={search} setSearch={setSearch} />
     </header>
   );
-};
+}
 
 export default Header;

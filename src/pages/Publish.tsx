@@ -55,19 +55,14 @@ const Publish: React.FC = () => {
     formData.append("color", color);
     formData.append("condition", condition);
     formData.append("size", size);
-    if (userId) {
-      formData.append("userId", userId);
-    }
-
+    if (userId) formData.append("userId", userId);
     imageUrls.forEach((file) => formData.append("pictures", file));
 
     try {
       const response = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/offers/publish",
         formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       const offerId = response.data._id;
       setMessage("Votre produit a été publié avec succès !");
@@ -84,94 +79,202 @@ const Publish: React.FC = () => {
     }
   };
 
+  const isError = message?.toLowerCase().includes("erreur");
+
   return (
-    <main className="main-publish">
+    <main
+      className="
+        relative min-h-screen text-white font-[Krub]
+        flex flex-col justify-center mx-4 md:mx-20 lg:mx-24 py-12
+      "
+    >
+      {/* Background plein écran fixé */}
       <img
-        className="publish-background-img"
         src={background}
         alt="Image de fond"
+        className="fixed inset-0 -z-10 w-screen h-screen object-cover"
       />
-      <h2>Publier votre produit</h2>
+
+      <h2 className="text-xl md:text-2xl mb-6 drop-shadow-[0_0_20px_rgba(252,124,124,0.8)]">
+        Publier votre produit
+      </h2>
 
       {message && (
         <div
-          className={`message ${
-            message.toLowerCase().includes("erreur") ? "error" : "success"
-          }`}
+          className={[
+            "mx-auto my-6 text-center px-5 py-3 text-base rounded border",
+            "transition-colors duration-300",
+            isError
+              ? "bg-[#f5828b] text-[#721c24] border-[#f5c6cb]"
+              : "bg-[#f96666] text-[#571515] border-[#ff0000]",
+          ].join(" ")}
         >
           {message}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="publish-container">
-        <h3>Titre de l'annonce :</h3>
-        <input
-          type="text"
-          placeholder="Titre"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md mx-auto flex flex-col items-center gap-4"
+      >
+        {/* Titre */}
+        <label className="w-full">
+          <h3 className="text-white text-base mb-1">Titre de l'annonce :</h3>
+          <input
+            type="text"
+            placeholder="Titre"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="
+              w-full h-12 rounded px-4
+              bg-white/90 text-black placeholder-black/60
+              outline-none border border-white/20
+              hover:bg-white/85 transition
+            "
+          />
+        </label>
 
-        <h3>Description :</h3>
-        <input
-          type="text"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        {/* Description */}
+        <label className="w-full">
+          <h3 className="text-white text-base mb-1">Description :</h3>
+          <input
+            type="text"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="
+              w-full h-12 rounded px-4
+              bg-white/90 text-black placeholder-black/60
+              outline-none border border-white/20
+              hover:bg-white/85 transition
+            "
+          />
+        </label>
 
-        <h3>Prix :</h3>
-        <input
-          type="number"
-          placeholder="Prix"
-          value={price}
-          onChange={(e) => setPrice(Number(e.target.value))}
-        />
+        {/* Prix */}
+        <label className="w-full">
+          <h3 className="text-white text-base mb-1">Prix :</h3>
+          <input
+            type="number"
+            placeholder="Prix"
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value))}
+            className="
+              w-full h-12 rounded px-4
+              bg-white/90 text-black placeholder-black/60
+              outline-none border border-white/20
+              hover:bg-white/85 transition
+            "
+          />
+        </label>
 
-        <h3>Condition :</h3>
-        <input
-          type="text"
-          placeholder="Condition"
-          value={condition}
-          onChange={(e) => setCondition(e.target.value)}
-        />
+        {/* Condition */}
+        <label className="w-full">
+          <h3 className="text-white text-base mb-1">Condition :</h3>
+          <input
+            type="text"
+            placeholder="Condition"
+            value={condition}
+            onChange={(e) => setCondition(e.target.value)}
+            className="
+              w-full h-12 rounded px-4
+              bg-white/90 text-black placeholder-black/60
+              outline-none border border-white/20
+              hover:bg-white/85 transition
+            "
+          />
+        </label>
 
-        <h3>Ville :</h3>
-        <input
-          type="text"
-          placeholder="Ville"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
+        {/* Ville */}
+        <label className="w-full">
+          <h3 className="text-white text-base mb-1">Ville :</h3>
+          <input
+            type="text"
+            placeholder="Ville"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className="
+              w-full h-12 rounded px-4
+              bg-white/90 text-black placeholder-black/60
+              outline-none border border-white/20
+              hover:bg-white/85 transition
+            "
+          />
+        </label>
 
-        <h3>Marque :</h3>
-        <input
-          type="text"
-          placeholder="Marque"
-          value={brand}
-          onChange={(e) => setBrand(e.target.value)}
-        />
+        {/* Marque */}
+        <label className="w-full">
+          <h3 className="text-white text-base mb-1">Marque :</h3>
+          <input
+            type="text"
+            placeholder="Marque"
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
+            className="
+              w-full h-12 rounded px-4
+              bg-white/90 text-black placeholder-black/60
+              outline-none border border-white/20
+              hover:bg-white/85 transition
+            "
+          />
+        </label>
 
-        <h3>Taille :</h3>
-        <input
-          type="text"
-          placeholder="Taille"
-          value={size}
-          onChange={(e) => setSize(e.target.value)}
-        />
+        {/* Taille */}
+        <label className="w-full">
+          <h3 className="text-white text-base mb-1">Taille :</h3>
+          <input
+            type="text"
+            placeholder="Taille"
+            value={size}
+            onChange={(e) => setSize(e.target.value)}
+            className="
+              w-full h-12 rounded px-4
+              bg-white/90 text-black placeholder-black/60
+              outline-none border border-white/20
+              hover:bg-white/85 transition
+            "
+          />
+        </label>
 
-        <h3>Couleur :</h3>
-        <input
-          type="text"
-          placeholder="Couleur"
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
-        />
+        {/* Couleur */}
+        <label className="w-full">
+          <h3 className="text-white text-base mb-1">Couleur :</h3>
+          <input
+            type="text"
+            placeholder="Couleur"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            className="
+              w-full h-12 rounded px-4
+              bg-white/90 text-black placeholder-black/60
+              outline-none border border-white/20
+              hover:bg-white/85 transition
+            "
+          />
+        </label>
 
-        <h3>Photos :</h3>
-        <ImageUpload setImageUrl={setImageUrls} />
+        {/* Photos */}
+        <div className="w-full">
+          <h3 className="text-white text-base mb-2">Photos :</h3>
+          <ImageUpload setImageUrl={setImageUrls} />
+          {/* 
+            Si tu veux styler le bouton interne d'ImageUpload comme avant :
+            ajoute dans ce composant les classes :
+            'bg-[#dfa080bd] text-white px-6 py-2 font-bold cursor-pointer transition-colors hover:bg-[#c87660] rounded'
+          */}
+        </div>
 
-        <button type="submit" disabled={loading}>
+        {/* Bouton Submit */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="
+            mt-4 h-12 w-full
+            bg-[#dfa080bd] hover:bg-[#c87660]
+            text-white font-bold text-lg
+            rounded transition-colors disabled:opacity-60 disabled:cursor-not-allowed
+          "
+        >
           {loading ? "Chargement..." : "Publier"}
         </button>
       </form>

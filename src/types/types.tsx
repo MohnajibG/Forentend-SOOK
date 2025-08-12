@@ -69,7 +69,7 @@ export interface CartItem {
 // ==============================
 export interface HeaderProps {
   search: string;
-  setSearch: (value: string) => void;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface SearchProps {

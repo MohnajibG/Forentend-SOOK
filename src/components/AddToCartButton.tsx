@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Cookies from "js-cookie";
-
-import "../assets/styles/style.css";
 import { CartItem } from "../types/types";
 
 interface AddToCartButtonProps {
@@ -12,7 +9,7 @@ interface AddToCartButtonProps {
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
   token: string;
   userId: string;
-  onSuccess?: () => void; // Ajout de la prop facultative
+  onSuccess?: () => void;
 }
 
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({
@@ -33,15 +30,11 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   }, [token, navigate]);
 
   useEffect(() => {
-    const foundItemInCart = cart.find((cartItem) => cartItem.id === item.id);
-    setIsInCart(!!foundItemInCart);
+    setIsInCart(!!cart.find((ci) => ci.id === item.id));
   }, [cart, item.id]);
 
   const handleAddToCart = async () => {
-    if (isInCart) {
-      console.log("Cet article est déjà dans le panier.");
-      return;
-    }
+    if (isInCart) return;
 
     try {
       const response = await axios.post(
@@ -61,22 +54,12 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       );
 
       if (response.status === 200 || response.status === 201) {
-        console.log("Produit ajouté au panier:", response.data);
         setCart(response.data.cart);
         setIsInCart(true);
-
-        // ✅ Appel de la fonction onSuccess pour afficher un toast
-        if (onSuccess) {
-          onSuccess();
-        }
-      } else {
-        console.error(
-          "Problème avec l'ajout au panier:",
-          response.data.message
-        );
+        onSuccess?.();
       }
     } catch (error) {
-      console.error("Erreur lors de l'ajout au panier:", error);
+      console.error("Erreur lors de l'ajout au panier :", error);
       alert("Une erreur est survenue. Veuillez réessayer.");
     }
   };
@@ -85,7 +68,15 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     <button
       onClick={handleAddToCart}
       disabled={isInCart}
-      className={isInCart ? "button-in-cart" : "button-add-to-cart"}
+      className={`
+        px-5 py-2 text-[12px] rounded-[5px] font-semibold transition-colors
+        ${
+          isInCart
+            ? "bg-[#ccc] text-[#666] cursor-not-allowed hover:bg-[#ccc]"
+            : "bg-[#4caf50] text-white hover:bg-[#45a049]"
+        }
+        disabled:opacity-60 disabled:cursor-not-allowed
+      `}
     >
       {isInCart ? "Déjà dans votre panier" : "Ajouter au panier"}
     </button>

@@ -3,11 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
-
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
-import "../assets/styles/login.css";
-import "../assets/styles/input.css";
 
 import loginBackground from "../assets/img/backgroudLogin.webp";
 
@@ -26,14 +22,12 @@ const Login: React.FC = () => {
     setErrorMessage("");
     setIsLoading(true);
 
-    // Validation client simple
     if (!email || !password) {
       setErrorMessage("Veuillez remplir tous les champs.");
       setIsLoading(false);
       return;
     }
 
-    // Vérification du format de l'email
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(email)) {
       setErrorMessage("Veuillez entrer un email valide.");
@@ -41,7 +35,6 @@ const Login: React.FC = () => {
       return;
     }
 
-    // Vérification de la longueur du mot de passe
     if (password.length < 8) {
       setErrorMessage("Le mot de passe doit comporter au moins 8 caractères.");
       setIsLoading(false);
@@ -61,13 +54,11 @@ const Login: React.FC = () => {
           response.data.account.username
         );
 
-        // Vérifier si le profil est complet
         const isProfileComplete =
           response.data.account.sexe &&
           response.data.account.address &&
           response.data.account.phoneNumber;
 
-        // Redirection en fonction de l'état du profil
         if (isProfileComplete) {
           navigate(`/profilePage/${response.data.userId}`);
         } else {
@@ -86,12 +77,29 @@ const Login: React.FC = () => {
   };
 
   return (
-    <main className="main-login">
-      <h2>Connexion</h2>
+    <main
+      className="
+        relative min-h-screen pt-20 pb-24
+        text-white font-[Krub] flex flex-col justify-center items-center gap-20
+      "
+    >
+      {/* Image de fond plein écran, fixée */}
+      <img
+        className="fixed inset-0 -z-10 h-screen w-full object-cover"
+        src={loginBackground}
+        alt="image-background-signup"
+      />
 
-      <form onSubmit={handleSubmit}>
+      <h2 className="text-center text-2xl drop-shadow-[0_0_20px_rgba(252,124,124,0.8)]">
+        Connexion
+      </h2>
+
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center justify-center gap-5 w-full max-w-sm"
+      >
         {/* Champ Email */}
-        <div>
+        <div className="w-full">
           <input
             type="email"
             id="email"
@@ -100,11 +108,16 @@ const Login: React.FC = () => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
+            className="
+              w-full h-12 rounded border border-white/20
+              bg-white/90 text-black placeholder-black/60
+              px-4 outline-none hover:bg-white/90 md:hover:bg-white/95 transition
+            "
           />
         </div>
 
         {/* Champ Mot de passe */}
-        <div className="password-input">
+        <div className="relative w-full">
           <input
             type={isPasswordVisible ? "text" : "password"}
             id="password"
@@ -113,36 +126,62 @@ const Login: React.FC = () => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
+            className="
+              w-full h-12 rounded border border-white/20
+              bg-white/90 text-black placeholder-black/60
+              px-4 pr-10 outline-none hover:bg-white/95 transition
+            "
           />
-          <span
-            className="toggle-visibility-icon"
+          <button
+            type="button"
             onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+            className="
+              absolute right-3 top-1/2 -translate-y-1/2
+              text-[#292727] text-xl cursor-pointer select-none
+            "
+            aria-label={
+              isPasswordVisible
+                ? "Masquer le mot de passe"
+                : "Afficher le mot de passe"
+            }
           >
             {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
-          </span>
+          </button>
         </div>
 
         {/* Bouton de connexion */}
-        <button className="login-btn" disabled={isLoading}>
+        <button
+          className="
+            w-40 h-12 text-white font-bold
+            bg-[#dfa080ec] hover:bg-[#cf8860]
+            text-base md:text-lg rounded
+            transition-colors disabled:opacity-60 disabled:cursor-not-allowed
+          "
+          disabled={isLoading}
+        >
           {isLoading ? "Connexion en cours..." : "Se connecter"}
         </button>
 
         {/* Lien vers l'inscription */}
-        <p className="signup-link">
+        <p className="w-72 font-bold text-base text-white text-justify">
           Pas encore de compte ? Créez-en un dès maintenant en cliquant ici{" "}
-          <Link to="/signup">S'inscrire</Link>
+          <Link
+            to="/signup"
+            className="font-semibold no-underline text-[#dfa080bd] hover:text-[#d6390d]
+                       transition-colors [text-shadow:2px_2px_5px_rgb(17,2,2)]
+                       hover:[text-shadow:2px_2px_10px_rgb(246,246,246)]"
+          >
+            S'inscrire
+          </Link>
         </p>
       </form>
 
-      {/* Image de fond */}
-      <img
-        className="img-background"
-        src={loginBackground}
-        alt="image-background-signup"
-      />
-
       {/* Message d'erreur */}
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
+      {errorMessage && (
+        <div className="text-red-500 text-center text-sm mt-4 font-bold drop-shadow-[0_0_10px_#fff]">
+          {errorMessage}
+        </div>
+      )}
     </main>
   );
 };

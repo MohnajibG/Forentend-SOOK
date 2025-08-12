@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useUser } from "../contexts/UserContext";
-
-import "../assets/styles/profileUpdate.css";
 import backgroundUpdateProfil from "../assets/img/hero.jpg";
 
 const ProfileUpdate: React.FC = () => {
@@ -32,19 +30,13 @@ const ProfileUpdate: React.FC = () => {
         setLoading(false);
         return;
       }
-
       setLoading(true);
       setError("");
-
       try {
-        const response = await axios.get(
+        const { data } = await axios.get(
           `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-
-        const data = response.data;
         setProfileData((prev) => ({
           ...prev,
           avatar: data.account?.avatar || "",
@@ -55,13 +47,11 @@ const ProfileUpdate: React.FC = () => {
           sexe: data.account?.sexe || "Autre",
           dateOfBorn: data.account?.dateOfBorn || "",
         }));
-      } catch (err) {
+      } catch {
         setError("Erreur lors de la récupération du profil.");
-        console.error(err);
       }
       setLoading(false);
     };
-
     fetchProfileData();
   }, [token, userId]);
 
@@ -76,21 +66,18 @@ const ProfileUpdate: React.FC = () => {
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files && files.length > 0) {
+    if (files?.length) {
       setLoadingAvatar(true);
       const formData = new FormData();
       formData.append("file", files[0]);
       formData.append("upload_preset", "SookIMG");
-
       try {
-        const response = await axios.post(
+        const res = await axios.post(
           "https://api.cloudinary.com/v1_1/mngcloudi/image/upload",
           formData
         );
-        const avatarUrl = response.data.secure_url;
-        setProfileData((prev) => ({ ...prev, avatar: avatarUrl }));
-      } catch (err) {
-        console.error("Erreur lors de l'upload de l'avatar:", err);
+        setProfileData((prev) => ({ ...prev, avatar: res.data.secure_url }));
+      } catch {
         setError("Erreur lors de l'upload de l'avatar.");
       }
       setLoadingAvatar(false);
@@ -101,27 +88,14 @@ const ProfileUpdate: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     if (!token || !userId) {
       setError("Données utilisateur manquantes.");
       setLoading(false);
       return;
     }
-
     try {
-      const updatedProfile = {
-        address: profileData.address,
-        postalCode: profileData.postalCode,
-        country: profileData.country,
-        phoneNumber: profileData.phoneNumber,
-        sexe: profileData.sexe,
-        dateOfBorn: profileData.dateOfBorn,
-        avatar: profileData.avatar,
-      };
-
-      console.log("Données envoyées :", updatedProfile);
-
-      const response = await axios.put(
+      const updatedProfile = { ...profileData };
+      const res = await axios.put(
         `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
         updatedProfile,
         {
@@ -131,12 +105,10 @@ const ProfileUpdate: React.FC = () => {
           },
         }
       );
-
-      setProfileData(response.data);
+      setProfileData(res.data);
       navigate(`/profilePage/${userId}`);
-    } catch (err) {
+    } catch {
       setError("Erreur lors de la mise à jour du profil.");
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -144,29 +116,37 @@ const ProfileUpdate: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="main-profileUpdate">
+      <div className="relative min-h-screen flex justify-center items-center text-white font-[Krub]">
         <img
-          className="profilbackground"
           src={backgroundUpdateProfil}
           alt="Background Update Profil"
+          className="absolute inset-0 w-full h-full object-cover -z-10"
         />
+        Chargement...
       </div>
     );
   }
 
   return (
-    <main className="main-profileUpdate">
+    <main className="relative mt-20 pb-40 text-white font-[Krub] flex flex-col items-center gap-20">
       <img
-        className="profilbackground"
         src={backgroundUpdateProfil}
         alt="Background Update Profil"
+        className="fixed inset-0 w-full h-screen object-cover -z-10"
       />
-      <h2>Mettre à jour le profil</h2>
 
-      {error && <p className="error">{error}</p>}
+      <h2 className="text-2xl font-bold text-center mb-4">
+        Mettre à jour le profil
+      </h2>
+      {error && (
+        <p className="text-red-500 font-bold text-center text-sm">{error}</p>
+      )}
 
-      <form onSubmit={handleSubmit}>
-        <div className="profileUpdate-info">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center gap-4 w-full max-w-md"
+      >
+        <div className="flex flex-col items-center gap-2 w-full">
           <label htmlFor="username">Nom d'utilisateur</label>
           <input
             id="username"
@@ -175,9 +155,10 @@ const ProfileUpdate: React.FC = () => {
               username
                 ? username.charAt(0).toUpperCase() +
                   username.slice(1).toLowerCase()
-                : "Nom non disponible"
+                : ""
             }
             disabled
+            className="w-full px-3 py-2 bg-white/90 text-black rounded"
           />
 
           <label htmlFor="sexe">Sexe</label>
@@ -186,7 +167,7 @@ const ProfileUpdate: React.FC = () => {
             name="sexe"
             value={profileData.sexe}
             onChange={handleInputChange}
-            className="input-textarea"
+            className="w-60 px-3 py-2 text-sm bg-white/90 rounded"
           >
             <option value="Homme">Homme</option>
             <option value="Femme">Femme</option>
@@ -196,10 +177,11 @@ const ProfileUpdate: React.FC = () => {
           <label htmlFor="dateOfBorn">Date de naissance</label>
           <input
             id="dateOfBorn"
-            type="date"
             name="dateOfBorn"
+            type="date"
             value={profileData.dateOfBorn}
             onChange={handleInputChange}
+            className="w-full px-3 py-2 bg-white/90 text-black rounded"
           />
 
           <label htmlFor="address">Adresse</label>
@@ -208,7 +190,7 @@ const ProfileUpdate: React.FC = () => {
             name="address"
             value={profileData.address}
             onChange={handleInputChange}
-            className="input-textarea"
+            className="w-full px-3 py-2 bg-white/90 text-black rounded"
           />
 
           <label htmlFor="postalCode">Code postal</label>
@@ -218,6 +200,7 @@ const ProfileUpdate: React.FC = () => {
             type="text"
             value={profileData.postalCode}
             onChange={handleInputChange}
+            className="w-full px-3 py-2 bg-white/90 text-black rounded"
           />
 
           <label htmlFor="country">Pays</label>
@@ -227,6 +210,7 @@ const ProfileUpdate: React.FC = () => {
             type="text"
             value={profileData.country}
             onChange={handleInputChange}
+            className="w-full px-3 py-2 bg-white/90 text-black rounded"
           />
 
           <label htmlFor="phoneNumber">Numéro de téléphone</label>
@@ -237,30 +221,38 @@ const ProfileUpdate: React.FC = () => {
             placeholder="+33655000000"
             value={profileData.phoneNumber}
             onChange={handleInputChange}
+            className="w-full px-3 py-2 bg-white/90 text-black rounded"
           />
 
-          <div className="avatar-container">
-            <label htmlFor="avatar"> +Ajouter Votre Photo de Profile</label>
+          {/* Avatar */}
+          <div className="flex items-center gap-4 cursor-pointer">
+            <label htmlFor="avatar" className="text-sm font-bold">
+              +Ajouter Votre Photo de Profil
+            </label>
             <input
-              className="avatar"
               id="avatar"
               type="file"
               style={{ display: "none" }}
               onChange={handleAvatarUpload}
               disabled={loading}
             />
-            {loadingAvatar && <div className="spinner-avatar"></div>}
+            {loadingAvatar && (
+              <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin" />
+            )}
             {profileData.avatar && (
               <img
                 src={profileData.avatar}
                 alt="Aperçu de l'avatar"
-                className="avatar-preview"
+                className="w-12 h-12 rounded-full object-cover border border-gray-300"
               />
             )}
           </div>
         </div>
 
-        <button type="submit" className="button-profileUpdate">
+        <button
+          type="submit"
+          className="mt-6 w-32 bg-[#dfa080bd] hover:bg-[#c87660] text-white font-bold py-2 rounded transition-colors"
+        >
           Mettre à jour
         </button>
       </form>

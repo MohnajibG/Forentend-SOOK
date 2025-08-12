@@ -9,9 +9,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import signupBackground from "../assets/img/backgroundsignup.jpg";
 
-import "../assets/styles/signup.css";
-import "../assets/styles/input.css";
-
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -71,7 +68,7 @@ const Signup: React.FC = () => {
     if (!/[0-9]/.test(formData.password)) {
       newErrors.push("Le mot de passe doit contenir au moins un chiffre.");
     }
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+    if (!/[!@#$%^&*(),.?\":{}|<>]/.test(formData.password)) {
       newErrors.push(
         "Le mot de passe doit contenir au moins un caractère spécial."
       );
@@ -103,7 +100,7 @@ const Signup: React.FC = () => {
         const { token, userId } = response.data;
         const username = response.data.account.username;
 
-        Cookies.set("token", token, { expires: 1 }); // Token valable 1 jour
+        Cookies.set("token", token, { expires: 1 });
         setUser(userId, token, username);
         navigate(`/profileUpdate/${userId}`);
       } else {
@@ -125,22 +122,49 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <main className="main-signup">
-      <img src={signupBackground} alt="Background signup" />
-      <h2>S'inscrire</h2>
+    <main
+      className="
+        relative min-h-screen pt-20 pb-40
+        text-white font-[Krub] flex flex-col justify-center items-center gap-20
+      "
+    >
+      {/* Background image plein écran, fixé */}
+      <img
+        src={signupBackground}
+        alt="Background signup"
+        className="fixed inset-0 -z-10 h-screen w-full object-cover"
+      />
 
-      <form onSubmit={handleSubmit}>
-        {/* Affichage des erreurs */}
+      <h2 className="text-center text-2xl drop-shadow-[0_0_20px_rgba(252,124,124,0.8)]">
+        S&apos;inscrire
+      </h2>
+
+      <form
+        onSubmit={handleSubmit}
+        className="
+          flex flex-col items-center justify-center gap-5
+          w-full max-w-sm
+        "
+      >
+        {/* Erreurs */}
         {errors.length > 0 && (
-          <div>
-            {errors.map((error, index) => (
-              <p className="error-message" key={index}>
+          <div className="w-full">
+            {errors.map((error, i) => (
+              <p
+                key={i}
+                className="
+                  text-red-500 p-4 bg-red-500/20 text-center text-sm mt-4 font-bold
+                  drop-shadow-[0_0_10px_rgba(0,0,0,1)] shadow-[0_0_10px_rgba(0,0,0,1)]
+                  rounded
+                "
+              >
                 {error}
               </p>
             ))}
           </div>
         )}
 
+        {/* Username */}
         <input
           type="text"
           id="username"
@@ -148,8 +172,14 @@ const Signup: React.FC = () => {
           value={formData.username}
           onChange={handleChange}
           disabled={isLoading}
+          className="
+            w-full h-12 rounded border border-white/20 bg-white/90 text-black
+            placeholder-black/60 px-4 outline-none
+            hover:bg-white/95 transition
+          "
         />
 
+        {/* Email */}
         <input
           type="email"
           id="email"
@@ -158,10 +188,15 @@ const Signup: React.FC = () => {
           value={formData.email}
           onChange={handleChange}
           disabled={isLoading}
+          className="
+            w-full h-12 rounded border border-white/20 bg-white/90 text-black
+            placeholder-black/60 px-4 outline-none
+            hover:bg-white/95 transition
+          "
         />
 
         {/* Mot de passe */}
-        <div className="password-field">
+        <div className="relative w-full">
           <input
             type={isPasswordVisible ? "text" : "password"}
             id="password"
@@ -170,17 +205,31 @@ const Signup: React.FC = () => {
             value={formData.password}
             onChange={handleChange}
             disabled={isLoading}
+            className="
+              w-full h-12 rounded border border-white/20 bg-white/90 text-black
+              placeholder-black/60 px-4 pr-10 outline-none
+              hover:bg-white/95 transition
+            "
           />
-          <span
-            className="toggle-visibility-icon"
+          <button
+            type="button"
             onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+            className="
+              absolute right-3 top-1/2 -translate-y-1/2
+              text-black text-xl cursor-pointer select-none
+            "
+            aria-label={
+              isPasswordVisible
+                ? "Masquer le mot de passe"
+                : "Afficher le mot de passe"
+            }
           >
             {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
-          </span>
+          </button>
         </div>
 
         {/* Confirmation mot de passe */}
-        <div className="password-field">
+        <div className="relative w-full">
           <input
             type={isConfirmPasswordVisible ? "text" : "password"}
             id="confirmPassword"
@@ -189,39 +238,67 @@ const Signup: React.FC = () => {
             value={formData.confirmPassword}
             onChange={handleChange}
             disabled={isLoading}
+            className="
+              w-full h-12 rounded border border-white/20 bg-white/90 text-black
+              placeholder-black/60 px-4 pr-10 outline-none
+              hover:bg-white/95 transition
+            "
           />
-          <span
-            className="toggle-visibility-icon"
+          <button
+            type="button"
             onClick={() =>
               setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
             }
+            className="
+              absolute right-3 top-1/2 -translate-y-1/2
+              text-black text-xl cursor-pointer select-none
+            "
+            aria-label={
+              isConfirmPasswordVisible
+                ? "Masquer la confirmation"
+                : "Afficher la confirmation"
+            }
           >
             {isConfirmPasswordVisible ? <FaEye /> : <FaEyeSlash />}
-          </span>
+          </button>
         </div>
 
         {/* Newsletter */}
-        <div className="nl-container">
+        <label
+          htmlFor="newsletter"
+          className="
+            mt-4 flex items-center gap-3 font-bold text-[rgba(223,160,128,0.74)]
+          "
+        >
           <input
-            className="checkbox-newsletter"
+            className="w-4 h-4 accent-[rgba(223,160,128,0.74)]"
             type="checkbox"
             id="newsletter"
             checked={formData.newsletter}
             onChange={handleChange}
             disabled={isLoading}
           />
-          <span>S'abonner à la newsletter</span>
-        </div>
+          <span>S&apos;abonner à la newsletter</span>
+        </label>
 
-        {/* Terms and conditions */}
-        <p>
-          En m'inscrivant, je certifie avoir pris connaissance et accepté les
-          Termes et Conditions ainsi que la Politique de Confidentialité de{" "}
-          <span>SOOK!</span>. Je déclare également avoir au moins 18 ans.
+        {/* Terms */}
+        <p className="w-72 font-bold text-base text-white text-justify">
+          En m&apos;inscrivant, je certifie avoir pris connaissance et accepté
+          les Termes et Conditions ainsi que la Politique de Confidentialité de{" "}
+          <span className="text-[#300a22] font-bold">SOOK!</span>. Je déclare
+          également avoir au moins 18 ans.
         </p>
 
-        {/* Bouton s'inscrire */}
-        <button disabled={isLoading}>
+        {/* Bouton */}
+        <button
+          disabled={isLoading}
+          className="
+            mt-4 h-12 w-full
+            bg-[#dfa080bd] hover:bg-[#c87660]
+            text-white font-bold text-xl
+            rounded transition-colors disabled:opacity-60 disabled:cursor-not-allowed
+          "
+        >
           {isLoading ? (
             <ClipLoader size={20} color="#fff" loading={isLoading} />
           ) : (
@@ -230,9 +307,11 @@ const Signup: React.FC = () => {
         </button>
 
         {/* Lien connexion */}
-        <p className="signup-link">
+        <p className="w-72 font-bold text-base text-white text-justify">
           Vous avez déjà un compte ? Connectez-vous ici{" "}
-          <Link to="/login">Se connecter</Link>
+          <Link to="/login" className="underline underline-offset-2">
+            Se connecter
+          </Link>
         </p>
       </form>
     </main>

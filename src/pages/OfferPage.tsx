@@ -7,9 +7,6 @@ import { useCart } from "../contexts/CartContext";
 import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 
-import "../assets/styles/offerstyle.css";
-import "../assets/styles/button.css";
-
 import AddToCartButton from "../components/AddToCartButton";
 import Modal from "../components/Modal";
 
@@ -32,16 +29,14 @@ const OfferPage: React.FC = () => {
       navigate("/offers");
       return;
     }
-
     const fetchOffer = async () => {
       setLoading(true);
       setError(null);
-
       try {
-        const response = await axios.get(
+        const { data } = await axios.get(
           `https://site--sook--dnxhn8mdblq5.code.run/offers/${id}`
         );
-        setOffer(response.data.offer);
+        setOffer(data.offer);
       } catch (err: any) {
         setError(
           axios.isAxiosError(err) && err.response?.data?.message
@@ -52,71 +47,93 @@ const OfferPage: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchOffer();
   }, [id, navigate]);
 
-  const handleAddToCartSuccess = () => {
+  const handleAddToCartSuccess = () =>
     toast.success("Produit ajouté au panier !");
-  };
 
   if (loading)
     return (
-      <div className="Load">
-        <ClipLoader size={50} color="#f10303" loading={loading} />
+      <div className="grid place-items-center min-h-screen">
+        <ClipLoader size={50} color="#f10303" />
       </div>
     );
 
-  if (error) return <p className="error-message">{error}</p>;
-  if (!offer) return <p>Aucune offre trouvée.</p>;
+  if (error)
+    return <p className="text-center text-red-500 font-bold">{error}</p>;
+  if (!offer) return <p className="text-center">Aucune offre trouvée.</p>;
 
   return (
-    <div className="offer-page">
-      <img src={background} alt="Background" className="background-img" />
-      <div className="offer-container">
-        <div className="offer-user-info">
-          <p className="username-offer">
-            {offer.userId.account?.username.toUpperCase() || "Non spécifié"}
+    <div className="relative min-h-screen text-white font-[Krub] mt-20 pb-40">
+      {/* Background plein écran fixé */}
+      <img
+        src={background}
+        alt="Background"
+        className="fixed inset-0 -z-10 w-full h-screen object-cover"
+      />
+
+      <div className="mx-auto w-full max-w-6xl px-4">
+        {/* Bandeau utilisateur */}
+        <div className="w-full bg-[#fbcfe680] flex items-center justify-between md:justify-around px-4 py-3 rounded-xl shadow-[0_0_10px_2px_rgb(255,255,255)]">
+          <p className="font-extrabold text-lg drop-shadow-[0_0_10px_rgb(255,255,255)]">
+            {offer.userId.account?.username?.toUpperCase() || "NON SPÉCIFIÉ"}
           </p>
           <img
             src={offer.userId.account?.avatar || ""}
             alt="avatar"
-            className="offer-user-info-img"
+            className="w-10 h-10 rounded-full object-cover shadow-[0_0_10px_2px_rgb(255,255,255)]"
           />
         </div>
 
-        <div className="offer">
-          <div className="offer-details">
-            <div
-              className="title-details-offer"
-              onClick={() => setShowDetailsModal(true)}
-            >
-              <h1>{offer.title || "Titre non disponible"}</h1>
-              <p>Marque : {offer.brand || "Non spécifiée"}</p>
-              <p>Description : {offer.description || "Non spécifiée"}</p>
-              <p>Prix : {offer.price ? `${offer.price} €` : "Non spécifié"}</p>
-              <p>Taille : {offer.size || "Non spécifiée"}</p>
-              <p>Couleur : {offer.color || "Non spécifiée"}</p>
+        {/* Bloc principal */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Détails */}
+          <div
+            className="bg-[rgba(251,248,238,0.598)] rounded-xl p-4 text-black/90 cursor-pointer"
+            onClick={() => setShowDetailsModal(true)}
+          >
+            <div className="flex flex-col gap-2">
+              <h1 className="text-center text-lg font-semibold text-[#e97510] drop-shadow-[0_0_10px_rgba(255,255,255,0.95)] mb-4">
+                {offer.title || "Titre non disponible"}
+              </h1>
+              <p className="text-[14px] text-[#666]">
+                Marque : {offer.brand || "Non spécifiée"}
+              </p>
+              <p className="text-[14px] text-[#666]">
+                Description : {offer.description || "Non spécifiée"}
+              </p>
+              <p className="text-[14px] text-[#666]">
+                Prix : {offer.price ? `${offer.price} €` : "Non spécifié"}
+              </p>
+              <p className="text-[14px] text-[#666]">
+                Taille : {offer.size || "Non spécifiée"}
+              </p>
+              <p className="text-[14px] text-[#666]">
+                Couleur : {offer.color || "Non spécifiée"}
+              </p>
             </div>
           </div>
 
-          <div className="img-btn">
+          {/* Images + bouton */}
+          <div className="bg-[rgba(251,248,238,0.598)] rounded-xl p-4 flex flex-col gap-4 items-center">
+            {/* bande défilante images */}
             <div
-              className="img-offerPage"
+              className="flex gap-2 overflow-x-auto w-full"
               onClick={() => setShowImagesModal(true)}
             >
               {offer.pictures && offer.pictures.length > 0 ? (
-                offer.pictures.map((picture: string, index: number) => (
-                  <Link to={picture} key={index}>
+                offer.pictures.map((picture: string, i: number) => (
+                  <Link to={picture} key={i} className="shrink-0 w-40">
                     <img
                       src={picture}
-                      alt={`Image ${index + 1}`}
-                      className="img-offer"
+                      alt={`Image ${i + 1}`}
+                      className="w-40 h-40 object-contain bg-white/60 rounded-md"
                     />
                   </Link>
                 ))
               ) : (
-                <p>Aucune image disponible.</p>
+                <p className="text-black/70">Aucune image disponible.</p>
               )}
             </div>
 
@@ -135,9 +152,12 @@ const OfferPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Bouton Retour */}
-        <div className="return-button-container">
-          <button className="return-button" onClick={() => navigate("/offers")}>
+        {/* Retour */}
+        <div className="mt-6 flex justify-center">
+          <button
+            className="px-4 py-2 rounded-md bg-white/20 hover:bg-white/30 text-white font-semibold transition-colors"
+            onClick={() => navigate("/offers")}
+          >
             ← Retour aux Offres
           </button>
         </div>
@@ -146,34 +166,40 @@ const OfferPage: React.FC = () => {
       {/* Modal Détails */}
       {showDetailsModal && (
         <Modal onClose={() => setShowDetailsModal(false)}>
-          <h2>Détails de l'offre</h2>
-          <p>Marque : {offer.brand || "Non spécifiée"}</p>
-          <p>Description : {offer.description || "Non spécifiée"}</p>
-          <p>Prix : {offer.price ? `${offer.price} €` : "Non spécifié"}</p>
-          <p>Taille : {offer.size || "Non spécifiée"}</p>
-          <p>Couleur : {offer.color || "Non spécifiée"}</p>
-          <p>Condition : {offer.condition || "Non spécifiée"}</p>
-          <p>Ville : {offer.city || "Non spécifiée"}</p>
+          <h2 className="text-xl font-semibold mb-3 text-black">
+            Détails de l'offre
+          </h2>
+          <div className="space-y-1 text-black/80">
+            <p>Marque : {offer.brand || "Non spécifiée"}</p>
+            <p>Description : {offer.description || "Non spécifiée"}</p>
+            <p>Prix : {offer.price ? `${offer.price} €` : "Non spécifié"}</p>
+            <p>Taille : {offer.size || "Non spécifiée"}</p>
+            <p>Couleur : {offer.color || "Non spécifiée"}</p>
+            <p>Condition : {offer.condition || "Non spécifiée"}</p>
+            <p>Ville : {offer.city || "Non spécifiée"}</p>
+          </div>
         </Modal>
       )}
 
       {/* Modal Images */}
       {showImagesModal && (
         <Modal onClose={() => setShowImagesModal(false)}>
-          <h2>Galerie d'images</h2>
-          <div className="images-offer">
+          <h2 className="text-xl font-semibold mb-3 text-black">
+            Galerie d'images
+          </h2>
+          <div className="w-[80vw] max-w-3xl max-h-[70vh] overflow-auto flex gap-2 justify-center flex-wrap">
             {offer.pictures && offer.pictures.length > 0 ? (
-              offer.pictures.map((picture: string, index: number) => (
-                <Link to={picture} key={index}>
+              offer.pictures.map((picture: string, i: number) => (
+                <Link to={picture} key={i}>
                   <img
                     src={picture}
-                    alt={`Image ${index + 1}`}
-                    className="modal-img"
+                    alt={`Image ${i + 1}`}
+                    className="w-40 h-40 object-cover rounded-md hover:scale-105 transition-transform"
                   />
                 </Link>
               ))
             ) : (
-              <p>Aucune image disponible.</p>
+              <p className="text-black/70">Aucune image disponible.</p>
             )}
           </div>
         </Modal>

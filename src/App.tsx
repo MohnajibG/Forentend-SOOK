@@ -26,7 +26,7 @@ import Cart from "./pages/Cart";
 import MyOffers from "./pages/MyOffers";
 import EditOffer from "./pages/EditOffer";
 
-import { useUser } from "./contexts/UserContext"; // déplacé ici pour la sous-composante
+import { useUser } from "./contexts/UserContext";
 
 function App() {
   const [search, setSearch] = useState<string>("");

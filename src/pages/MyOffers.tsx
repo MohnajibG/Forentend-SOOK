@@ -5,10 +5,7 @@ import { ClipLoader } from "react-spinners";
 import { toast } from "react-hot-toast";
 
 import { useUser } from "../contexts/UserContext";
-
-import { Offer } from "../types/types"; // 👈 On suppose que tu as un type Offer
-
-import "../assets/styles/style.css";
+import { Offer } from "../types/types";
 
 import background from "../assets/img/offerPage.webp";
 
@@ -24,15 +21,12 @@ const MyOffers: React.FC = () => {
     const fetchMyOffers = async () => {
       setLoading(true);
       setError(null);
-
       try {
-        const response = await axios.get(
-          `https://site--sook--dnxhn8mdblq5.code.run/offers/user`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+        const { data } = await axios.get(
+          "https://site--sook--dnxhn8mdblq5.code.run/offers/user",
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-        setMyOffers(response.data.offers || []);
+        setMyOffers(data.offers || []);
       } catch (err: any) {
         setError(
           axios.isAxiosError(err) && err.response?.data?.message
@@ -43,26 +37,20 @@ const MyOffers: React.FC = () => {
         setLoading(false);
       }
     };
-
     if (userId) fetchMyOffers();
   }, [userId, token]);
 
   const handleDeleteMyOffer = async (offerId: string) => {
-    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette offre ?")) {
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette offre ?"))
       return;
-    }
     try {
       await axios.delete(
         `https://site--sook--dnxhn8mdblq5.code.run/offers/user/${offerId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      setMyOffers((prevOffers) =>
-        prevOffers.filter((offer) => offer._id !== offerId)
-      );
+      setMyOffers((prev) => prev.filter((o) => o._id !== offerId));
       toast.success("Offre supprimée avec succès !");
-    } catch (err: any) {
+    } catch (err) {
       console.error("Erreur lors de la suppression de l'offre", err);
       toast.error("Impossible de supprimer l'offre. Veuillez réessayer.");
     }
@@ -70,43 +58,93 @@ const MyOffers: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="myoffers-main">
-        <img src={background} alt="Background" className="background-img" />
-        <div className="Load">
-          <ClipLoader size={50} color="#f10303" />
-        </div>
+      <main className="relative min-h-screen grid place-items-center text-white font-[Krub]">
+        <img
+          src={background}
+          alt="Background"
+          className="fixed inset-0 -z-10 w-full h-screen object-cover"
+        />
+        <ClipLoader size={50} color="#f10303" />
       </main>
     );
   }
 
   return (
-    <main className="myoffers-main">
-      <img src={background} alt="Background" className="background-img" />
+    <main className="relative min-h-screen mt-20 pb-40 px-4 md:px-8 text-white font-[Krub]">
+      {/* background plein écran, fixé */}
+      <img
+        src={background}
+        alt="Background"
+        className="fixed inset-0 -z-10 w-full h-screen object-cover"
+      />
 
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="text-red-500 text-center font-bold mb-4">{error}</div>
+      )}
 
-      <div className="myoffers-header">
-        <h2>Mes Annonces</h2>
-        <button className="return-button" onClick={() => navigate("/home")}>
+      {/* Header */}
+      <div className="mx-auto w-full max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
+        <h2 className="text-2xl font-semibold">Mes Annonces</h2>
+        <button
+          onClick={() => navigate("/home")}
+          className="px-4 py-2 rounded-md font-semibold
+                     bg-white/20 hover:bg-white/30 text-white transition-colors"
+        >
           ← Retour à l'accueil
         </button>
       </div>
 
+      {/* Liste */}
       {myOffers.length === 0 ? (
-        <p>Vous n'avez encore publié aucun article.</p>
+        <p className="mx-auto w-full max-w-6xl text-center">
+          Vous n'avez encore publié aucun article.
+        </p>
       ) : (
-        <div className="offers-grid">
+        <div
+          className="mx-auto w-full max-w-6xl
+                     grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {myOffers.map((offer) => (
-            <div key={offer._id} className="offer-card">
-              <h3>{offer.title}</h3>
-              <p>{offer.description}</p>
-              <p>Prix : {offer.price} €</p>
-              <button
-                className="delete-button"
-                onClick={() => handleDeleteMyOffer(offer._id)}
+            <div
+              key={offer._id}
+              className="rounded-2xl p-5
+                         bg-[#ffffffae] text-black
+                         shadow-[0_4px_8px_rgba(0,0,0,0.1)]
+                         hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)]
+                         transition-shadow"
+            >
+              <h3
+                className="text-lg font-semibold mb-1"
+                style={{ color: "#333" }}
               >
-                Supprimer
-              </button>
+                {offer.title}
+              </h3>
+              <p className="text-sm mb-2" style={{ color: "#666" }}>
+                {offer.description}
+              </p>
+              <p className="text-sm font-medium mb-4" style={{ color: "#666" }}>
+                Prix : {offer.price} €
+              </p>
+
+              <div className="mt-2 flex items-center justify-between gap-3">
+                <button
+                  onClick={() => navigate(`/offer/${offer._id}`)}
+                  className="px-3 py-2 rounded-md font-semibold
+                             bg-[#dfa080bd] hover:bg-[#c87660]
+                             text-white transition-colors"
+                >
+                  Voir l’annonce
+                </button>
+
+                <button
+                  onClick={() => handleDeleteMyOffer(offer._id)}
+                  className="px-3 py-2 rounded-md font-semibold
+                             bg-[#ff4d4d] hover:bg-[#e60000]
+                             text-white transition-colors"
+                >
+                  Supprimer
+                </button>
+              </div>
             </div>
           ))}
         </div>

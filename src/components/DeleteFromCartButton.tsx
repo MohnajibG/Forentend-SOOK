@@ -8,6 +8,7 @@ interface DeleteFromCartButtonProps {
   item: CartItem;
   cart: CartItem[];
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  className?: string;
 }
 
 const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
@@ -28,7 +29,10 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
   };
 
   return (
-    <button className="delete" onClick={handleDeleteFromCart}>
+    <button
+      className="bg-red-700 w-auto h-auto rounded-lg text-black"
+      onClick={handleDeleteFromCart}
+    >
       X
     </button>
   );

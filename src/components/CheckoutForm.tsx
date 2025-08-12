@@ -6,90 +6,125 @@ import {
 import { useState } from "react";
 import axios from "axios";
 
-const CheckoutForm = () => {
-  // Permet de faire une requête à Stripe pour confirmer le paiement
+const CheckoutForm: React.FC = () => {
   const stripe = useStripe();
-  // Permet de récupérer le contenu des inputs
   const elements = useElements();
 
-  // State qui gère les messages d'erreurs
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  // State qui gère le fait que le paiement a été effectué
   const [completed, setCompleted] = useState(false);
-  // State qui gère le fait qu'on est en train de payer
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (event: { preventDefault: () => void }) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // On commence à charger
+    setErrorMessage(null);
+
+    if (!elements) return;
     setIsLoading(true);
 
-    if (elements == null) {
-      return;
-    }
-
-    // Vérification et validation des infos entrées dans les inputs
+    // 1) Validation côté Stripe (PaymentElement)
     const { error: submitError } = await elements.submit();
     if (submitError) {
-      // Affiche l'erreur en question
-      setErrorMessage(submitError.message || "An unknown error occurred");
-      return;
-    }
-
-    // Demande au backend de créer l'intention de paiement, il nous renvoie le clientSecret
-    const response = await axios.post(
-      "https://site--sook--dnxhn8mdblq5.code.run/payment"
-    );
-
-    const clientSecret = response.data.client_secret;
-
-    // Requête à Stripe pour valider le paiement
-    if (!stripe) {
-      setErrorMessage("Stripe has not been initialized.");
+      setErrorMessage(
+        submitError.message || "Une erreur inconnue est survenue."
+      );
       setIsLoading(false);
       return;
     }
-    const stripeResponse = await stripe.confirmPayment({
-      // elements contient les infos et la configuration du paiement
-      elements,
-      clientSecret,
-      // Éventuelle redirection
-      confirmParams: {
-        return_url: "http://localhost:5173/",
-      },
-      // Bloque la redirections
-      redirect: "if_required",
-    });
 
-    // Si une erreur a lieu pendant la confirmation
-    if (stripeResponse.error) {
-      // On la montre au client
-      setErrorMessage(
-        stripeResponse.error.message || "An unknown error occurred"
+    try {
+      // 2) Crée l'intention de paiement côté backend -> client_secret
+      const { data } = await axios.post(
+        "https://site--sook--dnxhn8mdblq5.code.run/payment"
       );
-    }
+      const clientSecret = data?.client_secret;
+      if (!clientSecret) {
+        throw new Error("Client secret introuvable.");
+      }
 
-    // Si on reçois un status succeeded on fais passer completed à true
-    if (
-      stripeResponse.paymentIntent &&
-      stripeResponse.paymentIntent.status === "succeeded"
-    ) {
-      setCompleted(true);
+      // 3) Confirmation du paiement
+      if (!stripe) {
+        setErrorMessage("Stripe n'est pas initialisé.");
+        setIsLoading(false);
+        return;
+      }
+
+      const stripeResponse = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          // Utilise l’origine courante plutôt que localhost en dur
+          return_url: `${window.location.origin}/`,
+        },
+        redirect: "if_required",
+      });
+
+      if (stripeResponse.error) {
+        setErrorMessage(
+          stripeResponse.error.message ||
+            "Échec de la confirmation du paiement."
+        );
+      } else if (
+        stripeResponse.paymentIntent &&
+        stripeResponse.paymentIntent.status === "succeeded"
+      ) {
+        setCompleted(true);
+      }
+    } catch (err: any) {
+      setErrorMessage(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Erreur lors de l'initialisation du paiement."
+      );
+    } finally {
+      setIsLoading(false);
     }
-    // On a fini de charger
-    setIsLoading(false);
   };
 
-  return completed ? (
-    <p>Paiement effectué</p>
-  ) : (
-    <form onSubmit={handleSubmit}>
-      <PaymentElement />
-      <button type="submit" disabled={!stripe || !elements || isLoading}>
-        Pay
+  if (completed) {
+    return (
+      <div className="w-full max-w-md mx-auto rounded-xl bg-white/90 p-6 text-center shadow-md">
+        <h2 className="text-lg font-semibold text-green-700 mb-1">
+          Paiement effectué ✅
+        </h2>
+        <p className="text-sm text-black/70">Merci pour votre achat.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="w-full max-w-md mx-auto rounded-xl bg-white/90 p-6 shadow-md space-y-4"
+    >
+      {/* Astuce test mode (retire si tu n’en veux pas) */}
+      <div className="text-xs text-black/60">
+        Mode test Stripe : utilisez la carte{" "}
+        <span className="font-semibold">4242 4242 4242 4242</span>, une date
+        future, CVC et code postal quelconques.
+      </div>
+
+      <div className="rounded-md border border-black/10 bg-white p-3">
+        <PaymentElement />
+      </div>
+
+      {errorMessage && (
+        <div className="text-sm font-semibold text-red-600 bg-red-50 border border-red-200 rounded-md p-3">
+          {errorMessage}
+        </div>
+      )}
+
+      <button
+        type="submit"
+        disabled={!stripe || !elements || isLoading}
+        className="
+          w-full h-11 rounded-md font-bold text-white
+          bg-[#dfa080bd] hover:bg-[#c87660]
+          disabled:opacity-60 disabled:cursor-not-allowed
+          transition-colors
+        "
+      >
+        {isLoading ? "Paiement en cours..." : "Payer"}
       </button>
-      {/* Éventuel message d'erreur */}
-      {errorMessage && <div>{errorMessage}</div>}
     </form>
   );
 };
