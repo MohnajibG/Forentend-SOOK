@@ -2,12 +2,14 @@
 @import "tailwindcss";
 /* → Styles de base (reset / override) */
 @layer base {
+  html,
+  body,
+  #root {
+    @apply h-full w-full;
+  }
   body {
-    /* largeur/hauteur plein écran */
-    @apply w-screen h-full;
-    /* typo Krub (ajoute-la dans tailwind.config.js sous fontFamily) */
-    @apply font-[Krub];
-    /* texte clair en mode normal, sombre en mode dark */
+    /* typo Krub (déclarée dans tailwind.config.js) */
+    /* texte clair en mode light, sombre en mode dark */
     @apply text-white dark:text-black;
   }
   a {
@@ -16,13 +18,13 @@
   }
 }
 
-/* → Composants globaux */
+/* → Composants/utilitaires globaux */
 @layer components {
-  /* spinner ou zone de chargement à moitié de la taille du conteneur parent */
+  /* zone de chargement à 50% */
   .Load {
     @apply w-1/2 h-1/2;
   }
-  /* messages d’erreur ou alertes */
+  /* message d’erreur ou alertes */
   .message,
   .error {
     @apply text-red-500;

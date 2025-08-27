@@ -50,7 +50,7 @@ const Home: React.FC = () => {
             hover:bg-[rgba(249,200,208,0.66)]
           "
         >
-          <h1 className="leading-none">
+          <h1 className="leading-none font-bold ">
             <span className="text-[#ed749d] align-middle">|</span>
             SOOK !<span className="text-[#ab6415] align-middle">|</span>
           </h1>
@@ -161,38 +161,39 @@ const Home: React.FC = () => {
         {/* Offres disponibles */}
         <div
           className="
-            w-full max-w-6xl
-            bg-[#fac3c38c]
-            shadow-[0_0_13px_4px_rgba(255,255,255,0.75)]
-            transition-colors duration-1000
-            hover:bg-[rgba(249,200,208,0.66)]
-            px-3 md:px-4 py-6
-            flex flex-wrap items-center justify-center gap-4 md:gap-6
-          "
+    w-full max-w-6xl
+    bg-[#fac3c38c] transition-colors duration-1000
+    hover:bg-[rgba(249,200,208,0.66)]
+    px-3 md:px-4 py-10 md:mb-20
+    flex flex-wrap  items-center justify-between gap-
+    scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
+  "
         >
           {dataOffer?.offers?.map((offer) => (
-            <Link key={offer._id} to={`/offer/${offer._id}`} className="group">
+            <Link
+              key={offer._id}
+              to={`/offer/${offer._id}`}
+              className="w-full sm:w-64"
+            >
               <div
                 className="
-                  w-64 sm:w-72
-                  bg-[#fffefe79]
-                  shadow-[0_0_13px_4px_rgba(255,255,255,0.75)]
-                  rounded
-                  p-4 transition-colors duration-1000
-                  group-hover:bg-[#fffefe9a]
-                  flex flex-col gap-3
-                "
+          w-full h-80
+          bg-[#fffefe79]
+          shadow-[0_0_13px_4px_rgba(255,255,255,0.75)]
+          rounded-lg p-4
+          transition-colors duration-1000
+          hover:bg-[#fffefe9a]
+          flex flex-col justify-around mb-10
+        "
               >
-                <div className="flex flex-col gap-2">
-                  <h2 className="text-xl text-center">{offer.title}</h2>
-
-                  <div className="text-sm flex items-center justify-between">
+                <div className="space-y-2 text-center">
+                  <h2 className="text-xl font-semibold">{offer.title}</h2>
+                  <div className="text-sm flex justify-between px-4">
                     <p>Prix : {offer.price}€</p>
                     <p>Marque : {offer.brand}</p>
                   </div>
-
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm">
+                  <div className="flex justify-between items-center px-4">
+                    <p className="text-sm font-medium">
                       {offer.userId?.account?.username
                         ? offer.userId.account.username
                             .charAt(0)
@@ -200,34 +201,32 @@ const Home: React.FC = () => {
                           offer.userId.account.username.slice(1)
                         : "Utilisateur inconnu"}
                     </p>
-
                     {offer.userId?.account?.avatar && (
                       <img
                         src={offer.userId.account.avatar}
-                        alt="Avatar utilisateur"
-                        className="w-[30px] h-[30px] rounded-full object-cover"
+                        alt="Avatar"
+                        className="w-8 h-8 rounded-full object-cover"
                       />
                     )}
                   </div>
                 </div>
 
-                {/* Images de l'offre */}
                 {offer.pictures && offer.pictures.length > 0 && (
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {offer.pictures.map(
-                      (
-                        picture: string | undefined,
-                        index: Key | null | undefined
-                      ) =>
-                        picture && (
-                          <img
-                            key={index}
-                            src={picture}
-                            alt={`Image de l'offre ${offer._id}`}
-                            className="w-20 h-20 object-cover rounded"
-                          />
-                        )
-                    )}
+                  <div
+                    className="
+      flex items-center justify-around gap-10 mt-4 ml-10
+      overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
+      rounded-md snap-normal
+    "
+                  >
+                    {offer.pictures.map((pic: string, idx: number) => (
+                      <img
+                        key={idx}
+                        src={pic}
+                        alt={`Image ${idx + 1} de ${offer.title}`}
+                        className="w-40 h-40 object-cover rounded-md flex-shrink-0"
+                      />
+                    ))}
                   </div>
                 )}
               </div>

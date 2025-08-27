@@ -2,8 +2,6 @@ import React from "react";
 import axios from "axios";
 import { CartItem } from "../types/types";
 
-import "../assets/styles/style.css";
-
 interface DeleteFromCartButtonProps {
   item: CartItem;
   cart: CartItem[];

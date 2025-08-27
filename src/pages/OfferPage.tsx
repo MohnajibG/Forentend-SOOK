@@ -117,23 +117,34 @@ const OfferPage: React.FC = () => {
 
           {/* Images + bouton */}
           <div className="bg-[rgba(251,248,238,0.598)] rounded-xl p-4 flex flex-col gap-4 items-center">
-            {/* bande défilante images */}
+            {/* Carousel images – une seule image par vue */}
             <div
-              className="flex gap-2 overflow-x-auto w-full"
+              className="
+    w-full
+    overflow-x-auto overflow-y-hidden
+    flex flex-nowrap           /* ← ici on force l’axe horizontal */
+    snap-x snap-mandatory
+    scrollbar-thin
+    scrollbar-thumb-gray-400 scrollbar-track-gray-200
+  "
               onClick={() => setShowImagesModal(true)}
             >
               {offer.pictures && offer.pictures.length > 0 ? (
-                offer.pictures.map((picture: string, i: number) => (
-                  <Link to={picture} key={i} className="shrink-0 w-40">
+                offer.pictures.map((picture, i) => (
+                  <Link
+                    to={picture}
+                    key={i}
+                    className="flex-shrink-0 w-full snap-start"
+                  >
                     <img
                       src={picture}
                       alt={`Image ${i + 1}`}
-                      className="w-40 h-40 object-contain bg-white/60 rounded-md"
+                      className="w-full h-[400px] md:h-[500px] object-cover rounded-md"
                     />
                   </Link>
                 ))
               ) : (
-                <p className="text-black/70">Aucune image disponible.</p>
+                <p className="text-gray-600 p-4">Aucune image disponible.</p>
               )}
             </div>
 
