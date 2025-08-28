@@ -17,13 +17,13 @@ const navItems = (userId?: string) => [
 
 export default function Nav({ userId, onLinkClick, className = "" }: NavProps) {
   return (
-    <ul className={`flex flex-col md:flex-row gap-4 ${className}`}>
+    <ul className={`hidden md:flex flex-row gap-6 items-center ${className}`}>
       {navItems(userId).map((item) => (
         <li key={item.to}>
           <Link
             to={item.to}
             onClick={onLinkClick}
-            className="block px-4 py-2 text-white hover:text-yellow-300 transition-colors"
+            className="px-4 py-2 text-white hover:text-yellow-300 transition-colors"
           >
             {item.label}
           </Link>

@@ -6,6 +6,8 @@ interface DeleteFromCartButtonProps {
   item: CartItem;
   cart: CartItem[];
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  userId: string;
+  token: string;
   className?: string;
 }
 
@@ -13,22 +15,33 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
   item,
   cart,
   setCart,
+  userId,
+  token,
+  className,
 }) => {
   const handleDeleteFromCart = async () => {
     try {
       await axios.delete(
-        `https://site--sook--dnxhn8mdblq5.code.run/cart/${item.id}`
+        `https://site--sook--dnxhn8mdblq5.code.run/cart/${userId}/${item.productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
-      setCart(cart.filter((cartItem) => cartItem.id !== item.id));
+      setCart(cart.filter((cartItem) => cartItem.productId !== item.productId));
     } catch (error) {
       console.error("Erreur lors de la suppression de l'article :", error);
+      alert("Impossible de supprimer l'article du panier.");
     }
   };
 
   return (
     <button
-      className="bg-red-700 w-auto h-auto rounded-lg text-black"
+      className={`px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded transition-colors ${
+        className || ""
+      }`}
       onClick={handleDeleteFromCart}
     >
       X

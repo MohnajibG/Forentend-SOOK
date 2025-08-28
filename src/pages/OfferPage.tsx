@@ -152,7 +152,7 @@ const OfferPage: React.FC = () => {
               cart={cart}
               setCart={setCart}
               item={{
-                id: offer._id || "",
+                productId: offer._id || "", // 🔥 correction ici
                 name: offer.title || "",
                 price: offer.price || 0,
               }}

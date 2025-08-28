@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-hot-toast";
@@ -10,7 +10,7 @@ import { Offer } from "../types/types";
 import background from "../assets/img/offerPage.webp";
 
 const MyOffers: React.FC = () => {
-  const { token, userId } = useUser();
+  const { token } = useUser();
   const [myOffers, setMyOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,39 +19,48 @@ const MyOffers: React.FC = () => {
 
   useEffect(() => {
     const fetchMyOffers = async () => {
+      if (!token) return;
+
       setLoading(true);
       setError(null);
+
       try {
         const { data } = await axios.get(
-          "https://site--sook--dnxhn8mdblq5.code.run/offers/user",
-          { headers: { Authorization: `Bearer ${token}` } }
+          "https://site--sook--dnxhn8mdblq5.code.run/offers/user", // ✅ corrigé
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
         setMyOffers(data.offers || []);
       } catch (err: any) {
-        setError(
+        console.error("Erreur lors du chargement des offres :", err);
+        const message =
           axios.isAxiosError(err) && err.response?.data?.message
             ? err.response.data.message
-            : "Erreur lors du chargement des offres. Veuillez réessayer."
-        );
+            : "Erreur lors du chargement des offres. Veuillez réessayer.";
+        setError(message);
+        toast.error(message);
       } finally {
         setLoading(false);
       }
     };
-    if (userId) fetchMyOffers();
-  }, [userId, token]);
+
+    fetchMyOffers();
+  }, [token]);
 
   const handleDeleteMyOffer = async (offerId: string) => {
     if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette offre ?"))
       return;
+
     try {
       await axios.delete(
-        `https://site--sook--dnxhn8mdblq5.code.run/offers/user/${offerId}`,
+        `https://site--sook--dnxhn8mdblq5.code.run/offers/delete/${offerId}`, // ✅ corrigé
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMyOffers((prev) => prev.filter((o) => o._id !== offerId));
       toast.success("Offre supprimée avec succès !");
     } catch (err) {
-      console.error("Erreur lors de la suppression de l'offre", err);
+      console.error("Erreur lors de la suppression de l'offre :", err);
       toast.error("Impossible de supprimer l'offre. Veuillez réessayer.");
     }
   };
@@ -71,7 +80,7 @@ const MyOffers: React.FC = () => {
 
   return (
     <main className="relative min-h-screen mt-20 pb-40 px-4 md:px-8 text-white font-[Krub]">
-      {/* background plein écran, fixé */}
+      {/* background plein écran */}
       <img
         src={background}
         alt="Background"
@@ -113,16 +122,11 @@ const MyOffers: React.FC = () => {
                          hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)]
                          transition-shadow"
             >
-              <h3
-                className="text-lg font-semibold mb-1"
-                style={{ color: "#333" }}
-              >
+              <h3 className="text-lg font-semibold mb-1 text-[#333]">
                 {offer.title}
               </h3>
-              <p className="text-sm mb-2" style={{ color: "#666" }}>
-                {offer.description}
-              </p>
-              <p className="text-sm font-medium mb-4" style={{ color: "#666" }}>
+              <p className="text-sm mb-2 text-[#666]">{offer.description}</p>
+              <p className="text-sm font-medium mb-4 text-[#666]">
                 Prix : {offer.price} €
               </p>
 

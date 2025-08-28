@@ -4,7 +4,7 @@ import axios from "axios";
 import { CartItem } from "../types/types";
 
 interface AddToCartButtonProps {
-  item: { id: string; name: string; price: number };
+  item: { productId: string; name: string; price: number };
   cart: CartItem[];
   setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
   token: string;
@@ -30,8 +30,8 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   }, [token, navigate]);
 
   useEffect(() => {
-    setIsInCart(!!cart.find((ci) => ci.id === item.id));
-  }, [cart, item.id]);
+    setIsInCart(!!cart.find((ci) => ci.productId === item.productId));
+  }, [cart, item.productId]);
 
   const handleAddToCart = async () => {
     if (isInCart) return;
@@ -41,7 +41,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
         "https://site--sook--dnxhn8mdblq5.code.run/cart/add",
         {
           userId,
-          id: item.id,
+          productId: item.productId,
           name: item.name,
           price: item.price,
         },

@@ -18,22 +18,25 @@ const CheckoutForm: React.FC = () => {
     event.preventDefault();
     setErrorMessage(null);
 
-    if (!elements) return;
-    setIsLoading(true);
-
-    // 1) Validation côté Stripe
-    const { error: submitError } = await elements.submit();
-    if (submitError) {
-      setErrorMessage(
-        submitError.message || "Une erreur inconnue est survenue."
-      );
-      setIsLoading(false);
+    if (!stripe || !elements) {
+      setErrorMessage("Stripe n'est pas initialisé.");
       return;
     }
 
+    setIsLoading(true);
+
     try {
-      // 2) Création de l'intent côté backend
-      const { data } = await axios.post(
+      // 1) Validation côté Stripe
+      const { error: submitError } = await elements.submit();
+      if (submitError) {
+        setErrorMessage(
+          submitError.message || "Une erreur inconnue est survenue."
+        );
+        return;
+      }
+
+      // 2) Récupération du client_secret depuis ton backend
+      const { data } = await axios.post<{ client_secret: string }>(
         "https://site--sook--dnxhn8mdblq5.code.run/payment"
       );
       const clientSecret = data?.client_secret;
@@ -41,20 +44,14 @@ const CheckoutForm: React.FC = () => {
         throw new Error("Client secret introuvable.");
       }
 
-      // 3) Confirmation du paiement
-      if (!stripe) {
-        setErrorMessage("Stripe n'est pas initialisé.");
-        setIsLoading(false);
-        return;
-      }
-
+      // 3) Confirmation du paiement avec Stripe
       const stripeResponse = await stripe.confirmPayment({
         elements,
         clientSecret,
         confirmParams: {
           return_url: `${window.location.origin}/`,
         },
-        redirect: "if_required",
+        redirect: "if_required", // pas de redirection si pas nécessaire
       });
 
       if (stripeResponse.error) {
@@ -62,16 +59,14 @@ const CheckoutForm: React.FC = () => {
           stripeResponse.error.message ||
             "Échec de la confirmation du paiement."
         );
-      } else if (
-        stripeResponse.paymentIntent &&
-        stripeResponse.paymentIntent.status === "succeeded"
-      ) {
+      } else if (stripeResponse.paymentIntent?.status === "succeeded") {
         setCompleted(true);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as any;
       setErrorMessage(
-        err?.response?.data?.message ||
-          err?.message ||
+        error?.response?.data?.message ||
+          error?.message ||
           "Erreur lors de l'initialisation du paiement."
       );
     } finally {
@@ -83,7 +78,7 @@ const CheckoutForm: React.FC = () => {
     return (
       <div className="w-full max-w-md mx-auto bg-white/90 rounded-2xl p-6 shadow-lg text-center">
         <h2 className="text-2xl font-semibold text-green-700 mb-2">
-          Paiement effectué ✅
+          ✅ Paiement effectué
         </h2>
         <p className="text-gray-700">Merci pour votre achat !</p>
       </div>
@@ -97,24 +92,24 @@ const CheckoutForm: React.FC = () => {
     >
       {/* Mode test */}
       <div className="text-xs text-gray-600">
-        Mode test Stripe : carte{" "}
-        <span className="font-semibold">4242 4242 4242 4242</span>, date future,
-        CVC et code postal au choix.
+        <span className="font-semibold">Mode test Stripe :</span> utilisez la
+        carte <span className="font-semibold">4242 4242 4242 4242</span>, une
+        date future, un CVC et un code postal au choix.
       </div>
 
-      {/* PaymentElement */}
+      {/* Élément Stripe */}
       <div className="rounded-md border border-gray-300 bg-white p-3">
         <PaymentElement />
       </div>
 
-      {/* Erreurs */}
+      {/* Message d'erreur */}
       {errorMessage && (
         <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md p-3">
           {errorMessage}
         </div>
       )}
 
-      {/* Bouton payer */}
+      {/* Bouton de paiement */}
       <button
         type="submit"
         disabled={!stripe || !elements || isLoading}

@@ -19,12 +19,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     </CartContext.Provider>
   );
 };
+
 export const useCart = () => {
   const context = useContext(CartContext);
-  return (
-    context || {
-      cart: [],
-      setCart: () => {},
-    }
-  );
+  if (!context) {
+    throw new Error("useCart doit être utilisé dans un CartProvider");
+  }
+  return context;
 };

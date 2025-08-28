@@ -58,7 +58,7 @@ export interface ProfilProps {
 // Cart Types
 // ==============================
 export interface CartItem {
-  id: string; // ID unique du produit
+  productId: string; // ID unique du produit
   name: string; // Nom du produit
   price: number; // Prix unitaire
   quantity: number; // Quantité dans le panier
@@ -99,7 +99,7 @@ export interface ImageUploadProps {
   setImageUrl: React.Dispatch<React.SetStateAction<File[]>>; // Modifiez ici pour File[] au lieu de string[]
 }
 
-export interface ProdeuctsProps {
+export interface ProductProps {
   id: string;
   userId: string;
   prodeuctId: string;

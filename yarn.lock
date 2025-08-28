@@ -2159,6 +2159,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"framer-motion@npm:^12.23.12":
+  version: 12.23.12
+  resolution: "framer-motion@npm:12.23.12"
+  dependencies:
+    motion-dom: ^12.23.12
+    motion-utils: ^12.23.6
+    tslib: ^2.4.0
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 85c2a64c12cd7d3dcaeed44ec11843b5c6955da97a82895f89355fe58bfbd8f876c6272585fff54ba661d7a54218efd44b8ca072c6988d414ab4577f4d28a135
+  languageName: node
+  linkType: hard
+
 "frontend-vinted@workspace:.":
   version: 0.0.0-use.local
   resolution: "frontend-vinted@workspace:."
@@ -2181,6 +2203,7 @@ __metadata:
     eslint: ^9.13.0
     eslint-plugin-react-hooks: ^5.0.0
     eslint-plugin-react-refresh: ^0.4.14
+    framer-motion: ^12.23.12
     globals: ^15.11.0
     js-cookie: ^3.0.5
     postcss: ^8.5.6
@@ -2874,6 +2897,22 @@ __metadata:
   bin:
     mkdirp: dist/cjs/src/bin.js
   checksum: 972deb188e8fb55547f1e58d66bd6b4a3623bf0c7137802582602d73e6480c1c2268dcbafbfb1be466e00cc7e56ac514d7fd9334b7cf33e3e2ab547c16f83a8d
+  languageName: node
+  linkType: hard
+
+"motion-dom@npm:^12.23.12":
+  version: 12.23.12
+  resolution: "motion-dom@npm:12.23.12"
+  dependencies:
+    motion-utils: ^12.23.6
+  checksum: 3fb9450a9a3312ff11a9d0f7e6d44474c2bc66409cd7a2b4a29fc0e2e641414a4e1f869c0110d92bbaf5b4663bb49edccc745fad077d03169d96c2a361f7dc73
+  languageName: node
+  linkType: hard
+
+"motion-utils@npm:^12.23.6":
+  version: 12.23.6
+  resolution: "motion-utils@npm:12.23.6"
+  checksum: e7c0b1d7a893c5979eab529f2bd269031f71f8d23cbf8be2ec8785558544ee45b9ba7b23390f9a46f2f0a493903b6adc0666229de3b05e977a0bfc3c5fb13d8b
   languageName: node
   linkType: hard
 
