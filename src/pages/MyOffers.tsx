@@ -26,11 +26,12 @@ const MyOffers: React.FC = () => {
 
       try {
         const { data } = await axios.get(
-          "https://site--sook--dnxhn8mdblq5.code.run/offers/user", // ✅ corrigé
+          "https://site--sook--dnxhn8mdblq5.code.run/offers/user",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        console.log("📦 Offres reçues :", data.offers); // 🔎 debug
         setMyOffers(data.offers || []);
       } catch (err: any) {
         console.error("Erreur lors du chargement des offres :", err);
@@ -54,10 +55,12 @@ const MyOffers: React.FC = () => {
 
     try {
       await axios.delete(
-        `https://site--sook--dnxhn8mdblq5.code.run/offers/delete/${offerId}`, // ✅ corrigé
+        `https://site--sook--dnxhn8mdblq5.code.run/offers/delete/${offerId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setMyOffers((prev) => prev.filter((o) => o._id !== offerId));
+      setMyOffers((prev) =>
+        prev.filter((o) => (o._id || (o as any).id) !== offerId)
+      );
       toast.success("Offre supprimée avec succès !");
     } catch (err) {
       console.error("Erreur lors de la suppression de l'offre :", err);
@@ -80,7 +83,6 @@ const MyOffers: React.FC = () => {
 
   return (
     <main className="relative min-h-screen mt-20 pb-40 px-4 md:px-8 text-white font-[Krub]">
-      {/* background plein écran */}
       <img
         src={background}
         alt="Background"
@@ -91,7 +93,6 @@ const MyOffers: React.FC = () => {
         <div className="text-red-500 text-center font-bold mb-4">{error}</div>
       )}
 
-      {/* Header */}
       <div className="mx-auto w-full max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
         <h2 className="text-2xl font-semibold">Mes Annonces</h2>
         <button
@@ -103,54 +104,52 @@ const MyOffers: React.FC = () => {
         </button>
       </div>
 
-      {/* Liste */}
       {myOffers.length === 0 ? (
         <p className="mx-auto w-full max-w-6xl text-center">
           Vous n'avez encore publié aucun article.
         </p>
       ) : (
-        <div
-          className="mx-auto w-full max-w-6xl
-                     grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {myOffers.map((offer) => (
-            <div
-              key={offer._id}
-              className="rounded-2xl p-5
-                         bg-[#ffffffae] text-black
-                         shadow-[0_4px_8px_rgba(0,0,0,0.1)]
-                         hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)]
-                         transition-shadow"
-            >
-              <h3 className="text-lg font-semibold mb-1 text-[#333]">
-                {offer.title}
-              </h3>
-              <p className="text-sm mb-2 text-[#666]">{offer.description}</p>
-              <p className="text-sm font-medium mb-4 text-[#666]">
-                Prix : {offer.price} €
-              </p>
+        <div className="mx-auto w-full max-w-6xl grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {myOffers.map((offer) => {
+            const id = offer._id || (offer as any).id; // ✅ supporte _id et id
+            return (
+              <div
+                key={id}
+                className="rounded-2xl p-5 bg-[#ffffffae] text-black
+                           shadow-[0_4px_8px_rgba(0,0,0,0.1)]
+                           hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)]
+                           transition-shadow"
+              >
+                <h3 className="text-lg font-semibold mb-1 text-[#333]">
+                  {offer.title}
+                </h3>
+                <p className="text-sm mb-2 text-[#666]">{offer.description}</p>
+                <p className="text-sm font-medium mb-4 text-[#666]">
+                  Prix : {offer.price} €
+                </p>
 
-              <div className="mt-2 flex items-center justify-between gap-3">
-                <button
-                  onClick={() => navigate(`/offer/${offer._id}`)}
-                  className="px-3 py-2 rounded-md font-semibold
-                             bg-[#dfa080bd] hover:bg-[#c87660]
-                             text-white transition-colors"
-                >
-                  Voir l’annonce
-                </button>
+                <div className="mt-2 flex items-center justify-between gap-3">
+                  <button
+                    onClick={() => navigate(`/offer/${id}`)}
+                    className="px-3 py-2 rounded-md font-semibold
+                               bg-[#dfa080bd] hover:bg-[#c87660]
+                               text-white transition-colors"
+                  >
+                    Voir l’annonce
+                  </button>
 
-                <button
-                  onClick={() => handleDeleteMyOffer(offer._id)}
-                  className="px-3 py-2 rounded-md font-semibold
-                             bg-[#ff4d4d] hover:bg-[#e60000]
-                             text-white transition-colors"
-                >
-                  Supprimer
-                </button>
+                  <button
+                    onClick={() => handleDeleteMyOffer(id)}
+                    className="px-3 py-2 rounded-md font-semibold
+                               bg-[#ff4d4d] hover:bg-[#e60000]
+                               text-white transition-colors"
+                  >
+                    Supprimer
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </main>
