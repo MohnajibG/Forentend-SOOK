@@ -23,7 +23,7 @@ export default function Nav({ userId, onLinkClick, className = "" }: NavProps) {
           <Link
             to={item.to}
             onClick={onLinkClick}
-            className="px-4 py-2 text-white hover:text-yellow-300 transition-colors"
+            className="px-4 py-2 text-black font-bold hover:text-yellow-300 transition-colors"
           >
             {item.label}
           </Link>
