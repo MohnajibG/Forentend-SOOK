@@ -1,133 +1,92 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useCart } from "../contexts/CartContext";
-import { useUser } from "../contexts/UserContext";
-
+// src/pages/Payement.tsx
+import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
+import { useCart } from "../contexts/CartContext";
+import { useUser } from "../contexts/UserContext";
 import CheckoutForm from "../components/CheckoutForm";
-import DeleteFromCartButton from "../components/DeleteFromCartButton";
 
-import backgroundCart from "../assets/img/backgroundCart.webp";
 import Loading from "../assets/img/Loading.gif";
+import background from "../assets/img/backgroundCart.webp";
 
+// Stripe public key
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY!);
 
-const Cart: React.FC = () => {
-  const { cart, setCart } = useCart();
-  const { userId, token } = useUser();
+const Payement: React.FC = () => {
+  const { cart } = useCart();
+  const { token } = useUser();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const total = cart.reduce((sum, item) => sum + item.price, 0).toFixed(2);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!userId || !token) {
-      navigate("/login");
+    if (cart.length === 0) {
+      navigate("/cart", { replace: true });
+      return;
+    }
+    if (!token) {
+      navigate("/login", { replace: true });
       return;
     }
 
-    const fetchCart = async () => {
-      setLoading(true);
-      setError(null);
+    // Montant total en centimes
+    const totalAmount = Math.round(
+      cart.reduce((sum, item) => sum + item.price, 0) * 100
+    );
 
+    // Appel backend -> création PaymentIntent
+    const createPaymentIntent = async () => {
       try {
-        const { data } = await axios.get(
-          "https://site--sook--dnxhn8mdblq5.code.run/cart",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+        const { data } = await axios.post(
+          "https://site--sook--dnxhn8mdblq5.code.run/create-payment-intent",
+          { amount: totalAmount },
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-        console.log("📦 Panier reçu :", data); // 🔎 debug
-
-        setCart(data || []);
+        setClientSecret(data.clientSecret);
       } catch (err) {
-        console.error("Erreur lors de la récupération du panier :", err);
-        setError("Impossible de charger le panier. Veuillez réessayer.");
-      } finally {
-        setLoading(false);
+        console.error("Erreur lors de la création du PaymentIntent:", err);
       }
     };
 
-    fetchCart();
-  }, [setCart, userId, token, navigate]);
+    createPaymentIntent();
+  }, [cart, token, navigate]);
+
+  if (!clientSecret) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center">
+        <img
+          src={background}
+          alt="background"
+          className="fixed inset-0 -z-10 w-full h-full object-cover"
+        />
+        <img src={Loading} alt="Loading" className="w-20 h-20 animate-pulse" />
+      </div>
+    );
+  }
 
   return (
     <main className="relative min-h-screen font-[Krub]">
       <img
-        src={backgroundCart}
+        src={background}
         alt="background"
         className="fixed inset-0 -z-10 w-full h-full object-cover"
       />
 
-      {loading ? (
-        <div className="flex items-center justify-center h-screen">
-          <img
-            src={Loading}
-            alt="Loading"
-            className="w-20 h-20 animate-pulse"
-          />
-        </div>
-      ) : (
-        <div className="relative z-10 mx-auto mt-24 mb-12 max-w-4xl bg-white/90 rounded-2xl p-8 shadow-xl space-y-6">
-          <h1 className="text-3xl font-semibold text-gray-800">Mon Panier</h1>
+      <div className="relative z-10 mx-auto mt-24 mb-12 max-w-lg bg-white/90 rounded-2xl p-8 shadow-xl">
+        <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
+          Paiement Sécurisé
+        </h1>
 
-          {error && (
-            <p className="text-red-600 bg-red-50 border border-red-200 p-3 rounded-md">
-              {error}
-            </p>
-          )}
-
-          {cart.length === 0 ? (
-            <p className="text-gray-600">
-              Votre panier est vide. Ajoutez des articles pour commencer !
-            </p>
-          ) : (
-            <>
-              <div className="space-y-4">
-                {cart.map((item, idx) => (
-                  <div
-                    key={`${item.productId}-${idx}`}
-                    className="flex items-center justify-between bg-gray-100 rounded-lg p-4"
-                  >
-                    <div>
-                      <h2 className="text-lg font-medium text-gray-800">
-                        {item.name}
-                      </h2>
-                      <p className="text-gray-700">{item.price.toFixed(2)} €</p>
-                    </div>
-                    <DeleteFromCartButton
-                      item={item}
-                      cart={cart}
-                      setCart={setCart}
-                      userId={userId!}
-                      token={token!}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex justify-end pt-4 border-t border-gray-300">
-                <span className="text-xl font-semibold text-gray-800">
-                  Total : {total} €
-                </span>
-              </div>
-
-              <div className="mt-6">
-                <Elements stripe={stripePromise}>
-                  <CheckoutForm />
-                </Elements>
-              </div>
-            </>
-          )}
-        </div>
-      )}
+        {/* ✅ On passe stripe + clientSecret */}
+        <Elements stripe={stripePromise} options={{ clientSecret }}>
+          <CheckoutForm />
+        </Elements>
+      </div>
     </main>
   );
 };
 
-export default Cart;
+export default Payement;
