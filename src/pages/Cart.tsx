@@ -37,11 +37,12 @@ const Cart: React.FC = () => {
 
       try {
         const { data } = await axios.get(
-          `https://site--sook--dnxhn8mdblq5.code.run/cart/${userId}`,
+          "https://site--sook--dnxhn8mdblq5.code.run/cart",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        console.log("📦 Panier reçu :", data); // 🔎 debug
 
         setCart(data || []);
       } catch (err) {

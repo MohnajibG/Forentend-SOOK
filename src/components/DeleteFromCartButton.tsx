@@ -22,11 +22,9 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
   const handleDeleteFromCart = async () => {
     try {
       await axios.delete(
-        `https://site--sook--dnxhn8mdblq5.code.run/cart/${userId}/${item.productId}`,
+        `https://site--sook--dnxhn8mdblq5.code.run/cart/${item.productId}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
