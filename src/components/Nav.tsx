@@ -12,7 +12,7 @@ const navItems = (userId?: string) => [
   { to: "/offers", label: "Offres" },
   { to: "/mesoffres", label: "Mes Offres" },
   { to: "/publish", label: "Publier" },
-  { to: `/cart/${userId}`, label: "Panier" },
+  { to: "/cart", label: "Panier" },
 ];
 
 export default function Nav({ userId, onLinkClick, className = "" }: NavProps) {

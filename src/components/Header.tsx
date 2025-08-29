@@ -181,7 +181,7 @@ function Header({ search, setSearch }: HeaderProps) {
                 </li>
                 <li>
                   <Link
-                    to="/cart/${userId}"
+                    to="/cart"
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center gap-3 px-5 py-3 text-[#333] hover:bg-[#ffe0dc]"
                   >
