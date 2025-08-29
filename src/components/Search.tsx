@@ -82,8 +82,8 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
         ref={inputRef}
         className="
           w-[80vw] md:w-[70vw] lg:w-[60vw]
-          h-10 rounded-md px-4
-          bg-[#dbc4b8ec] hover:bg-[#eee5e0]
+          h-10  px-4
+          bg-[#ffffffec] hover:bg-[#eee5e0]
           outline-none border-0 transition-colors
           text-black placeholder-black/60
         "

@@ -4,7 +4,6 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import { useState } from "react";
-import axios from "axios";
 
 const CheckoutForm: React.FC = () => {
   const stripe = useStripe();
@@ -26,7 +25,7 @@ const CheckoutForm: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // 1) Validation côté Stripe
+      // 1) Validation côté Stripe (ex: champs obligatoires remplis)
       const { error: submitError } = await elements.submit();
       if (submitError) {
         setErrorMessage(
@@ -35,23 +34,13 @@ const CheckoutForm: React.FC = () => {
         return;
       }
 
-      // 2) Récupération du client_secret depuis ton backend
-      const { data } = await axios.post<{ client_secret: string }>(
-        "https://site--sook--dnxhn8mdblq5.code.run/payment"
-      );
-      const clientSecret = data?.client_secret;
-      if (!clientSecret) {
-        throw new Error("Client secret introuvable.");
-      }
-
-      // 3) Confirmation du paiement avec Stripe
+      // 2) Confirmation du paiement
       const stripeResponse = await stripe.confirmPayment({
         elements,
-        clientSecret,
         confirmParams: {
-          return_url: `${window.location.origin}/`,
+          return_url: `${window.location.origin}/success`, // redirection si besoin
         },
-        redirect: "if_required", // pas de redirection si pas nécessaire
+        redirect: "if_required", // évite la redirection auto
       });
 
       if (stripeResponse.error) {
@@ -63,12 +52,7 @@ const CheckoutForm: React.FC = () => {
         setCompleted(true);
       }
     } catch (err: unknown) {
-      const error = err as any;
-      setErrorMessage(
-        error?.response?.data?.message ||
-          error?.message ||
-          "Erreur lors de l'initialisation du paiement."
-      );
+      setErrorMessage((err as Error).message);
     } finally {
       setIsLoading(false);
     }

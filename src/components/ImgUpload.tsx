@@ -72,13 +72,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ setImageUrl }) => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-3">
+    <div className="w-full flex flex-col gap-3 justify-center items-center">
       <label
         htmlFor="pictures"
         className="
           inline-flex items-center justify-center
           px-4 py-2 rounded font-bold text-white cursor-pointer
-          bg-[#dfa080bd] hover:bg-[#c87660] transition-colors
+          bg-[#dfa080eb] hover:bg-[#c87660] transition-colors
           w-max
         "
       >

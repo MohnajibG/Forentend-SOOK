@@ -84,7 +84,7 @@ const Publish: React.FC = () => {
   return (
     <main
       className="
-        relative min-h-screen text-white font-[Krub]
+        relative min-h-screen text-white font-[Krub] font-bold
         flex flex-col justify-center mx-4 md:mx-20 lg:mx-24 py-12
       "
     >
@@ -95,14 +95,14 @@ const Publish: React.FC = () => {
         className="fixed inset-0 -z-10 w-screen h-screen object-cover"
       />
 
-      <h2 className="text-xl md:text-2xl mb-6 drop-shadow-[0_0_20px_rgba(252,124,124,0.8)]">
+      <h2 className="text-xl md:text-4xl font-bold text-center mb-6 drop-shadow-[0_0_20px_rgba(252,124,124,0.8)]">
         Publier votre produit
       </h2>
 
       {message && (
         <div
           className={[
-            "mx-auto my-6 text-center px-5 py-3 text-base rounded border",
+            "mx-auto my-10 text-center px-5 py-3 text-base rounded border",
             "transition-colors duration-300",
             isError
               ? "bg-[#f5828b] text-[#721c24] border-[#f5c6cb]"
@@ -254,7 +254,7 @@ const Publish: React.FC = () => {
         </label>
 
         {/* Photos */}
-        <div className="w-full">
+        <div className="w-full flex flex-col ">
           <h3 className="text-white text-base mb-2">Photos :</h3>
           <ImageUpload setImageUrl={setImageUrls} />
           {/* 
