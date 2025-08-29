@@ -21,12 +21,12 @@ const UpdateCartButton: React.FC<UpdateCartButtonProps> = ({
 
     try {
       const response = await axios.put<{ updatedItem: CartItem }>(
-        `https://site--sook--dnxhn8mdblq5.code.run/carts/${item.id}`,
+        `https://site--sook--dnxhn8mdblq5.code.run/carts/${item.productId}`,
         { quantity: newQuantity }
       );
 
       const updatedCart = cart.map((cartItem) =>
-        cartItem.id === item.id
+        cartItem.productId === item.productId
           ? { ...cartItem, quantity: response.data.updatedItem.quantity }
           : cartItem
       );
