@@ -1,4 +1,3 @@
-// src/pages/Payement.tsx
 import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -12,7 +11,6 @@ import CheckoutForm from "../components/CheckoutForm";
 import Loading from "../assets/img/Loading.gif";
 import background from "../assets/img/backgroundCart.webp";
 
-// Charge la clé publique Stripe (pk_live ou pk_test)
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY!);
 
 const Payement: React.FC = () => {
@@ -21,47 +19,40 @@ const Payement: React.FC = () => {
   const navigate = useNavigate();
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  // Redirection si panier vide
   useEffect(() => {
     if (cart.length === 0) {
       navigate("/cart", { replace: true });
+      return;
     }
-  }, [cart, navigate]);
-
-  // Redirection si pas connecté
-  useEffect(() => {
     if (!token) {
       navigate("/login", { replace: true });
+      return;
     }
-  }, [token, navigate]);
 
-  // Création du PaymentIntent côté backend
-  useEffect(() => {
+    // Calcul du montant total en centimes
+    const totalAmount = Math.round(
+      cart.reduce((sum, item) => sum + item.price, 0) * 100
+    );
+
+    // 🔥 On appelle le backend pour générer un PaymentIntent
     const createPaymentIntent = async () => {
       try {
-        const total = cart.reduce((sum, item) => sum + item.price, 0) * 100; // en centimes
         const { data } = await axios.post(
           "https://site--sook--dnxhn8mdblq5.code.run/create-payment-intent",
-          { amount: Math.round(total) },
+          { amount: totalAmount },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-
         setClientSecret(data.clientSecret);
       } catch (err) {
         console.error("Erreur lors de la création du PaymentIntent:", err);
-      } finally {
-        setLoading(false);
       }
     };
 
-    if (cart.length > 0 && token) {
-      createPaymentIntent();
-    }
-  }, [cart, token]);
+    createPaymentIntent();
+  }, [cart, token, navigate]);
 
-  if (loading || !clientSecret) {
+  if (!clientSecret) {
     return (
       <div className="relative min-h-screen flex items-center justify-center">
         <img
@@ -87,10 +78,14 @@ const Payement: React.FC = () => {
           Paiement Sécurisé
         </h1>
 
-        {/* Stripe Elements avec clientSecret */}
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CheckoutForm />
-        </Elements>
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={() => navigate("/payement")}
+            className="px-6 py-3 rounded-md bg-[#dfa080bd] text-white font-bold hover:bg-[#c87660] transition-colors"
+          >
+            Procéder au paiement
+          </button>
+        </div>
       </div>
     </main>
   );
