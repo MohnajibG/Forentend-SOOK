@@ -31,6 +31,7 @@ const Payement: React.FC = () => {
       navigate("/login", { replace: true });
       return;
     }
+    console.log("Cart contents:", cart);
 
     // Montant total en centimes
     const totalAmount = Math.round(
@@ -45,6 +46,8 @@ const Payement: React.FC = () => {
           { amount: totalAmount },
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        console.log("Client Secret reçu:", data.clientSecret);
+
         setClientSecret(data.clientSecret);
       } catch (err) {
         console.error("Erreur lors de la création du PaymentIntent:", err);

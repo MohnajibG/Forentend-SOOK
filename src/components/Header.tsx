@@ -26,8 +26,13 @@ function Header({ search, setSearch }: HeaderProps) {
 
   return (
     <header
-      className="flex flex-col gap-4 justify-center p-4 font-[Krub]       bg-[rgba(249,200,208,0.55)] backdrop-blur-sm 
-      shadow-[0_0_13px_rgba(255,255,255,0.4)] "
+      className=" 
+    fixed md:relative top-0 left-0 w-full
+    flex flex-col gap-4 justify-center p-4 font-[Krub]
+    bg-[rgba(249,200,208,0.55)] backdrop-blur-sm 
+    shadow-[0_0_13px_rgba(255,255,255,0.4)]
+    z-40
+  "
     >
       <div className="flex items-center justify-between border-b border-[#dbc4b8]">
         {/* Logo */}
@@ -65,7 +70,7 @@ function Header({ search, setSearch }: HeaderProps) {
               {/* Bouton menu burger */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-[#ffc1bdf2] border-2 border-black relative md:hidden"
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-[#ffc1bdf2] border-2 border-black relative md:hidden z-100"
               >
                 <motion.div
                   animate={isMenuOpen ? "open" : "closed"}
@@ -122,7 +127,7 @@ function Header({ search, setSearch }: HeaderProps) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 bg-black/50 md:hidden"
+            className="fixed inset-0 z-50  md:hidden" // 🟢 overlay semi-transparent
             onClick={() => setIsMenuOpen(false)}
           >
             <motion.div
@@ -130,7 +135,7 @@ function Header({ search, setSearch }: HeaderProps) {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.3 }}
-              className="absolute right-0 top-0 h-full w-64 bg-[#ffc1bddc] border-l-2 border-black shadow-lg flex flex-col"
+              className="fixed top-0 right-0 h-screen w-64 bg-[#ffc1bd] border-l-2 border-black shadow-lg flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               <ul className="flex flex-col divide-y divide-[#e66b19] mt-12">
@@ -199,6 +204,15 @@ function Header({ search, setSearch }: HeaderProps) {
                     <BiLogOut /> Déconnexion
                   </button>
                 </li>
+
+                <div className="absolute bottom-4 left-0 w-full text-center text-sm text-[#333] flex items-center justify-center pb-20">
+                  &copy; 2025 SOOK. All rights reserved.
+                  <img
+                    src={logo}
+                    alt="logo Sook"
+                    className="border-2 border-black rounded-full w-20 inline-block ml-2 object-cover "
+                  />
+                </div>
               </ul>
             </motion.div>
           </motion.div>
