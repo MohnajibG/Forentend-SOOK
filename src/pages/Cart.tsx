@@ -42,7 +42,7 @@ const Payement: React.FC = () => {
     const createPaymentIntent = async () => {
       try {
         const { data } = await axios.post(
-          "https://site--sook--dnxhn8mdblq5.code.run/create-payment-intent",
+          "https://site--sook--dnxhn8mdblq5.code.run/payment/create-payment-intent",
           { amount: totalAmount },
           { headers: { Authorization: `Bearer ${token}` } }
         );
