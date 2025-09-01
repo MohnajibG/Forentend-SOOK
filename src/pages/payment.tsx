@@ -60,7 +60,11 @@ const Payement: React.FC = () => {
           alt="background"
           className="fixed inset-0 -z-10 w-full h-full object-cover"
         />
-        <img src={Loading} alt="Loading" className="w-20 h-20 animate-pulse" />
+        <img
+          src={Loading}
+          alt="Loading"
+          className="w-20 h-20 animate-pulse rounded-full"
+        />
       </div>
     );
   }

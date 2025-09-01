@@ -108,7 +108,11 @@ const ProfilePage: React.FC = () => {
           alt=""
           className="fixed inset-0 -z-10 w-full h-full object-cover"
         />
-        <img src={Loading} alt="Loading..." className="w-24 h-24" />
+        <img
+          src={Loading}
+          alt="Loading..."
+          className="w-20 h-20 animate-pulse rounded-full"
+        />
       </div>
     );
   }

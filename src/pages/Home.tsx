@@ -19,7 +19,11 @@ const Home: React.FC = () => {
   if (isLoading) {
     return (
       <div className="fixed inset-0 grid place-items-center bg-black/30">
-        <img src={Loading} alt="Loading..." className="w-28 h-28" />
+        <img
+          src={Loading}
+          alt="Loading..."
+          className="w-20 h-20 animate-pulse rounded-full"
+        />
       </div>
     );
   }
