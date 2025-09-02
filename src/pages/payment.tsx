@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
 import { useCart } from "../contexts/CartContext";
 import { useUser } from "../contexts/UserContext";
 import CheckoutForm from "../components/CheckoutForm";
+import axios from "axios";
 
 import Loading from "../assets/img/Loading.gif";
 import background from "../assets/img/backgroundCart.webp";
@@ -16,30 +14,20 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY!);
 const Payement: React.FC = () => {
   const { cart } = useCart();
   const { token } = useUser();
-  const navigate = useNavigate();
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   useEffect(() => {
-    if (cart.length === 0) {
-      navigate("/cart", { replace: true });
-      return;
-    }
-    if (!token) {
-      navigate("/login", { replace: true });
-      return;
-    }
+    if (cart.length === 0 || !token) return;
 
-    // Calcul du montant total en centimes
     const totalAmount = Math.round(
       cart.reduce((sum, item) => sum + item.price, 0) * 100
     );
 
-    // 🔥 On appelle le backend pour générer un PaymentIntent
     const createPaymentIntent = async () => {
       try {
         const { data } = await axios.post(
-          "https://site--sook--dnxhn8mdblq5.code.run/payement/create-payment-intent",
+          "https://site--sook--dnxhn8mdblq5.code.run/payment/create-payment-intent",
           { amount: totalAmount },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -50,11 +38,11 @@ const Payement: React.FC = () => {
     };
 
     createPaymentIntent();
-  }, [cart, token, navigate]);
+  }, [cart, token]);
 
   if (!clientSecret) {
     return (
-      <div className="relative min-h-screen flex items-center justify-center">
+      <div className="relative min-h-24 flex items-center justify-center">
         <img
           src={background}
           alt="background"
@@ -70,28 +58,9 @@ const Payement: React.FC = () => {
   }
 
   return (
-    <main className="relative min-h-screen font-[Krub]">
-      <img
-        src={background}
-        alt="background"
-        className="fixed inset-0 -z-10 w-full h-full object-cover"
-      />
-
-      <div className="relative z-10 mx-auto mt-24 mb-12 max-w-lg bg-white/90 rounded-2xl p-8 shadow-xl">
-        <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-          Paiement Sécurisé
-        </h1>
-
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={() => navigate("/payement")}
-            className="px-6 py-3 rounded-md bg-[#dfa080bd] text-white font-bold hover:bg-[#c87660] transition-colors"
-          >
-            Procéder au paiement
-          </button>
-        </div>
-      </div>
-    </main>
+    <Elements stripe={stripePromise} options={{ clientSecret }}>
+      <CheckoutForm />
+    </Elements>
   );
 };
 

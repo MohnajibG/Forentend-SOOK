@@ -1,99 +1,119 @@
-// src/pages/Payement.tsx
 import React, { useEffect, useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { useCart } from "../contexts/CartContext";
 import { useUser } from "../contexts/UserContext";
-import CheckoutForm from "../components/CheckoutForm";
 
+import backgroundCart from "../assets/img/backgroundCart.webp";
 import Loading from "../assets/img/Loading.gif";
-import background from "../assets/img/backgroundCart.webp";
+import DeleteFromCartButton from "../components/DeleteFromCartButton";
 
-// Stripe public key
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY!);
+import Payement from "./payment"; // notre composant de paiement
 
-const Payement: React.FC = () => {
-  const { cart } = useCart();
-  const { token } = useUser();
+const Cart: React.FC = () => {
+  const { cart, setCart } = useCart();
+  const { userId, token } = useUser();
   const navigate = useNavigate();
 
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const total = cart.reduce((sum, item) => sum + item.price, 0).toFixed(2);
 
   useEffect(() => {
-    if (cart.length === 0) {
-      navigate("/cart", { replace: true });
+    if (!userId || !token) {
+      navigate("/login");
       return;
     }
-    if (!token) {
-      navigate("/login", { replace: true });
-      return;
-    }
-    console.log("Cart contents:", cart);
 
-    // Montant total en centimes
-    const totalAmount = Math.round(
-      cart.reduce((sum, item) => sum + item.price, 0) * 100
-    );
+    const fetchCart = async () => {
+      setLoading(true);
+      setError(null);
 
-    // Appel backend -> création PaymentIntent
-    const createPaymentIntent = async () => {
       try {
-        const { data } = await axios.post(
-          "https://site--sook--dnxhn8mdblq5.code.run/payment/create-payment-intent",
-          { amount: totalAmount },
+        const { data } = await axios.get(
+          "https://site--sook--dnxhn8mdblq5.code.run/cart",
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        console.log("Client Secret reçu:", data.clientSecret);
-
-        setClientSecret(data.clientSecret);
+        setCart(data || []);
       } catch (err) {
-        console.error("Erreur lors de la création du PaymentIntent:", err);
+        setError("Impossible de charger le panier. Veuillez réessayer.");
+      } finally {
+        setLoading(false);
       }
     };
 
-    createPaymentIntent();
-  }, [cart, token, navigate]);
-
-  if (!clientSecret) {
-    return (
-      <div className="relative min-h-screen flex items-center justify-center">
-        <img
-          src={background}
-          alt="background"
-          className="fixed inset-0 -z-10 w-full h-full object-cover rounded-full"
-        />
-        <img
-          src={Loading}
-          alt="Loading"
-          className="w-20 h-20 animate-pulse rounded-full"
-        />
-      </div>
-    );
-  }
+    fetchCart();
+  }, [setCart, userId, token, navigate]);
 
   return (
     <main className="relative min-h-screen font-[Krub]">
       <img
-        src={background}
+        src={backgroundCart}
         alt="background"
         className="fixed inset-0 -z-10 w-full h-full object-cover"
       />
 
-      <div className="relative z-10 mx-auto mt-24 mb-12 max-w-lg bg-white/90 rounded-2xl p-8 shadow-xl">
-        <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-          Paiement Sécurisé
-        </h1>
+      {loading ? (
+        <div className="flex items-center justify-center h-screen">
+          <img
+            src={Loading}
+            alt="Loading"
+            className="w-20 h-20 animate-pulse"
+          />
+        </div>
+      ) : cart.length === 0 ? (
+        <p className="relative z-10 text-gray-600 mt-24 text-center">
+          Votre panier est vide. Ajoutez des articles pour commencer !
+        </p>
+      ) : (
+        <div className="relative z-10 mx-auto mt-24 mb-12 max-w-4xl bg-white/90 rounded-2xl p-8 shadow-xl space-y-6">
+          <h1 className="text-3xl font-semibold text-gray-800">Mon Panier</h1>
 
-        {/* ✅ On passe stripe + clientSecret */}
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CheckoutForm />
-        </Elements>
-      </div>
+          {error && (
+            <p className="text-red-600 bg-red-50 border border-red-200 p-3 rounded-md">
+              {error}
+            </p>
+          )}
+
+          <div className="space-y-4">
+            {cart.map((item, idx) => (
+              <div
+                key={`${item.productId}-${idx}`}
+                className="flex items-center justify-between bg-gray-100 rounded-lg p-4"
+              >
+                <div>
+                  <h2 className="text-lg font-medium text-gray-800">
+                    {item.name}
+                  </h2>
+                  <p className="text-gray-700">{item.price.toFixed(2)} €</p>
+                </div>
+                <DeleteFromCartButton
+                  item={item}
+                  cart={cart}
+                  setCart={setCart}
+                  userId={userId!}
+                  token={token!}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-end pt-4 border-t border-gray-300">
+            <span className="text-xl font-semibold text-gray-800">
+              Total : {total} €
+            </span>
+          </div>
+
+          {/* On utilise Payement ici */}
+          <div className="mt-6">
+            <Payement />
+          </div>
+        </div>
+      )}
     </main>
   );
 };
 
-export default Payement;
+export default Cart;
