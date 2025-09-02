@@ -21,7 +21,7 @@ const Payement: React.FC = () => {
     if (cart.length === 0 || !token) return;
 
     const totalAmount = Math.round(
-      cart.reduce((sum, item) => sum + item.price, 0) * 100
+      cart.reduce((sum, item) => sum + Number(item.price), 0) * 100
     );
 
     const createPaymentIntent = async () => {
