@@ -1,48 +1,44 @@
-import React from "react";
 import axios from "axios";
-import { CartItem } from "../types/types";
+import { IoMdClose } from "react-icons/io";
 
 interface DeleteFromCartButtonProps {
-  item: CartItem;
-  cart: CartItem[];
-  setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  item: any;
+  cart: any[];
+  setCart: React.Dispatch<React.SetStateAction<any[]>>;
   userId: string;
   token: string;
-  className?: string;
 }
 
 const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
   item,
   cart,
   setCart,
-  userId,
   token,
-  className,
 }) => {
   const handleDeleteFromCart = async () => {
+    console.log("Item envoyé pour suppression :", item);
+
     try {
       await axios.delete(
         `https://site--sook--dnxhn8mdblq5.code.run/cart/${item.productId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setCart(cart.filter((cartItem) => cartItem.productId !== item.productId));
-    } catch (error) {
-      console.error("Erreur lors de la suppression de l'article :", error);
-      alert("Impossible de supprimer l'article du panier.");
+    } catch (err: any) {
+      console.error(
+        "Erreur lors de la suppression :",
+        err.response?.data || err.message
+      );
     }
   };
 
   return (
     <button
-      className={`px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded transition-colors ${
-        className || ""
-      }`}
       onClick={handleDeleteFromCart}
+      className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
     >
-      X
+      <IoMdClose />
     </button>
   );
 };

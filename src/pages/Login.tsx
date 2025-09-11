@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
+import { GoogleLogin } from "@react-oauth/google";
+
 import loginBackground from "../assets/img/backgroudLogin.webp";
 
 const Login: React.FC = () => {
@@ -147,6 +149,34 @@ const Login: React.FC = () => {
           >
             {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}
           </button>
+        </div>
+
+        <div className="mt-4">
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              try {
+                // envoyer le token Google à ton backend
+                const res = await axios.post(
+                  "https://site--sook--dnxhn8mdblq5.code.run/user/google-login",
+                  { token: credentialResponse.credential }
+                );
+
+                if (res.data.token) {
+                  setUser(
+                    res.data.userId,
+                    res.data.token,
+                    res.data.account.username
+                  );
+                  navigate(`/profilePage/${res.data.userId}`);
+                }
+              } catch (err) {
+                setErrorMessage("Erreur de connexion Google.");
+              }
+            }}
+            onError={() => {
+              setErrorMessage("Échec de la connexion Google");
+            }}
+          />
         </div>
 
         {/* Bouton de connexion */}

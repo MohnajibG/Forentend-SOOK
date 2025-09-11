@@ -39,7 +39,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     try {
       const response = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/cart/add",
-        { productId: item.productId }, // ✅ seulement productId
+        { productId: item.productId },
         {
           headers: {
             "Content-Type": "application/json",
