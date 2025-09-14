@@ -19,7 +19,7 @@ const Publish: React.FC = () => {
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
   const [condition, setCondition] = useState("");
-  const [imageUrls, setImageUrls] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]); // ✅ URLs et pas File[]
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -46,25 +46,25 @@ const Publish: React.FC = () => {
 
     setLoading(true);
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("price", price.toString());
-    formData.append("city", city);
-    formData.append("brand", brand);
-    formData.append("color", color);
-    formData.append("condition", condition);
-    formData.append("size", size);
-    if (userId) formData.append("userId", userId);
-    imageUrls.forEach((file) => formData.append("pictures", file));
-
     try {
       const response = await axios.post(
         "https://site--sook--dnxhn8mdblq5.code.run/offers/publish",
-        formData,
+        {
+          title,
+          description,
+          price,
+          city,
+          brand,
+          color,
+          condition,
+          size,
+          userId,
+          pictures: imageUrls, // ✅ on envoie les URLs
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      const offerId = response.data._id;
+
+      const offerId = response.data.offer._id;
       setMessage("Votre produit a été publié avec succès !");
       navigate(`/offer/${offerId}`);
     } catch (error) {
@@ -84,8 +84,8 @@ const Publish: React.FC = () => {
   return (
     <main
       className="
-        relative min-h-screen text-white font-[Krub] font-bold
-        flex flex-col justify-center mx-4 md:mx-20 lg:mx-24 py-12
+        relative min-h-screen text-white font-[Krub] 
+        flex flex-col justify-center mx-4 md:mx-20 lg:mx-24 py-24 md:mb-40
       "
     >
       {/* Background plein écran fixé */}
@@ -95,23 +95,9 @@ const Publish: React.FC = () => {
         className="fixed inset-0 -z-10 w-screen h-screen object-cover"
       />
 
-      <h2 className="text-xl md:text-4xl font-bold text-center mb-6 drop-shadow-[0_0_20px_rgba(252,124,124,0.8)]">
-        Publier votre produit
+      <h2 className="text-xl md:text-4xl font-bold text-center mb-6 drop-shadow-black ">
+        PUBLIER VOTRE PRODUIT
       </h2>
-
-      {message && (
-        <div
-          className={[
-            "mx-auto my-10 text-center px-5 py-3 text-base rounded border",
-            "transition-colors duration-300",
-            isError
-              ? "bg-[#f5828b] text-[#721c24] border-[#f5c6cb]"
-              : "bg-[#f96666] text-[#571515] border-[#ff0000]",
-          ].join(" ")}
-        >
-          {message}
-        </div>
-      )}
 
       <form
         onSubmit={handleSubmit}
@@ -119,41 +105,37 @@ const Publish: React.FC = () => {
       >
         {/* Titre */}
         <label className="w-full">
-          <h3 className="text-white text-base mb-1">Titre de l'annonce :</h3>
+          <h3 className="text-white text-base mb-1 font-bold ">
+            Titre de l'annonce :
+          </h3>
           <input
             type="text"
             placeholder="Titre"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="
-              w-full h-12 rounded px-4
-              bg-white/90 text-black placeholder-black/60
-              outline-none border border-white/20
-              hover:bg-white/85 transition
-            "
+            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
+                       outline-none border border-white/20 hover:bg-white/85 transition"
           />
         </label>
 
         {/* Description */}
         <label className="w-full">
-          <h3 className="text-white text-base mb-1">Description :</h3>
+          <h3 className="text-white text-base mb-1 font-bold ">
+            Description :
+          </h3>
           <input
             type="text"
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="
-              w-full h-12 rounded px-4
-              bg-white/90 text-black placeholder-black/60
-              outline-none border border-white/20
-              hover:bg-white/85 transition
-            "
+            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
+                       outline-none border border-white/20 hover:bg-white/85 transition"
           />
         </label>
 
         {/* Prix */}
         <label className="w-full">
-          <h3 className="text-white text-base mb-1">Prix :</h3>
+          <h3 className="text-white text-base mb-1 font-bold ">Prix :</h3>
           <input
             type="number"
             placeholder="Prix"
@@ -161,27 +143,19 @@ const Publish: React.FC = () => {
             onChange={(e) => setPrice(Number(e.target.value))}
             min={0}
             step={0.01}
-            className="
-              w-full h-12 rounded px-4
-              bg-white/90 text-black placeholder-black/60
-              outline-none border border-white/20
-              hover:bg-white/85 transition
-            "
+            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
+                       outline-none border border-white/20 hover:bg-white/85 transition"
           />
         </label>
 
         {/* Condition */}
         <label className="w-full">
-          <h3 className="text-white text-base mb-1">Condition :</h3>
+          <h3 className="text-white text-base mb-1 font-bold ">Condition :</h3>
           <select
             value={condition}
             onChange={(e) => setCondition(e.target.value)}
-            className="
-      w-full h-12 rounded px-4
-      bg-white/90 text-black
-      outline-none border border-white/20
-      hover:bg-white/85 transition
-    "
+            className="w-full h-12 px-4 bg-white/90 text-black
+                       outline-none border border-white/20 hover:bg-white/85 transition"
           >
             <option value="">Sélectionner</option>
             <option value="Neuf">Neuf</option>
@@ -193,96 +167,86 @@ const Publish: React.FC = () => {
 
         {/* Ville */}
         <label className="w-full">
-          <h3 className="text-white text-base mb-1">Ville :</h3>
+          <h3 className="text-white text-base mb-1 font-bold ">Ville :</h3>
           <input
             type="text"
             placeholder="Ville"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="
-              w-full h-12 rounded px-4
-              bg-white/90 text-black placeholder-black/60
-              outline-none border border-white/20
-              hover:bg-white/85 transition
-            "
+            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
+                       outline-none border border-white/20 hover:bg-white/85 transition"
           />
         </label>
 
         {/* Marque */}
         <label className="w-full">
-          <h3 className="text-white text-base mb-1">Marque :</h3>
+          <h3 className="text-white text-base mb-1 font-bold ">Marque :</h3>
           <input
             type="text"
             placeholder="Marque"
             value={brand}
             onChange={(e) => setBrand(e.target.value)}
-            className="
-              w-full h-12 rounded px-4
-              bg-white/90 text-black placeholder-black/60
-              outline-none border border-white/20
-              hover:bg-white/85 transition
-            "
+            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
+                       outline-none border border-white/20 hover:bg-white/85 transition"
           />
         </label>
 
         {/* Taille */}
         <label className="w-full">
-          <h3 className="text-white text-base mb-1">Taille :</h3>
+          <h3 className="text-white text-base mb-1 font-bold ">Taille :</h3>
           <input
             type="text"
             placeholder="Taille"
             value={size}
             onChange={(e) => setSize(e.target.value)}
-            className="
-              w-full h-12 rounded px-4
-              bg-white/90 text-black placeholder-black/60
-              outline-none border border-white/20
-              hover:bg-white/85 transition
-            "
+            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
+                       outline-none border border-white/20 hover:bg-white/85 transition"
           />
         </label>
 
         {/* Couleur */}
         <label className="w-full">
-          <h3 className="text-white text-base mb-1">Couleur :</h3>
+          <h3 className="text-white text-base mb-1 font-bold ">Couleur :</h3>
           <input
             type="text"
             placeholder="Couleur"
             value={color}
             onChange={(e) => setColor(e.target.value)}
-            className="
-              w-full h-12 rounded px-4
-              bg-white/90 text-black placeholder-black/60
-              outline-none border border-white/20
-              hover:bg-white/85 transition
-            "
+            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
+                       outline-none border border-white/20 hover:bg-white/85 transition"
           />
         </label>
 
         {/* Photos */}
-        <div className="w-full flex flex-col ">
-          <h3 className="text-white text-base mb-2">Photos :</h3>
+        <div className="w-full flex flex-col">
+          <h3 className="text-white text-base mb-2 font-bold ">Photos :</h3>
           <ImageUpload setImageUrl={setImageUrls} />
-          {/* 
-            Si tu veux styler le bouton interne d'ImageUpload comme avant :
-            ajoute dans ce composant les classes :
-            'bg-[#dfa080bd] text-white px-6 py-2 font-bold cursor-pointer transition-colors hover:bg-[#c87660] rounded'
-          */}
         </div>
 
         {/* Bouton Submit */}
         <button
           type="submit"
           disabled={loading}
-          className="
-            mt-4 h-12 w-full
-            bg-[#dfa080bd] hover:bg-[#c87660]
-            text-white font-bold text-lg
-            rounded transition-colors disabled:opacity-60 disabled:cursor-not-allowed
-          "
+          className="mt-4 h-12 w-full bg-[#dfa080bd] hover:bg-[#c87660]
+                     text-white font-bold text-lg rounded transition-colors 
+                     disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {loading ? "Chargement..." : "Publier"}
         </button>
+
+        {message && (
+          <div
+            className={[
+              "mx-auto my-6 text-center px-5 py-3 border",
+              "transition-colors duration-300 opacity-80",
+              isError
+                ? "bg-[#f5828b] text-[#721c24] border-[#f5c6cb]"
+                : "bg-[#f96666] text-[#571515] border-[#ff0000]/30",
+            ].join(" ")}
+          >
+            {message}
+          </div>
+        )}
       </form>
     </main>
   );

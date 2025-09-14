@@ -77,12 +77,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ setImageUrl }) => {
         htmlFor="pictures"
         className="
           inline-flex items-center justify-center
-          px-4 py-2 rounded font-bold text-white cursor-pointer
+          px-4 py-2  font-bold text-white cursor-pointer
           bg-[#dfa080eb] hover:bg-[#c87660] transition-colors
           w-max
         "
       >
-        + Ajouter vos photos
+        + Ajouter
       </label>
 
       <input
@@ -120,13 +120,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ setImageUrl }) => {
                   onClick={() => handleRemove(index)}
                   className="
                     absolute -top-2 -right-2 w-6 h-6 rounded-full
-                    bg-red-600 text-black text-xs font-bold
+                    bg-red-500 text-white text-xs font-bold
                     grid place-items-center
                     hover:bg-red-700 transition-colors
                   "
                   aria-label="Supprimer l'image"
                 >
-                  ×
+                  x
                 </button>
               </div>
             );

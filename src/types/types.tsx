@@ -96,7 +96,7 @@ export interface Account {
 }
 
 export interface ImageUploadProps {
-  setImageUrl: React.Dispatch<React.SetStateAction<File[]>>; // Modifiez ici pour File[] au lieu de string[]
+  setImageUrl: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export interface ProductProps {

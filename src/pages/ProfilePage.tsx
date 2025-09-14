@@ -141,9 +141,9 @@ const ProfilePage: React.FC = () => {
         className="fixed inset-0 -z-10 w-full h-screen object-cover"
       />
 
-      <div className="px-4 md:px-10 lg:px-20 pt-24 pb-36 flex flex-col items-center gap-10">
-        <h1 className="text-center text-[clamp(1.5rem,4vw,2rem)] text-[#fef2f2] font-semibold">
-          Votre Profil
+      <div className="px-4 md:px-10 lg:px-20 pt-24 pb-36 flex flex-col *: items-center gap-10">
+        <h1 className="text-center text-5xl font-bold  text-[#fef2f2] ">
+          VOTRE PROFIL
         </h1>
 
         {/* Carte profil */}
