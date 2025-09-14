@@ -159,6 +159,8 @@ const Publish: React.FC = () => {
             placeholder="Prix"
             value={price}
             onChange={(e) => setPrice(Number(e.target.value))}
+            min={0}
+            step={0.01}
             className="
               w-full h-12 rounded px-4
               bg-white/90 text-black placeholder-black/60
