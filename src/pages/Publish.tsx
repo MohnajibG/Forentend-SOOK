@@ -14,11 +14,11 @@ const Publish: React.FC = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
-  const [condition, setCondition] = useState("");
   const [city, setCity] = useState("");
   const [brand, setBrand] = useState("");
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
+  const [condition, setCondition] = useState("");
   const [imageUrls, setImageUrls] = useState<File[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -171,18 +171,22 @@ const Publish: React.FC = () => {
         {/* Condition */}
         <label className="w-full">
           <h3 className="text-white text-base mb-1">Condition :</h3>
-          <input
-            type="text"
-            placeholder="Condition"
+          <select
             value={condition}
             onChange={(e) => setCondition(e.target.value)}
             className="
-              w-full h-12 rounded px-4
-              bg-white/90 text-black placeholder-black/60
-              outline-none border border-white/20
-              hover:bg-white/85 transition
-            "
-          />
+      w-full h-12 rounded px-4
+      bg-white/90 text-black
+      outline-none border border-white/20
+      hover:bg-white/85 transition
+    "
+          >
+            <option value="">Sélectionner</option>
+            <option value="Neuf">Neuf</option>
+            <option value="Très bon état">Très bon état</option>
+            <option value="Bon état">Bon état</option>
+            <option value="Usé">Usé</option>
+          </select>
         </label>
 
         {/* Ville */}
