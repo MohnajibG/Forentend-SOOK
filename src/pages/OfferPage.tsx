@@ -1,7 +1,8 @@
+// src/pages/OfferPage.tsx
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ProfilProps } from "../types/types";
 import { useCart } from "../contexts/CartContext";
 import { toast } from "react-hot-toast";
@@ -61,90 +62,90 @@ const OfferPage: React.FC = () => {
     );
 
   if (error)
-    return <p className="text-center text-red-500 font-bold">{error}</p>;
-  if (!offer) return <p className="text-center">Aucune offre trouvée.</p>;
+    return <p className="text-center text-red-500 font-bold mt-20">{error}</p>;
+  if (!offer) return <p className="text-center mt-20">Aucune offre trouvée.</p>;
 
   return (
-    <div className="relative min-h-screen text-white font-[Krub] mt-20 pb-40">
-      {/* Background plein écran fixé */}
+    <main className="relative min-h-screen font-[Krub] text-white mt-24 pb-40">
+      {/* Background plein écran */}
       <img
         src={background}
         alt="Background"
-        className="fixed inset-0 -z-10 w-full h-screen object-cover"
+        className="fixed inset-0 -z-10 w-screen h-screen object-cover"
       />
 
-      <div className="mx-auto w-full max-w-6xl px-4">
+      <div className="max-w-5xl mx-auto px-4">
         {/* Bandeau utilisateur */}
-        <div className="w-full bg-[#fbcfe680] flex items-center justify-between md:justify-around px-4 py-3 rounded-xl shadow-[0_0_10px_2px_rgb(255,255,255)]">
-          <p className="font-extrabold text-lg drop-shadow-[0_0_10px_rgb(255,255,255)]">
+        <div className="flex items-center justify-between bg-[#fbcfe695] shadow-[0_0_10px_2px_rgb(255,255,255)]  p-4  mb-6">
+          <p className="font-bold text-lg text-white drop-shadow-md ">
             {offer.userId.account?.username?.toUpperCase() || "NON SPÉCIFIÉ"}
           </p>
           <img
             src={offer.userId.account?.avatar || ""}
             alt="avatar"
-            className="w-10 h-10 rounded-full object-cover shadow-[0_0_10px_2px_rgb(255,255,255)]"
+            className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md"
           />
         </div>
 
         {/* Bloc principal */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Détails */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Détails de l'offre */}
           <div
-            className="bg-[rgba(251,248,238,0.598)] rounded-xl p-4 text-black/90 cursor-pointer"
+            className="bg-white/80  p-6 text-black cursor-pointer hover:shadow-xl transition-shadow"
             onClick={() => setShowDetailsModal(true)}
           >
-            <div className="flex flex-col gap-2">
-              <h1 className="text-center text-lg font-semibold text-[#e97510] drop-shadow-[0_0_10px_rgba(255,255,255,0.95)] mb-4">
-                {offer.title || "Titre non disponible"}
-              </h1>
-              <p className="text-[14px] text-[#666]">
-                Marque : {offer.brand || "Non spécifiée"}
+            <h1 className="text-2xl font-bold text-center mb-4 text-[#e97510] drop-shadow-md">
+              {offer.title || "Titre non disponible"}
+            </h1>
+            <div className="space-y-2 text-sm">
+              <p>
+                <span className="font-semibold">Marque :</span>{" "}
+                {offer.brand || "Non spécifiée"}
               </p>
-              <p className="text-[14px] text-[#666]">
-                Description : {offer.description || "Non spécifiée"}
+              <p>
+                <span className="font-semibold">Description :</span>{" "}
+                {offer.description || "Non spécifiée"}
               </p>
-              <p className="text-[14px] text-[#666]">
-                Prix : {offer.price ? `${offer.price} €` : "Non spécifié"}
+              <p>
+                <span className="font-semibold">Prix :</span>{" "}
+                {offer.price ? `${offer.price} €` : "Non spécifié"}
               </p>
-              <p className="text-[14px] text-[#666]">
-                Taille : {offer.size || "Non spécifiée"}
+              <p>
+                <span className="font-semibold">Taille :</span>{" "}
+                {offer.size || "Non spécifiée"}
               </p>
-              <p className="text-[14px] text-[#666]">
-                Couleur : {offer.color || "Non spécifiée"}
+              <p>
+                <span className="font-semibold">Couleur :</span>{" "}
+                {offer.color || "Non spécifiée"}
+              </p>
+              <p>
+                <span className="font-semibold">Condition :</span>{" "}
+                {offer.condition || "Non spécifiée"}
+              </p>
+              <p>
+                <span className="font-semibold">Ville :</span>{" "}
+                {offer.city || "Non spécifiée"}
               </p>
             </div>
           </div>
 
-          {/* Images + bouton */}
-          <div className="bg-[rgba(251,248,238,0.598)] rounded-xl p-4 flex flex-col gap-4 items-center">
-            {/* Carousel images – une seule image par vue */}
+          {/* Images + AddToCart */}
+          <div className="bg-white/80  p-6 flex flex-col gap-4 items-center">
             <div
-              className="
-    w-full
-    overflow-x-auto overflow-y-hidden
-    flex flex-nowrap           /* ← ici on force l’axe horizontal */
-    snap-x snap-mandatory
-    scrollbar-thin
-    scrollbar-thumb-gray-400 scrollbar-track-gray-200
-  "
+              className="w-full flex overflow-x-auto gap-3 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 cursor-pointer"
               onClick={() => setShowImagesModal(true)}
             >
               {offer.pictures && offer.pictures.length > 0 ? (
-                offer.pictures.map((picture, i) => (
-                  <Link
-                    to={picture}
-                    key={i}
-                    className="flex-shrink-0 w-full snap-start"
-                  >
-                    <img
-                      src={picture}
-                      alt={`Image ${i + 1}`}
-                      className="w-full h-[400px] md:h-[500px] object-cover rounded-md"
-                    />
-                  </Link>
+                offer.pictures.map((pic, idx) => (
+                  <img
+                    key={idx}
+                    src={pic}
+                    alt={`image-${idx}`}
+                    className="flex-shrink-0 w-full md:w-80 h-64 object-cover  snap-start"
+                  />
                 ))
               ) : (
-                <p className="text-gray-600 p-4">Aucune image disponible.</p>
+                <p className="text-gray-600 p-4">Aucune image disponible</p>
               )}
             </div>
 
@@ -152,7 +153,7 @@ const OfferPage: React.FC = () => {
               cart={cart}
               setCart={setCart}
               item={{
-                productId: offer._id || "", // 🔥 correction ici
+                productId: offer._id || "",
                 name: offer.title || "",
                 price: offer.price || 0,
               }}
@@ -163,11 +164,11 @@ const OfferPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Retour */}
+        {/* Bouton Retour */}
         <div className="mt-6 flex justify-center">
           <button
-            className="px-4 py-2 rounded-md bg-white/20 hover:bg-white/30 text-white font-semibold transition-colors"
-            onClick={() => navigate("/offers")}
+            className="px-6 py-3  bg-[#dfa080bd] hover:bg-[#c87660] text-white font-bold transition-colors"
+            onClick={() => navigate(`/mesoffres`)}
           >
             ← Retour aux Offres
           </button>
@@ -177,17 +178,38 @@ const OfferPage: React.FC = () => {
       {/* Modal Détails */}
       {showDetailsModal && (
         <Modal onClose={() => setShowDetailsModal(false)}>
-          <h2 className="text-xl font-semibold mb-3 text-black">
+          <h2 className="text-2xl font-bold mb-3 text-black">
             Détails de l'offre
           </h2>
-          <div className="space-y-1 text-black/80">
-            <p>Marque : {offer.brand || "Non spécifiée"}</p>
-            <p>Description : {offer.description || "Non spécifiée"}</p>
-            <p>Prix : {offer.price ? `${offer.price} €` : "Non spécifié"}</p>
-            <p>Taille : {offer.size || "Non spécifiée"}</p>
-            <p>Couleur : {offer.color || "Non spécifiée"}</p>
-            <p>Condition : {offer.condition || "Non spécifiée"}</p>
-            <p>Ville : {offer.city || "Non spécifiée"}</p>
+          <div className="space-y-2 text-black/90">
+            <p>
+              <span className="font-semibold">Marque :</span>{" "}
+              {offer.brand || "Non spécifiée"}
+            </p>
+            <p>
+              <span className="font-semibold">Description :</span>{" "}
+              {offer.description || "Non spécifiée"}
+            </p>
+            <p>
+              <span className="font-semibold">Prix :</span>{" "}
+              {offer.price ? `${offer.price} €` : "Non spécifié"}
+            </p>
+            <p>
+              <span className="font-semibold">Taille :</span>{" "}
+              {offer.size || "Non spécifiée"}
+            </p>
+            <p>
+              <span className="font-semibold">Couleur :</span>{" "}
+              {offer.color || "Non spécifiée"}
+            </p>
+            <p>
+              <span className="font-semibold">Condition :</span>{" "}
+              {offer.condition || "Non spécifiée"}
+            </p>
+            <p>
+              <span className="font-semibold">Ville :</span>{" "}
+              {offer.city || "Non spécifiée"}
+            </p>
           </div>
         </Modal>
       )}
@@ -195,27 +217,26 @@ const OfferPage: React.FC = () => {
       {/* Modal Images */}
       {showImagesModal && (
         <Modal onClose={() => setShowImagesModal(false)}>
-          <h2 className="text-xl font-semibold mb-3 text-black">
+          <h2 className="text-2xl font-bold mb-3 text-black">
             Galerie d'images
           </h2>
-          <div className="w-[80vw] max-w-3xl max-h-[70vh] overflow-auto flex gap-2 justify-center flex-wrap">
+          <div className="w-[80vw] max-w-3xl max-h-[70vh] overflow-auto flex flex-wrap gap-3 justify-center">
             {offer.pictures && offer.pictures.length > 0 ? (
-              offer.pictures.map((picture: string, i: number) => (
-                <Link to={picture} key={i}>
-                  <img
-                    src={picture}
-                    alt={`Image ${i + 1}`}
-                    className="w-40 h-40 object-cover rounded-md hover:scale-105 transition-transform"
-                  />
-                </Link>
+              offer.pictures.map((pic, idx) => (
+                <img
+                  key={idx}
+                  src={pic}
+                  alt={`image-${idx}`}
+                  className="w-40 h-40 object-cover rounded-md hover:scale-105 transition-transform"
+                />
               ))
             ) : (
-              <p className="text-black/70">Aucune image disponible.</p>
+              <p className="text-black/70">Aucune image disponible</p>
             )}
           </div>
         </Modal>
       )}
-    </div>
+    </main>
   );
 };
 

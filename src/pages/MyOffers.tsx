@@ -96,7 +96,7 @@ const MyOffers: React.FC = () => {
       )}
 
       <div className="mx-auto w-full max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
-        <h2 className="text-2xl font-semibold">Mes Annonces</h2>
+        <h2 className="text-2xl font-semibold text-centre">Mes Offres</h2>
         <button
           onClick={() => navigate("/home")}
           className="px-4 py-2 rounded-md font-semibold
