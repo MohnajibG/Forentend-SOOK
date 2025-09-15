@@ -2,10 +2,14 @@ import axios from "axios";
 import { IoMdClose } from "react-icons/io";
 
 interface DeleteFromCartButtonProps {
-  item: any;
+  item: {
+    productId: string; // correspond à _id côté backend
+    name: string;
+    price: number;
+    userId: string;
+  };
   cart: any[];
   setCart: React.Dispatch<React.SetStateAction<any[]>>;
-  userId: string;
   token: string;
 }
 
@@ -16,7 +20,10 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
   token,
 }) => {
   const handleDeleteFromCart = async () => {
-    console.log("Item envoyé pour suppression :", item);
+    if (!item.productId) {
+      console.error("Erreur : item.productId est undefined !");
+      return;
+    }
 
     try {
       await axios.delete(
@@ -24,6 +31,7 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
+      // Met à jour le state local du panier
       setCart(cart.filter((cartItem) => cartItem.productId !== item.productId));
     } catch (err: any) {
       console.error(
@@ -37,6 +45,7 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
     <button
       onClick={handleDeleteFromCart}
       className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+      aria-label={`Supprimer ${item.name} du panier`}
     >
       <IoMdClose />
     </button>
