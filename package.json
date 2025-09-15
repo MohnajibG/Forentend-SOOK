@@ -19,6 +19,7 @@
     "axios": "^1.11.0",
     "framer-motion": "^12.23.12",
     "js-cookie": "^3.0.5",
+    "lucide-react": "^0.544.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-facebook-login": "^4.1.1",

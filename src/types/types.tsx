@@ -108,10 +108,16 @@ export interface ProductProps {
 
 export interface Offer {
   _id: string;
-
   title: string;
-
   description: string;
-
   price: number;
+  city: string;
+  brand: string;
+  size?: string; // optionnel
+  color: string;
+  condition: string;
+  pictures: string[]; // tableau d’URLs d’images
+  userId?: string; // si besoin
+  createdAt?: string; // optionnel si renvoyé par l’API
+  updatedAt?: string; // optionnel si renvoyé par l’API
 }

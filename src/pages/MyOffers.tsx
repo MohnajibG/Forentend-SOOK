@@ -3,17 +3,20 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-hot-toast";
+import { MoreVertical } from "lucide-react"; // icône menu
 
 import { useUser } from "../contexts/UserContext";
-import { Offer } from "../types/types";
+import { ProfilProps } from "../types/types";
 
 import background from "../assets/img/offerPage.webp";
+import LOGO from "../assets/img/LOGO.png";
 
 const MyOffers: React.FC = () => {
   const { token } = useUser();
-  const [myOffers, setMyOffers] = useState<Offer[]>([]);
+  const [myOffers, setMyOffers] = useState<ProfilProps[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -31,7 +34,6 @@ const MyOffers: React.FC = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("📦 Offres reçues :", data.offers); // 🔎 debug
         setMyOffers(data.offers || []);
       } catch (err: any) {
         console.error("Erreur lors du chargement des offres :", err);
@@ -109,43 +111,72 @@ const MyOffers: React.FC = () => {
           Vous n'avez encore publié aucun article.
         </p>
       ) : (
-        <div className="mx-auto w-full max-w-6xl grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto w-full max-w-6xl flex flex-col sm:flex-row flex-wrap gap-6 justify-center">
           {myOffers.map((offer) => {
-            const id = offer._id || (offer as any).id; // ✅ supporte _id et id
+            const id = offer._id || (offer as any).id;
+            const firstImage =
+              Array.isArray(offer.pictures) && offer.pictures.length > 0
+                ? offer.pictures[0]
+                : LOGO;
+
             return (
               <div
                 key={id}
-                className="rounded-2xl p-5 bg-[#ffffffae] text-black
-                           shadow-[0_4px_8px_rgba(0,0,0,0.1)]
-                           hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)]
-                           transition-shadow"
+                className="relative flex flex-col rounded-2xl bg-[#ffffffae] shadow-[0_4px_8px_rgba(0,0,0,0.1)] 
+                           hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)] transition-shadow w-full sm:w-[300px]"
               >
-                <h3 className="text-lg font-semibold mb-1 text-[#333]">
-                  {offer.title}
-                </h3>
-                <p className="text-sm mb-2 text-[#666]">{offer.description}</p>
-                <p className="text-sm font-medium mb-4 text-[#666]">
-                  Prix : {offer.price} €
-                </p>
-
-                <div className="mt-2 flex items-center justify-between gap-3">
+                {/* Bouton menu */}
+                <div className="absolute top-3 right-3">
                   <button
-                    onClick={() => navigate(`/offer/${id}`)}
-                    className="px-3 py-2 rounded-md font-semibold
-                               bg-[#dfa080bd] hover:bg-[#c87660]
-                               text-white transition-colors"
+                    onClick={() => setOpenMenuId(openMenuId === id ? null : id)}
+                    className="p-2 rounded-full bg-white/70 hover:bg-white shadow"
                   >
-                    Voir l’annonce
+                    <MoreVertical className="w-5 h-5 text-gray-700" />
                   </button>
 
-                  <button
-                    onClick={() => handleDeleteMyOffer(id)}
-                    className="px-3 py-2 rounded-md font-semibold
-                               bg-[#ff4d4d] hover:bg-[#e60000]
-                               text-white transition-colors"
-                  >
-                    Supprimer
-                  </button>
+                  {/* Menu dropdown */}
+                  {openMenuId === id && (
+                    <div className="absolute right-0 mt-2 w-40 bg-gray-900 rounded-md shadow-lg overflow-hidden z-10">
+                      <button
+                        onClick={() => navigate(`/offer/${id}`)}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-pink-300"
+                      >
+                        Voir l’annonce
+                      </button>
+                      <button
+                        onClick={() => navigate(`/offer/update/${id}`)}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-pink-300"
+                      >
+                        Modifier
+                      </button>
+                      <button
+                        onClick={() => handleDeleteMyOffer(id)}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                      >
+                        Supprimer
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Image */}
+                <div className="w-full h-64 overflow-hidden rounded-t-2xl">
+                  <img
+                    src={firstImage}
+                    alt={offer.title || ""}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {/* Contenu */}
+                <div className="p-4 flex flex-col gap-2">
+                  <h3 className="text-lg font-semibold text-[#333]">
+                    {offer.title}
+                  </h3>
+                  <p className="text-sm text-[#666]">{offer.description}</p>
+                  <p className="text-sm font-medium text-[#666]">
+                    Prix : {offer.price} €
+                  </p>
                 </div>
               </div>
             );

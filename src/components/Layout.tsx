@@ -53,7 +53,7 @@ const Layout: React.FC<LayoutProps> = ({ search, setSearch }) => {
           <Route path="/search/:keyword" element={<OffersPage />} />
           <Route path="/offer/:id" element={<OfferPage />} />
           <Route path="/mesoffres" element={<MyOffers />} />
-          <Route path="/edit/:id" element={<EditOffer />} />
+          <Route path="/offer/update/:id" element={<EditOffer />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<NoMatch />} />
         </Routes>
