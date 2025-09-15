@@ -66,11 +66,14 @@ const OffersPage: React.FC = () => {
             shadow-[0_0_13px_4px_rgba(255,255,255,0.75)]
           "
         >
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="flex flex-wrap gap-6 justify-center">
             {offers.map((offer) => (
-              <div key={offer._id} className="flex flex-col">
+              <div
+                key={offer._id}
+                className="flex flex-col w-full sm:w-[48%] lg:w-[30%] xl:w-[22%]"
+              >
                 {/* user row */}
-                <div className="w-full flex items-center justify-center gap-3 mb-2">
+                <div className="w-full flex items-center justify-between mb-2">
                   <p className="text-white text-base font-bold">
                     {offer.userId.account
                       ? offer.userId.account.username
@@ -85,13 +88,13 @@ const OffersPage: React.FC = () => {
                     <img
                       src={offer.userId.account.avatar}
                       alt="Avatar"
-                      className="w-[30px] h-[30px] rounded-full border-2 border-[#ffffff69] object-cover"
+                      className="w-10 h-10 rounded-full border-2 border-[#ffffff69] object-cover"
                     />
                   ) : (
                     <img
                       src={LOGO}
                       alt="avatar"
-                      className="w-[30px] h-[30px] rounded-full border-2 border-[#ffffff69] object-cover"
+                      className="w-10 h-10 rounded-full border-2 border-[#ffffff69] object-cover"
                     />
                   )}
                 </div>
@@ -120,20 +123,30 @@ const OffersPage: React.FC = () => {
                       </p>
                     </div>
 
-                    {/* images */}
+                    {/* images avec carrousel */}
                     {offer.pictures && offer.pictures.length > 0 && (
-                      <div className="flex gap-2 justify-center flex-wrap">
-                        {offer.pictures.map((picture, idx) => (
-                          <img
-                            key={idx}
-                            src={picture}
-                            alt={`Image de l'offre ${offer._id}`}
-                            className="
-                              w-full max-h-[50vh] object-contain mt-2
-                              rounded-md
-                            "
-                          />
-                        ))}
+                      <div className="relative w-full">
+                        <div
+                          id={`carousel-${offer._id}`}
+                          className="
+                            w-full flex overflow-x-auto
+                            snap-x snap-mandatory
+                            scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent
+                          "
+                        >
+                          {offer.pictures.map((picture, idx) => (
+                            <div
+                              key={idx}
+                              className="flex-shrink-0 w-full flex justify-center snap-center"
+                            >
+                              <img
+                                src={picture}
+                                alt={`Image de l'offre ${offer._id}`}
+                                className="w-64 h-64 object-cover rounded-lg shadow-md"
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>

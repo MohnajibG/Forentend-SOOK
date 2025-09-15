@@ -186,7 +186,7 @@ const Home: React.FC = () => {
           shadow-[0_0_13px_4px_rgba(255,255,255,0.75)]
           rounded-lg p-4
           transition-colors duration-1000
-          hover:bg-[#fffefe9a]
+          hover:bg-[#fffefe9a] hover:text-gray-600/75
           flex flex-col justify-around mb-10
         "
               >
@@ -218,7 +218,7 @@ const Home: React.FC = () => {
                 {offer.pictures && offer.pictures.length > 0 && (
                   <div
                     className="
-      flex items-center justify-around gap-10 mt-4 ml-10
+      flex items-center justify-centre gap-10 mt-4 ml-10
       overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
       rounded-md snap-normal
     "
