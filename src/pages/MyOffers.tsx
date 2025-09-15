@@ -84,7 +84,7 @@ const MyOffers: React.FC = () => {
   }
 
   return (
-    <main className="relative min-h-screen mt-20 pb-40 px-4 md:px-8 text-white font-[Krub]">
+    <main className="relative min-h-screen text-white font-[Krub] my-50">
       <img
         src={background}
         alt="Background"

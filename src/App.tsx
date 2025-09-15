@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { UserProvider } from "./contexts/UserContext";
 import { CartProvider } from "./contexts/CartContext";
 import { BrowserRouter as Router } from "react-router-dom";

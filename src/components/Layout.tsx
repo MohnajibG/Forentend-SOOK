@@ -9,7 +9,6 @@ import NoMatch from "../pages/noMatch";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Home from "../pages/Home";
-import ProfileUpdate from "../pages/ProfileUpdate";
 import ProfilePage from "../pages/ProfilePage";
 import Publish from "../pages/Publish";
 import OffersPage from "../pages/OffersPage";
@@ -46,7 +45,6 @@ const Layout: React.FC<LayoutProps> = ({ search, setSearch }) => {
             element={token ? <Navigate to="/home" replace /> : <Signup />}
           />
           <Route path="/home" element={<Home />} />
-          <Route path="/profileUpdate/:userId" element={<ProfileUpdate />} />
           <Route path="/profilePage/:userId" element={<ProfilePage />} />
           <Route path="/publish" element={<Publish />} />
           <Route path="/offers" element={<OffersPage />} />
