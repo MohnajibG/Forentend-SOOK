@@ -1,3 +1,5 @@
+import { Space } from "lucide-react";
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -14,7 +16,7 @@ module.exports = {
         title: "0 0 20px rgba(252,124,124,0.8)", // ex: drop-shadow-title
       },
       fontFamily: {
-        Space Grotesk: ["Space Grotesk", "sans-serif"],
+        "Space Grotesk": ["Space Grotesk", "sans-serif"],
       },
     },
   },
