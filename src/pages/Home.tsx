@@ -165,7 +165,7 @@ const Home: React.FC = () => {
         {/* Offres disponibles */}
         <div
           className="
-  
+    w-full max-w-6xl
     bg-[#fac3c38c] transition-colors duration-1000
     hover:bg-[rgba(249,200,208,0.66)]
     px-3 md:px-4 py-10 md:mb-20
