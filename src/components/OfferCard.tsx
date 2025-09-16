@@ -14,10 +14,10 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer }) => {
         <div
           className="
             w-full
-            bg-[#ffffffae] rounded-xl
+             bg-[#fac3c38c] transition-colors duration-1000
+    hover:bg-[rgba(249,200,208,0.66)] rounded-xl
             shadow-[0_0_13px_4px_rgba(255,255,255,0.75)]
             hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)]
-            transition-transform duration-200
             group-hover:-translate-y-1
             p-2 text-center
           "
