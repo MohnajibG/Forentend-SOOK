@@ -18,8 +18,7 @@ const navItems = (userId?: string) => [
 export default function Nav({ userId, onLinkClick, className = "" }: NavProps) {
   return (
     <ul
-      className={`hidden md:flex flex-row items-center gap-6 px-6 py-3 
-    ${className}`}
+      className={`hidden md:flex flex-row items-center gap-6 px-6 py-3 ${className}`}
     >
       {navItems(userId).map((item) => (
         <li key={item.to}>
@@ -27,7 +26,7 @@ export default function Nav({ userId, onLinkClick, className = "" }: NavProps) {
             to={item.to}
             onClick={onLinkClick}
             className="
-              relative px-3 py-2 font-semibold text-white  text-lg
+              relative px-3 py-2 font-semibold text-white text-lg
               transition-colors duration-300
               after:content-[''] after:absolute after:left-0 after:bottom-0 
               after:w-0 after:h-[2px] after:bg-white

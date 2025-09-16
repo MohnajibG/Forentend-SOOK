@@ -3,10 +3,9 @@ import { IoMdClose } from "react-icons/io";
 
 interface DeleteFromCartButtonProps {
   item: {
-    productId: string; // correspond à _id côté backend
+    productId: string;
     name: string;
     price: number;
-    userId: string;
   };
   cart: any[];
   setCart: React.Dispatch<React.SetStateAction<any[]>>;

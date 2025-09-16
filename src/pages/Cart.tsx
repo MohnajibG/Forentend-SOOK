@@ -93,7 +93,6 @@ const Cart: React.FC = () => {
                   item={item}
                   cart={cart}
                   setCart={setCart}
-                  userId={userId!}
                   token={token!}
                 />
               </div>
