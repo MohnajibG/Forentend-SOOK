@@ -123,9 +123,8 @@ const Signup: React.FC = () => {
 
   return (
     <main
-      className="
-        relative min-h-screen pt-20 pb-40
-        text-white font-[Krub] flex flex-col justify-center items-center gap-20
+      className="relative min-h-screen text-white  my-15 pt-20 pb-40
+        font-[Space Grotesk] flex flex-col justify-center items-center gap-20
       "
     >
       {/* Background image plein écran, fixé */}

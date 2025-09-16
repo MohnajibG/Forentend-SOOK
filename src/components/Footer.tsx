@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
       h-[10vh]
       bg-gray-900
       text-gray-300
-      font-[Krub]
+      font-[Space Grotesk]
       shadow-[0_-2px_5px_rgba(0,0,0,0.3)]
       z-50
     "

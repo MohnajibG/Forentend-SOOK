@@ -133,7 +133,7 @@ const ProfilePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="relative min-h-screen flex items-center justify-center text-white font-[Krub]">
+      <div className="relative min-h-screen flex items-center justify-center text-white font-[Space Grotesk]">
         <img
           src={backgroundUpdateProfil}
           alt=""
@@ -150,7 +150,7 @@ const ProfilePage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="relative min-h-screen flex items-center justify-center text-white font-[Krub]">
+      <div className="relative min-h-screen flex items-center justify-center text-white font-[Space Grotesk]">
         <img
           src={backgroundUpdateProfil}
           alt=""
@@ -164,7 +164,7 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="relative min-h-screen text-white font-[Krub] my-15">
+    <div className="relative min-h-screen text-white  my-15">
       <img
         src={backgroundUpdateProfil}
         alt="Background Update Profil"

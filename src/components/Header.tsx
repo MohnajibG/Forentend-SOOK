@@ -29,7 +29,7 @@ function Header({ search, setSearch }: HeaderProps) {
   return (
     <header
       className="fixed md:relative top-0 left-0 w-full flex flex-col gap-4 justify-center 
-      p-4 font-[Krub] bg-[rgba(249,200,208,0.55)] backdrop-blur-sm 
+      p-4 font-[Space Grotesk] bg-[rgba(249,200,208,0.55)] backdrop-blur-sm 
       shadow-[0_0_13px_rgba(255,255,255,0.4)] z-40"
     >
       <div className="flex items-center justify-between border-b border-[#dbc4b8]">

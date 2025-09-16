@@ -84,7 +84,7 @@ const Publish: React.FC = () => {
   return (
     <main
       className="
-        relative min-h-screen text-white font-[Krub] 
+        relative min-h-screen text-white font-[Space Grotesk]  my-15
         flex flex-col justify-center mx-4 md:mx-20 lg:mx-24 py-24 md:mb-40
       "
     >

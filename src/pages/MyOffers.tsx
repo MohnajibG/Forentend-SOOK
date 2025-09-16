@@ -72,7 +72,7 @@ const MyOffers: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="relative min-h-screen grid place-items-center text-white font-[Krub]">
+      <main className="relative min-h-screen grid place-items-center text-white font-[Space Grotesk]">
         <img
           src={background}
           alt="Background"
@@ -84,7 +84,7 @@ const MyOffers: React.FC = () => {
   }
 
   return (
-    <main className="relative min-h-screen text-white font-[Krub] my-50">
+    <main className="relative min-h-screen text-white font-[Space Grotesk] my-50">
       <img
         src={background}
         alt="Background"

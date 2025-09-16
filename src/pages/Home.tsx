@@ -8,6 +8,7 @@ import useUserInfo from "../hooks/useUserInfo";
 import logo from "../assets/img/LOGO.png";
 import hero from "../assets/img/hero.jpg";
 import Loading from "../assets/img/Loading.gif";
+import OfferCard from "../components/OfferCard";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <main className="relative min-h-screen text-white font-[Krub]">
+    <main className="relative min-h-screen text-white font-[Space Grotesk] my-20 mx-4 md:mx-20 lg:mx-24 pb-40">
       {/* background hero plein écran, fixé */}
       <img
         src={hero}
@@ -165,77 +166,17 @@ const Home: React.FC = () => {
         {/* Offres disponibles */}
         <div
           className="
-    w-full max-w-6xl
-    bg-[#fac3c38c] transition-colors duration-1000
-    hover:bg-[rgba(249,200,208,0.66)]
-    px-3 md:px-4 py-10 md:mb-20
-    flex flex-wrap  items-center justify-between gap-
-    scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
+    w-full mx-auto max-w-7xl
+    p-4 md:p-6 rounded-2xl
+    bg-[rgba(240,248,255,0.488)]
+    shadow-[0_0_13px_4px_rgba(255,255,255,0.75)]
   "
         >
-          {dataOffer?.offers?.map((offer) => (
-            <Link
-              key={offer._id}
-              to={`/offer/${offer._id}`}
-              className="w-full sm:w-64"
-            >
-              <div
-                className="
-          w-full h-80
-          bg-[#fffefe79]
-          shadow-[0_0_13px_4px_rgba(255,255,255,0.75)]
-          rounded-lg p-4
-          transition-colors duration-1000
-          hover:bg-[#fffefe9a] hover:text-gray-600/75
-          flex flex-col justify-around mb-10
-        "
-              >
-                <div className="space-y-2 text-center">
-                  <h2 className="text-xl font-semibold">{offer.title}</h2>
-                  <div className="text-sm flex justify-between px-4">
-                    <p>Prix : {offer.price}€</p>
-                    <p>Marque : {offer.brand}</p>
-                  </div>
-                  <div className="flex justify-between items-center px-4">
-                    <p className="text-sm font-medium">
-                      {offer.userId?.account?.username
-                        ? offer.userId.account.username
-                            .charAt(0)
-                            .toUpperCase() +
-                          offer.userId.account.username.slice(1)
-                        : "Utilisateur inconnu"}
-                    </p>
-                    {offer.userId?.account?.avatar && (
-                      <img
-                        src={offer.userId.account.avatar}
-                        alt="Avatar"
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
-                    )}
-                  </div>
-                </div>
-
-                {offer.pictures && offer.pictures.length > 0 && (
-                  <div
-                    className="
-      flex items-center justify-centre gap-10 mt-4 ml-10
-      overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
-      rounded-md snap-normal
-    "
-                  >
-                    {offer.pictures.map((pic: string, idx: number) => (
-                      <img
-                        key={idx}
-                        src={pic}
-                        alt={`Image ${idx + 1} de ${offer.title}`}
-                        className="w-40 h-40 object-cover rounded-md flex-shrink-0"
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            </Link>
-          ))}
+          <div className="flex flex-wrap gap-20 justify-center">
+            {dataOffer?.offers?.map((offer) => (
+              <OfferCard key={offer._id} offer={offer} />
+            ))}
+          </div>
         </div>
       </div>
     </main>

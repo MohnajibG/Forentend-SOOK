@@ -8,7 +8,7 @@
     @apply h-full w-full;
   }
   body {
-    /* typo Krub (déclarée dans tailwind.config.js) */
+    /* typo Space Grotesk (déclarée dans tailwind.config.js) */
     /* texte clair en mode light, sombre en mode dark */
     @apply text-white dark:text-black;
   }

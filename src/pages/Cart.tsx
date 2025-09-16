@@ -48,7 +48,7 @@ const Cart: React.FC = () => {
   }, [setCart, userId, token, navigate]);
 
   return (
-    <main className="relative min-h-screen font-[Krub]">
+    <main className="relative min-h-screen font-[Space Grotesk]">
       <img
         src={backgroundCart}
         alt="background"
@@ -64,9 +64,11 @@ const Cart: React.FC = () => {
           />
         </div>
       ) : cart.length === 0 ? (
-        <p className="relative z-10 text-gray-600 mt-24 text-center">
-          Votre panier est vide. Ajoutez des articles pour commencer !
-        </p>
+        <div className="flex items-center justify-center h-screen">
+          <p className="relative z-10 text-red-400 mt-24 text-center  font-bold">
+            Votre panier est vide. Ajoutez des articles pour commencer !
+          </p>
+        </div>
       ) : (
         <div className="relative z-10 mx-auto mt-24 mb-12 max-w-4xl bg-white/90 rounded-2xl p-8 shadow-xl space-y-6">
           <h1 className="text-3xl font-semibold text-gray-800">Mon Panier</h1>

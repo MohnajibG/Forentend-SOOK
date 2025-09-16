@@ -66,7 +66,7 @@ const OfferPage: React.FC = () => {
   if (!offer) return <p className="text-center mt-20">Aucune offre trouvée.</p>;
 
   return (
-    <main className="relative min-h-screen font-[Krub] text-white mt-24 pb-40">
+    <main className="relative min-h-screen font-[Space Grotesk] text-white mt-24 pb-40">
       {/* Background plein écran */}
       <img
         src={background}

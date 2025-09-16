@@ -82,7 +82,7 @@ const Login: React.FC = () => {
     <main
       className="
         relative min-h-screen pt-20 pb-24
-        text-white font-[Krub] flex flex-col justify-center items-center gap-20
+        text-white font-[Space Grotesk] flex flex-col justify-center items-center gap-20
       "
     >
       {/* Image de fond plein écran, fixée */}
