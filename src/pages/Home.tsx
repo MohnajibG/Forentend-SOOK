@@ -217,10 +217,7 @@ const Home: React.FC = () => {
 
                 {offer.pictures && offer.pictures.length > 0 && (
                   <div
-                    className="
-      flex items-center justify-centre gap-10 mt-4 ml-10
-      overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
-      rounded-md snap-normal
+                    className="flex items-center justify-centre gap-10 mt-4 ml-10 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200rounded-md snap-normal
     "
                   >
                     {offer.pictures.map((pic: string, idx: number) => (
