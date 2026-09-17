@@ -1,5 +1,6 @@
 import axios from "axios";
 import { IoMdClose } from "react-icons/io";
+import { API_URL } from "../settings/api";
 
 interface DeleteFromCartButtonProps {
   item: {
@@ -26,7 +27,7 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
 
     try {
       await axios.delete(
-        `https://site--sook--dnxhn8mdblq5.code.run/cart/${item.productId}`,
+        `${API_URL}/cart/${item.productId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -43,10 +44,10 @@ const DeleteFromCartButton: React.FC<DeleteFromCartButtonProps> = ({
   return (
     <button
       onClick={handleDeleteFromCart}
-      className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+      className="shrink-0 w-9 h-9 grid place-items-center rounded-full text-white/70 hover:bg-[#ff4d4d] hover:text-white transition-colors"
       aria-label={`Supprimer ${item.name} du panier`}
     >
-      <IoMdClose />
+      <IoMdClose size={18} />
     </button>
   );
 };

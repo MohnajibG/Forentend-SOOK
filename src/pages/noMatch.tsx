@@ -10,14 +10,8 @@ const NoMatch: React.FC = () => {
         <p className="text-lg text-gray-600">
           Oups ! La page que vous recherchez n'existe pas.
         </p>
-        <button
-          onClick={() => navigate("/")}
-          className="
-            px-6 py-3 text-white font-bold rounded-md
-            bg-[#dfa080bd] hover:bg-[#c87660]
-            transition-colors
-          "
-        >
+        <button onClick={() => navigate("/")} className="btn-primary px-6 py-3">
+
           Retour à l'accueil
         </button>
       </div>

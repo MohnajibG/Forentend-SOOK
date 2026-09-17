@@ -60,11 +60,11 @@ const CheckoutForm: React.FC = () => {
 
   if (completed) {
     return (
-      <div className="w-full max-w-md mx-auto bg-white/90 rounded-2xl p-6 shadow-lg text-center">
-        <h2 className="text-2xl font-semibold text-green-700 mb-2">
-          ✅ Paiement effectué
-        </h2>
-        <p className="text-gray-700">Merci pour votre achat !</p>
+      <div className="w-full pt-4 border-t border-white/30 text-center">
+        <h2 className="text-xl font-bold mb-1">✅ Paiement effectué</h2>
+        <p className="text-sm text-white/85">
+          Merci pour votre achat ! Le vendeur a été notifié.
+        </p>
       </div>
     );
   }
@@ -72,10 +72,10 @@ const CheckoutForm: React.FC = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-md mx-auto bg-white/90 rounded-2xl p-6 shadow-lg space-y-4"
+      className="w-full pt-4 border-t border-white/30 space-y-4"
     >
       {/* Mode test */}
-      <div className="text-xs text-gray-600">
+      <div className="text-xs text-white/80 bg-white/10 rounded-md p-2.5">
         <span className="font-semibold">Mode test Stripe :</span> utilisez la
         carte <span className="font-semibold">4242 4242 4242 4242</span>, une
         date future, un CVC et un code postal au choix.
@@ -97,12 +97,7 @@ const CheckoutForm: React.FC = () => {
       <button
         type="submit"
         disabled={!stripe || !elements || isLoading}
-        className="
-          w-full h-12 rounded-md font-bold text-white
-          bg-[#dfa080bd] hover:bg-[#c87660]
-          disabled:opacity-60 disabled:cursor-not-allowed
-          transition-colors
-        "
+        className="btn-primary w-full h-12"
       >
         {isLoading ? "Paiement en cours..." : "Payer"}
       </button>

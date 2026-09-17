@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../settings/api";
 
 const useOffers = () => {
   const [dataOffer, setDataOffer] = useState<{ offers: any[] }>({ offers: [] });
@@ -12,7 +13,7 @@ const useOffers = () => {
       setError(null);
       try {
         const response = await axios.get(
-          "https://site--sook--dnxhn8mdblq5.code.run/offers"
+          `${API_URL}/offers`
         );
         setDataOffer(response.data);
       } catch (err) {

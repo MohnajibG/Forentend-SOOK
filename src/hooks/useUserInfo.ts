@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../settings/api";
 
 const useUserInfo = (userId: string | null, token: string | null) => {
   const [userInfo, setUserInfo] = useState<{
@@ -17,7 +18,7 @@ const useUserInfo = (userId: string | null, token: string | null) => {
       if (userId && token) {
         try {
           const response = await axios.get(
-            `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
+            `${API_URL}/user/profile/${userId}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }

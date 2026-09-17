@@ -4,8 +4,15 @@ import { useNavigate } from "react-router-dom";
 
 import ImageUpload from "../components/ImgUpload";
 import { useUser } from "../contexts/UserContext";
+import { API_URL } from "../settings/api";
 
 import background from "../assets/img/background-publish.webp";
+
+const inputClass =
+  "w-full h-12 px-4 bg-white/90 text-black placeholder-black/50 rounded-lg " +
+  "outline-none border border-white/20 hover:bg-white transition focus:ring-2 focus:ring-white/70";
+
+const labelClass = "text-white text-sm font-bold mb-1.5 block";
 
 const Publish: React.FC = () => {
   const navigate = useNavigate();
@@ -21,6 +28,7 @@ const Publish: React.FC = () => {
   const [condition, setCondition] = useState("");
   const [imageUrls, setImageUrls] = useState<string[]>([]); // ✅ URLs et pas File[]
   const [message, setMessage] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const isFormValid = (): boolean => {
@@ -34,6 +42,7 @@ const Publish: React.FC = () => {
       imageUrls.length === 0 ||
       !userId
     ) {
+      setIsSuccess(false);
       setMessage("Veuillez remplir tous les champs obligatoires.");
       return false;
     }
@@ -42,13 +51,14 @@ const Publish: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setMessage(null);
     if (!isFormValid()) return;
 
     setLoading(true);
 
     try {
       const response = await axios.post(
-        "https://site--sook--dnxhn8mdblq5.code.run/offers/publish",
+        `${API_URL}/offers/publish`,
         {
           title,
           description,
@@ -65,27 +75,27 @@ const Publish: React.FC = () => {
       );
 
       const offerId = response.data.offer._id;
-      setMessage("Votre produit a été publié avec succès !");
-      navigate(`/offer/${offerId}`);
+      setIsSuccess(true);
+      setMessage("Votre annonce a été publiée avec succès ! Redirection...");
+      setTimeout(() => navigate(`/offer/${offerId}`), 900);
     } catch (error) {
       console.error("Erreur lors de la publication", error);
+      setIsSuccess(false);
       setMessage(
         axios.isAxiosError(error) && error.response?.data?.message
           ? error.response.data.message
-          : "Erreur lors de la publication de l'offre."
+          : "Erreur lors de la publication de l'offre. Veuillez réessayer."
       );
     } finally {
       setLoading(false);
     }
   };
 
-  const isError = message?.toLowerCase().includes("erreur");
-
   return (
     <main
       className="
-        relative min-h-screen text-white font-[Space Grotesk]  my-15
-        flex flex-col justify-center mx-4 md:mx-20 lg:mx-24 py-24 md:mb-40
+        relative min-h-screen page-shell
+        flex flex-col justify-center mx-4 md:mx-10 lg:mx-24
       "
     >
       {/* Background plein écran fixé */}
@@ -95,159 +105,152 @@ const Publish: React.FC = () => {
         className="fixed inset-0 -z-10 w-screen h-screen object-cover"
       />
 
-      <h2 className="text-xl md:text-4xl font-bold text-center mb-6 drop-shadow-black ">
-        PUBLIER VOTRE PRODUIT
-      </h2>
-
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-md mx-auto flex flex-col items-center gap-4"
-      >
-        {/* Titre */}
-        <label className="w-full">
-          <h3 className="text-white text-base mb-1 font-bold ">
-            Titre de l'annonce :
-          </h3>
-          <input
-            type="text"
-            placeholder="Titre"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
-                       outline-none border border-white/20 hover:bg-white/85 transition"
-          />
-        </label>
-
-        {/* Description */}
-        <label className="w-full">
-          <h3 className="text-white text-base mb-1 font-bold ">
-            Description :
-          </h3>
-          <input
-            type="text"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
-                       outline-none border border-white/20 hover:bg-white/85 transition"
-          />
-        </label>
-
-        {/* Prix */}
-        <label className="w-full">
-          <h3 className="text-white text-base mb-1 font-bold ">Prix :</h3>
-          <input
-            type="number"
-            placeholder="Prix"
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
-            min={0}
-            step={0.01}
-            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
-                       outline-none border border-white/20 hover:bg-white/85 transition"
-          />
-        </label>
-
-        {/* Condition */}
-        <label className="w-full">
-          <h3 className="text-white text-base mb-1 font-bold ">Condition :</h3>
-          <select
-            value={condition}
-            onChange={(e) => setCondition(e.target.value)}
-            className="w-full h-12 px-4 bg-white/90 text-black
-                       outline-none border border-white/20 hover:bg-white/85 transition"
-          >
-            <option value="">Sélectionner</option>
-            <option value="Neuf">Neuf</option>
-            <option value="Très bon état">Très bon état</option>
-            <option value="Bon état">Bon état</option>
-            <option value="Usé">Usé</option>
-          </select>
-        </label>
-
-        {/* Ville */}
-        <label className="w-full">
-          <h3 className="text-white text-base mb-1 font-bold ">Ville :</h3>
-          <input
-            type="text"
-            placeholder="Ville"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
-                       outline-none border border-white/20 hover:bg-white/85 transition"
-          />
-        </label>
-
-        {/* Marque */}
-        <label className="w-full">
-          <h3 className="text-white text-base mb-1 font-bold ">Marque :</h3>
-          <input
-            type="text"
-            placeholder="Marque"
-            value={brand}
-            onChange={(e) => setBrand(e.target.value)}
-            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
-                       outline-none border border-white/20 hover:bg-white/85 transition"
-          />
-        </label>
-
-        {/* Taille */}
-        <label className="w-full">
-          <h3 className="text-white text-base mb-1 font-bold ">Taille :</h3>
-          <input
-            type="text"
-            placeholder="Taille"
-            value={size}
-            onChange={(e) => setSize(e.target.value)}
-            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
-                       outline-none border border-white/20 hover:bg-white/85 transition"
-          />
-        </label>
-
-        {/* Couleur */}
-        <label className="w-full">
-          <h3 className="text-white text-base mb-1 font-bold ">Couleur :</h3>
-          <input
-            type="text"
-            placeholder="Couleur"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            className="w-full h-12 px-4 bg-white/90 text-black placeholder-black/60
-                       outline-none border border-white/20 hover:bg-white/85 transition"
-          />
-        </label>
-
-        {/* Photos */}
-        <div className="w-full flex flex-col">
-          <h3 className="text-white text-base mb-2 font-bold ">Photos :</h3>
-          <ImageUpload setImageUrl={setImageUrls} />
+      <div className="glass-rose w-full max-w-3xl mx-auto flex flex-col gap-6 px-6 py-10 md:px-12">
+        <div className="text-center">
+          <h2 className="text-2xl md:text-4xl font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            Publier une annonce
+          </h2>
+          <p className="text-white/75 text-sm mt-2 max-w-md mx-auto">
+            Quelques informations sur votre article, et il sera visible par
+            toute la communauté SOOK en quelques secondes.
+          </p>
         </div>
 
-        {/* Bouton Submit */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="mt-4 h-12 w-full bg-[#dfa080bd] hover:bg-[#c87660]
-                     text-white font-bold text-lg rounded transition-colors 
-                     disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {loading ? "Chargement..." : "Publier"}
-        </button>
+        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-5">
+          {/* Titre */}
+          <label className="w-full">
+            <span className={labelClass}>Titre de l'annonce *</span>
+            <input
+              type="text"
+              placeholder="Ex : Blouson en cuir vintage"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={inputClass}
+            />
+          </label>
 
-        {message && (
-          <div
-            className={[
-              "mx-auto my-6 text-center px-5 py-3 border",
-              "transition-colors duration-300 opacity-80",
-              isError
-                ? "bg-[#f5828b] text-[#721c24] border-[#f5c6cb]"
-                : "bg-[#f96666] text-[#571515] border-[#ff0000]/30",
-            ].join(" ")}
-          >
-            {message}
+          {/* Description */}
+          <label className="w-full">
+            <span className={labelClass}>Description *</span>
+            <textarea
+              placeholder="Décrivez la matière, la coupe, les éventuels défauts... plus c'est précis, plus vite ça se vend !"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+              className={`${inputClass} h-auto py-3 resize-none`}
+            />
+          </label>
+
+          {/* Ligne : Prix / Marque */}
+          <div className="grid sm:grid-cols-2 gap-5">
+            <label>
+              <span className={labelClass}>Prix (€) *</span>
+              <input
+                type="number"
+                placeholder="0.00"
+                value={price || ""}
+                onChange={(e) => setPrice(Number(e.target.value))}
+                min={0}
+                step={0.01}
+                className={inputClass}
+              />
+            </label>
+            <label>
+              <span className={labelClass}>Marque *</span>
+              <input
+                type="text"
+                placeholder="Ex : Zara, Nike..."
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+                className={inputClass}
+              />
+            </label>
           </div>
-        )}
-      </form>
+
+          {/* Ligne : Condition / Taille */}
+          <div className="grid sm:grid-cols-2 gap-5">
+            <label>
+              <span className={labelClass}>État</span>
+              <select
+                value={condition}
+                onChange={(e) => setCondition(e.target.value)}
+                className={inputClass}
+              >
+                <option value="">Sélectionner</option>
+                <option value="Neuf">Neuf</option>
+                <option value="Très bon état">Très bon état</option>
+                <option value="Bon état">Bon état</option>
+                <option value="Usé">Usé</option>
+              </select>
+            </label>
+            <label>
+              <span className={labelClass}>Taille</span>
+              <input
+                type="text"
+                placeholder="Ex : M, 40, unique..."
+                value={size}
+                onChange={(e) => setSize(e.target.value)}
+                className={inputClass}
+              />
+            </label>
+          </div>
+
+          {/* Ligne : Couleur / Ville */}
+          <div className="grid sm:grid-cols-2 gap-5">
+            <label>
+              <span className={labelClass}>Couleur *</span>
+              <input
+                type="text"
+                placeholder="Ex : Bleu marine"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                className={inputClass}
+              />
+            </label>
+            <label>
+              <span className={labelClass}>Ville *</span>
+              <input
+                type="text"
+                placeholder="Ex : Lyon"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                className={inputClass}
+              />
+            </label>
+          </div>
+
+          {/* Photos */}
+          <div className="w-full flex flex-col">
+            <span className={labelClass}>Photos *</span>
+            <p className="text-white/65 text-xs mb-2">
+              Une bonne photo, prise en pleine lumière, augmente nettement vos
+              chances de vendre.
+            </p>
+            <ImageUpload setImageUrl={setImageUrls} />
+          </div>
+
+          {message && (
+            <div
+              className={`text-center px-5 py-3 rounded-lg border text-sm font-semibold ${
+                isSuccess
+                  ? "bg-green-500/20 text-green-100 border-green-400/40"
+                  : "bg-red-500/20 text-red-100 border-red-400/40"
+              }`}
+            >
+              {message}
+            </div>
+          )}
+
+          {/* Bouton Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-primary h-12 w-full text-lg"
+          >
+            {loading ? "Publication en cours..." : "Publier mon annonce"}
+          </button>
+        </form>
+      </div>
     </main>
   );
 };

@@ -28,7 +28,6 @@
     "react-router-dom": "^7.0.1",
     "react-spinners": "^0.14.1",
     "react-toastify": "^10.0.6",
-    "socket.io-client": "^4.8.1",
     "stripe": "^18.5.0"
   },
   "devDependencies": {
@@ -37,7 +36,6 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/react-router-dom": "^5.3.3",
-    "@types/socket.io-client": "^3.0.0",
     "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.13.0",

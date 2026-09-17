@@ -97,6 +97,7 @@ export interface Account {
 
 export interface ImageUploadProps {
   setImageUrl: React.Dispatch<React.SetStateAction<string[]>>;
+  initialImages?: string[];
 }
 
 export interface ProductProps {

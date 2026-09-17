@@ -43,31 +43,19 @@ const Modal: React.FC<ModalProps> = ({
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`relative bg-white rounded-2xl shadow-xl p-5 md:p-6 ${sizeClasses} outline-none animate-[zoomIn_.15s_ease-out]`}
+        className={`glass-rose relative p-5 md:p-6 ${sizeClasses} outline-none animate-[zoomIn_.15s_ease-out]`}
         onClick={(e) => e.stopPropagation()}
       >
         {children}
 
         <button
           onClick={onClose}
-          className="
-            mt-5 inline-flex items-center justify-center
-            px-4 py-2 rounded-md font-semibold text-white
-            bg-[#ff4d4d] hover:bg-[#e60000] transition-colors
-            focus:outline-none focus:ring-2 focus:ring-[#ff4d4d]/50
-          "
-        >
-          Fermer
-        </button>
-
-        {/* bouton X (optionnel) */}
-        <button
-          onClick={onClose}
           aria-label="Fermer"
           className="
             absolute top-3 right-3 w-9 h-9 grid place-items-center
-            rounded-full bg-black/5 hover:bg-black/10
-            text-black/70 text-lg
+            rounded-full bg-black/10 hover:bg-[#ff4d4d] transition-colors
+            text-white text-lg
+            focus:outline-none focus:ring-2 focus:ring-[#ff4d4d]/50
           "
         >
           ×

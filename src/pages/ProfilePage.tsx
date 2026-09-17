@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Account, ProfilProps } from "../types/types";
 import { useUser } from "../contexts/UserContext";
+import { API_URL } from "../settings/api";
 
 import backgroundUpdateProfil from "../assets/img/hero.jpg";
 import Loading from "../assets/img/Loading.gif";
@@ -32,7 +33,7 @@ const ProfilePage: React.FC = () => {
           return;
         }
         const res = await axios.get<ProfilProps>(
-          `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
+          `${API_URL}/user/profile/${userId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setDataProfile(res.data);
@@ -109,7 +110,7 @@ const ProfilePage: React.FC = () => {
       );
 
       const res = await axios.put(
-        `https://site--sook--dnxhn8mdblq5.code.run/user/profile/${userId}`,
+        `${API_URL}/user/profile/${userId}`,
         formData,
         {
           headers: {
@@ -133,7 +134,7 @@ const ProfilePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="relative min-h-screen flex items-center justify-center text-white font-[Space Grotesk]">
+      <div className="relative min-h-screen flex items-center justify-center">
         <img
           src={backgroundUpdateProfil}
           alt=""
@@ -150,7 +151,7 @@ const ProfilePage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="relative min-h-screen flex items-center justify-center text-white font-[Space Grotesk]">
+      <div className="relative min-h-screen flex items-center justify-center">
         <img
           src={backgroundUpdateProfil}
           alt=""
@@ -164,25 +165,23 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="relative min-h-screen text-white  my-15">
+    <div className="relative min-h-screen page-shell">
       <img
         src={backgroundUpdateProfil}
         alt="Background Update Profil"
         className="fixed inset-0 -z-10 w-full h-screen object-cover"
       />
 
-      <div className="px-4 md:px-10 lg:px-20 pt-24 pb-36 flex flex-col items-center gap-10">
+      <div className="px-4 md:px-10 lg:px-20 flex flex-col items-center gap-10">
         <h1 className="text-center text-5xl font-bold text-[#fef2f2]">
           VOTRE PROFIL
         </h1>
 
         <div
           className="
+            glass-rose
             flex flex-col items-center
             w-full max-w-4xl
-            bg-[#f3f3f399]/[.99]
-            backdrop-blur-sm
-            shadow-[0_10px_30px_rgba(0,0,0,0.25)]
             p-4 md:p-8
           "
         >
@@ -196,7 +195,7 @@ const ProfilePage: React.FC = () => {
               />
               {editMode && (
                 <>
-                  <label className="inline-flex items-center gap-2 cursor-pointer text-sm font-bold px-3 py-2 bg-[#dfa080bd] hover:bg-[#c87660] transition-colors">
+                  <label className="btn-primary inline-flex items-center gap-2 cursor-pointer text-sm px-3 py-2">
                     <input
                       type="file"
                       accept="image/*"
@@ -305,7 +304,7 @@ const ProfilePage: React.FC = () => {
                       <button
                         type="button"
                         onClick={handleSave}
-                        className="h-11 px-5 font-bold bg-[#dfa080bd] hover:bg-[#c87660] text-white transition-colors"
+                        className="btn-primary h-11 px-5"
                       >
                         Enregistrer
                       </button>
@@ -317,7 +316,7 @@ const ProfilePage: React.FC = () => {
                           setAvatarFile(null);
                           setAvatarPreview(null);
                         }}
-                        className="h-11 px-5 font-bold bg-white/20 hover:bg-white/30 text-white transition-colors"
+                        className="btn-secondary h-11 px-5"
                       >
                         Annuler
                       </button>
@@ -379,7 +378,7 @@ const ProfilePage: React.FC = () => {
                       });
                       setEditMode(true);
                     }}
-                    className="h-11 px-5 font-bold bg-[#dfa080bd] hover:bg-[#c87660] text-white transition-colors mx-10"
+                    className="btn-primary h-11 px-5 mx-10"
                   >
                     Modifier
                   </button>
@@ -389,10 +388,7 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        <button
-          onClick={() => navigate("/home")}
-          className="h-11 px-6 font-bold bg-white/20 hover:bg-white/30 text-white transition-colors"
-        >
+        <button onClick={() => navigate("/home")} className="btn-secondary h-11 px-6">
           Retour à l'accueil
         </button>
       </div>

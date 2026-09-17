@@ -1,5 +1,25 @@
 /* Import Tailwind base utilities */
 @import "tailwindcss";
+
+/* Tokens du design system (couleurs, police) — valeurs inchangées,
+   simplement centralisées ici au lieu d'être dupliquées page par page. */
+@theme {
+  --color-sook-plum: #300a22; /* pour <span> SOOK! */
+  --color-sook-accent: #dfa080bd; /* bouton / newsletter (rgba conservé) */
+  --color-sook-accent-hover: #c87660; /* hover bouton */
+  --font-sook: "Space Grotesk", sans-serif;
+  --drop-shadow-title: 0 0 20px rgba(252, 124, 124, 0.8);
+
+  /* Les deux tons "verre dépoli" du site : rose et doré, déjà utilisés
+     un peu partout avant, maintenant avec un flou et un hover uniformes. */
+  --color-glass-rose: rgba(249, 200, 208, 0.55);
+  --color-glass-rose-hover: rgba(249, 200, 208, 0.7);
+  --color-glass-rose-card: rgba(249, 200, 208, 0.38);
+  --color-glass-rose-card-hover: rgba(249, 200, 208, 0.55);
+  --color-glass-gold: rgba(227, 192, 153, 0.6);
+  --color-glass-gold-hover: rgba(253, 219, 185, 0.72);
+}
+
 /* → Styles de base (reset / override) */
 @layer base {
   html,
@@ -8,9 +28,8 @@
     @apply h-full w-full;
   }
   body {
-    /* typo Space Grotesk (déclarée dans tailwind.config.js) */
-    /* texte clair en mode light, sombre en mode dark */
-    @apply text-white dark:text-black;
+    /* police unique du site : plus besoin de la répéter sur chaque page */
+    @apply font-sook text-white dark:text-black;
   }
   a {
     /* liens blancs sans soulignement */
@@ -28,5 +47,71 @@
   .message,
   .error {
     @apply text-red-500;
+  }
+
+  /* Bouton d'action principal (même couleur accent partout, plus de dérives) */
+  .btn-primary {
+    @apply px-4 py-2 rounded-md font-bold text-white bg-sook-accent
+           transition-colors hover:bg-sook-accent-hover
+           disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  /* Bouton secondaire (retour, annuler...) */
+  .btn-secondary {
+    @apply px-4 py-2 rounded-md font-semibold text-white bg-white/20
+           transition-colors hover:bg-white/30
+           disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  /* Contenant de page standard : compense le header fixe en dessous de lg
+     (statique à partir de lg, donc pas de compensation nécessaire) et
+     laisse une respiration constante avant le footer. */
+  .page-shell {
+    @apply pt-36 lg:pt-8 pb-12;
+  }
+
+  /* ============================================================
+     Système "verre dépoli" rose / doré — les deux teintes déjà
+     utilisées sur le site, avec flou et hover cohérents partout.
+     ============================================================ */
+
+  /* Panneau rose (header, bloc titre, conteneurs de liste...) :
+     le halo lumineux existant + flou ajouté, transition douce conservée. */
+  .glass-rose {
+    @apply relative rounded-2xl backdrop-blur-lg transition-colors duration-1000;
+    background: var(--color-glass-rose);
+    box-shadow: 0 0 13px 4px rgba(255, 255, 255, 0.75);
+  }
+  .glass-rose:hover {
+    background: var(--color-glass-rose-hover);
+  }
+
+  /* Panneau doré (messages de bienvenue / mise en avant) : même principe,
+     avec le halo chaud d'origine. */
+  .glass-gold {
+    @apply relative rounded-2xl backdrop-blur-lg transition-colors duration-1000 cursor-default;
+    background: var(--color-glass-gold);
+    box-shadow: 0 0 13px 4px rgba(251, 209, 168, 0.412);
+  }
+  .glass-gold:hover {
+    background: var(--color-glass-gold-hover);
+  }
+
+  /* Carte rose (offres) : halo au repos, ombre portée + léger soulèvement
+     au survol — comportement déjà présent sur les cartes d'offres. */
+  .glass-card {
+    @apply relative rounded-xl overflow-hidden backdrop-blur-lg transition-all duration-1000;
+    background: var(--color-glass-rose-card);
+    box-shadow: 0 0 13px 4px rgba(255, 255, 255, 0.75);
+  }
+  .glass-card:hover {
+    background: var(--color-glass-rose-card-hover);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+  }
+
+  /* Badge flottant sur une photo (condition, prix...) */
+  .glass-badge {
+    @apply text-xs font-bold px-2.5 py-1 rounded-full text-[#241118] backdrop-blur-md;
+    background: rgba(255, 255, 255, 0.75);
   }
 }

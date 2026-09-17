@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+import { BsBagCheckFill, BsBagPlusFill } from "react-icons/bs";
 import { CartItem } from "../types/types";
+import { API_URL } from "../settings/api";
 
 interface AddToCartButtonProps {
   item: { productId: string; name: string; price: number };
@@ -38,7 +41,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
 
     try {
       const response = await axios.post(
-        "https://site--sook--dnxhn8mdblq5.code.run/cart/add",
+        `${API_URL}/cart/add`,
         { productId: item.productId },
         {
           headers: {
@@ -55,7 +58,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       }
     } catch (error) {
       console.error("Erreur lors de l'ajout au panier :", error);
-      alert("Une erreur est survenue. Veuillez réessayer.");
+      toast.error("Impossible d'ajouter cet article. Veuillez réessayer.");
     }
   };
 
@@ -64,16 +67,24 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       onClick={handleAddToCart}
       disabled={isInCart}
       className={`
-        px-5 py-2 text-[12px] rounded-[5px] font-semibold transition-colors
+        w-full flex items-center justify-center gap-2
+        px-6 py-3 rounded-lg font-bold transition-colors
         ${
           isInCart
-            ? "bg-[#ccc] text-[#666] cursor-not-allowed hover:bg-[#ccc]"
-            : "bg-[#4caf50] text-white hover:bg-[#45a049]"
+            ? "bg-white/20 text-white/70 cursor-not-allowed"
+            : "bg-sook-accent text-white hover:bg-sook-accent-hover"
         }
-        disabled:opacity-60 disabled:cursor-not-allowed
       `}
     >
-      {isInCart ? "Déjà dans votre panier" : "Ajouter au panier"}
+      {isInCart ? (
+        <>
+          <BsBagCheckFill size={18} /> Déjà dans votre panier
+        </>
+      ) : (
+        <>
+          <BsBagPlusFill size={18} /> Ajouter au panier
+        </>
+      )}
     </button>
   );
 };

@@ -3,10 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-hot-toast";
-import { MoreVertical } from "lucide-react"; // icône menu
+import { MoreVertical, Tag, Wallet, PlusCircle } from "lucide-react"; // icônes
 
 import { useUser } from "../contexts/UserContext";
 import { ProfilProps } from "../types/types";
+import { API_URL } from "../settings/api";
 
 import background from "../assets/img/offerPage.webp";
 import LOGO from "../assets/img/LOGO.png";
@@ -29,7 +30,7 @@ const MyOffers: React.FC = () => {
 
       try {
         const { data } = await axios.get(
-          "https://site--sook--dnxhn8mdblq5.code.run/offers/user",
+          `${API_URL}/offers/user`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -57,7 +58,7 @@ const MyOffers: React.FC = () => {
 
     try {
       await axios.delete(
-        `https://site--sook--dnxhn8mdblq5.code.run/offers/delete/${offerId}`,
+        `${API_URL}/offers/delete/${offerId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMyOffers((prev) =>
@@ -72,7 +73,7 @@ const MyOffers: React.FC = () => {
 
   if (loading) {
     return (
-      <main className="relative min-h-screen grid place-items-center text-white font-[Space Grotesk]">
+      <main className="relative min-h-screen grid place-items-center">
         <img
           src={background}
           alt="Background"
@@ -84,7 +85,7 @@ const MyOffers: React.FC = () => {
   }
 
   return (
-    <main className="relative min-h-screen text-white font-[Space Grotesk] my-50">
+    <main className="relative min-h-screen page-shell">
       <img
         src={background}
         alt="Background"
@@ -96,37 +97,73 @@ const MyOffers: React.FC = () => {
       )}
 
       <div className="mx-auto w-full max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
-        <h2 className="text-2xl font-semibold text-centre">Mes Offres</h2>
-        <button
-          onClick={() => navigate("/home")}
-          className="px-4 py-2 rounded-md font-semibold
-                     bg-white/20 hover:bg-white/30 text-white transition-colors"
-        >
+        <div>
+          <h2 className="text-2xl font-semibold">Mes annonces</h2>
+          <p className="text-sm text-white/70">
+            Gérez, modifiez ou retirez vos articles en vente.
+          </p>
+        </div>
+        <button onClick={() => navigate("/home")} className="btn-secondary">
           ← Retour à l'accueil
         </button>
       </div>
 
+      {myOffers.length > 0 && (
+        <div className="mx-auto w-full max-w-6xl grid grid-cols-2 gap-4 mb-8">
+          <div className="glass-rose flex items-center gap-3 px-5 py-4">
+            <Tag className="text-[#dfa080]" size={22} />
+            <div>
+              <p className="text-xl font-bold leading-none">{myOffers.length}</p>
+              <p className="text-xs text-white/70 mt-1">
+                {myOffers.length > 1 ? "annonces publiées" : "annonce publiée"}
+              </p>
+            </div>
+          </div>
+          <div className="glass-rose flex items-center gap-3 px-5 py-4">
+            <Wallet className="text-[#dfa080]" size={22} />
+            <div>
+              <p className="text-xl font-bold leading-none">
+                {myOffers
+                  .reduce((sum, o) => sum + (o.price || 0), 0)
+                  .toFixed(2)}{" "}
+                €
+              </p>
+              <p className="text-xs text-white/70 mt-1">valeur totale en vente</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {myOffers.length === 0 ? (
-        <p className="mx-auto w-full max-w-6xl text-center">
-          Vous n'avez encore publié aucun article.
-        </p>
+        <div className="glass-rose mx-auto w-full max-w-md text-center px-8 py-12 flex flex-col items-center gap-4">
+          <PlusCircle className="text-[#dfa080]" size={40} />
+          <div>
+            <h3 className="text-lg font-bold mb-1">Rien à vendre pour l'instant</h3>
+            <p className="text-sm text-white/75">
+              Publiez votre premier article et il apparaîtra ici, prêt à être
+              vu par toute la communauté SOOK.
+            </p>
+          </div>
+          <button onClick={() => navigate("/publish")} className="btn-primary">
+            Publier une annonce
+          </button>
+        </div>
       ) : (
         <div className="mx-auto w-full max-w-6xl flex flex-col sm:flex-row flex-wrap gap-6 justify-center">
           {myOffers.map((offer) => {
             const id = offer._id || (offer as any).id;
-            const firstImage =
+            const pictures =
               Array.isArray(offer.pictures) && offer.pictures.length > 0
-                ? offer.pictures[0]
-                : LOGO;
+                ? offer.pictures
+                : [LOGO];
 
             return (
               <div
                 key={id}
-                className="relative flex flex-col rounded-2xl bg-[#ffffffae] shadow-[0_4px_8px_rgba(0,0,0,0.1)] 
-                           hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)] transition-shadow w-full sm:w-[300px]"
+                className="glass-card relative flex flex-col w-full sm:w-[300px]"
               >
                 {/* Bouton menu */}
-                <div className="absolute top-3 right-3">
+                <div className="absolute top-3 right-3 z-20">
                   <button
                     onClick={() => setOpenMenuId(openMenuId === id ? null : id)}
                     className="p-2 rounded-full bg-white/70 hover:bg-white shadow"
@@ -159,24 +196,42 @@ const MyOffers: React.FC = () => {
                   )}
                 </div>
 
-                {/* Image */}
-                <div className="w-full h-64 overflow-hidden rounded-t-2xl">
-                  <img
-                    src={firstImage}
-                    alt={offer.title || ""}
-                    className="w-full h-full object-cover"
-                  />
+                {/* Photo(s) : carrousel scrollable, images centrées */}
+                <div className="relative aspect-square">
+                  {offer.condition && (
+                    <span className="glass-badge absolute top-3 left-3 z-10">
+                      {offer.condition}
+                    </span>
+                  )}
+                  <div
+                    className="
+                      w-full h-full flex overflow-x-auto snap-x snap-mandatory
+                      scrollbar-thin scrollbar-thumb-white/40 scrollbar-track-transparent
+                    "
+                  >
+                    {pictures.map((pic, idx) => (
+                      <img
+                        key={idx}
+                        src={pic}
+                        alt={`${offer.title || ""} — photo ${idx + 1}`}
+                        className="w-full h-full flex-shrink-0 object-cover snap-center"
+                      />
+                    ))}
+                  </div>
                 </div>
 
                 {/* Contenu */}
                 <div className="p-4 flex flex-col gap-2">
-                  <h3 className="text-lg font-semibold text-[#333]">
-                    {offer.title}
-                  </h3>
-                  <p className="text-sm text-[#666]">{offer.description}</p>
-                  <p className="text-sm font-medium text-[#666]">
-                    Prix : {offer.price} €
+                  {offer.brand && (
+                    <p className="text-xs font-bold uppercase tracking-wide text-[#dfa080]">
+                      {offer.brand}
+                    </p>
+                  )}
+                  <h3 className="text-lg font-semibold truncate">{offer.title}</h3>
+                  <p className="text-sm text-white/80 line-clamp-2">
+                    {offer.description}
                   </p>
+                  <p className="text-base font-bold">{offer.price} €</p>
                 </div>
               </div>
             );

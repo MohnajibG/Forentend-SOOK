@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ImageUploadProps } from "../types/types";
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ setImageUrl }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({
+  setImageUrl,
+  initialImages,
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [pictures, setPictures] = useState<(File | string)[]>([]);
+  const [pictures, setPictures] = useState<(File | string)[]>(
+    initialImages || []
+  );
+
+  // Les images existantes (édition d'une annonce) arrivent après le montage,
+  // une fois l'appel réseau terminé : on synchronise l'aperçu à ce moment-là.
+  useEffect(() => {
+    if (initialImages && initialImages.length > 0 && pictures.length === 0) {
+      setPictures(initialImages);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialImages]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -75,14 +89,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ setImageUrl }) => {
     <div className="w-full flex flex-col gap-3 justify-center items-center">
       <label
         htmlFor="pictures"
-        className="
-          inline-flex items-center justify-center
-          px-4 py-2  font-bold text-white cursor-pointer
-          bg-[#dfa080eb] hover:bg-[#c87660] transition-colors
-          w-max
-        "
+        className="btn-primary inline-flex items-center justify-center cursor-pointer w-max"
       >
-        + Ajouter
+        + Ajouter des photos
       </label>
 
       <input

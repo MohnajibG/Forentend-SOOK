@@ -8,6 +8,7 @@ import { useUser } from "../contexts/UserContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import signupBackground from "../assets/img/backgroundsignup.jpg";
+import { API_URL } from "../settings/api";
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -92,7 +93,7 @@ const Signup: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://site--sook--dnxhn8mdblq5.code.run/user/signup",
+        `${API_URL}/user/signup`,
         formData
       );
 
@@ -102,7 +103,7 @@ const Signup: React.FC = () => {
 
         Cookies.set("token", token, { expires: 1 });
         setUser(userId, token, username);
-        navigate(`/profileUpdate/${userId}`);
+        navigate(`/profilePage/${userId}`);
       } else {
         setErrors(["Erreur inattendue lors de l'inscription."]);
       }
@@ -123,8 +124,8 @@ const Signup: React.FC = () => {
 
   return (
     <main
-      className="relative min-h-screen text-white  my-15 pt-20 pb-40
-        font-[Space Grotesk] flex flex-col justify-center items-center gap-20
+      className="relative min-h-screen page-shell
+        flex flex-col justify-center items-center
       "
     >
       {/* Background image plein écran, fixé */}
@@ -134,7 +135,8 @@ const Signup: React.FC = () => {
         className="fixed inset-0 -z-10 h-screen w-full object-cover"
       />
 
-      <h2 className="text-center text-2xl drop-shadow-[0_0_20px_rgba(252,124,124,0.8)]">
+      <div className="glass-rose w-full max-w-sm flex flex-col items-center gap-8 px-6 py-10 md:px-10">
+      <h2 className="text-center text-2xl drop-shadow-title">
         S&apos;inscrire
       </h2>
 
@@ -142,7 +144,7 @@ const Signup: React.FC = () => {
         onSubmit={handleSubmit}
         className="
           flex flex-col items-center justify-center gap-5
-          w-full max-w-sm
+          w-full
         "
       >
         {/* Erreurs */}
@@ -284,19 +286,14 @@ const Signup: React.FC = () => {
         <p className="w-72 font-bold text-base text-white text-justify">
           En m&apos;inscrivant, je certifie avoir pris connaissance et accepté
           les Termes et Conditions ainsi que la Politique de Confidentialité de{" "}
-          <span className="text-[#300a22] font-bold">SOOK!</span>. Je déclare
+          <span className="text-sook-plum font-bold">SOOK!</span>. Je déclare
           également avoir au moins 18 ans.
         </p>
 
         {/* Bouton */}
         <button
           disabled={isLoading}
-          className="
-            mt-4 h-12 w-full
-            bg-[#dfa080bd] hover:bg-[#c87660]
-            text-white font-bold text-xl
-            rounded transition-colors disabled:opacity-60 disabled:cursor-not-allowed
-          "
+          className="btn-primary mt-4 h-12 w-full text-xl"
         >
           {isLoading ? (
             <ClipLoader size={20} color="#fff" loading={isLoading} />
@@ -308,11 +305,17 @@ const Signup: React.FC = () => {
         {/* Lien connexion */}
         <p className="w-72 font-bold text-base text-white text-justify">
           Vous avez déjà un compte ? Connectez-vous ici{" "}
-          <Link to="/login" className="underline underline-offset-2">
+          <Link
+            to="/login"
+            className="font-semibold no-underline text-sook-accent hover:text-[#d6390d]
+                       transition-colors [text-shadow:2px_2px_5px_rgb(17,2,2)]
+                       hover:[text-shadow:2px_2px_10px_rgb(246,246,246)]"
+          >
             Se connecter
           </Link>
         </p>
       </form>
+      </div>
     </main>
   );
 };

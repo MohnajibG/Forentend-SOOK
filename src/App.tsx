@@ -1,24 +1,20 @@
-// src/App.tsx
 import { useState } from "react";
+import { BrowserRouter } from "react-router-dom";
+
 import { UserProvider } from "./contexts/UserContext";
 import { CartProvider } from "./contexts/CartContext";
-import { BrowserRouter as Router } from "react-router-dom";
-
 import Layout from "./components/Layout";
 
-function App() {
-  const [search, setSearch] = useState<string>("");
+export default function App() {
+  const [search, setSearch] = useState("");
 
   return (
-    <UserProvider>
-      <CartProvider>
-        <Router>
-          {/* Layout s’occupe de Header + Routes + Footer */}
+    <BrowserRouter>
+      <UserProvider>
+        <CartProvider>
           <Layout search={search} setSearch={setSearch} />
-        </Router>
-      </CartProvider>
-    </UserProvider>
+        </CartProvider>
+      </UserProvider>
+    </BrowserRouter>
   );
 }
-
-export default App;

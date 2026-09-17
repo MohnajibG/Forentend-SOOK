@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { ProfilProps } from "../types/types";
 import { Link } from "react-router-dom";
+import { API_URL } from "../settings/api";
 
 interface SearchProps {
   search: string;
@@ -51,14 +52,10 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
       setError(null);
       try {
         const { data } = await axios.get(
-          "https://site--sook--dnxhn8mdblq5.code.run/offers",
-          { params: { title: q } }
+          `${API_URL}/offers/search`,
+          { params: { keyword: q } }
         );
-        const offers: ProfilProps[] = data.offers || [];
-        const filtered = offers.filter((o) =>
-          (o.title || "").toLowerCase().includes(q.toLowerCase())
-        );
-        setSearchResults(filtered);
+        setSearchResults(data.offers || []);
         setIsSearchOpen(true);
       } catch (e) {
         setError("Une erreur est survenue lors de la recherche.");
@@ -99,13 +96,13 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
       {isSearchOpen && (
         <div
           className="
+            glass-rose
             w-[80vw] md:w-[70vw] lg:w-[60vw]
-            bg-white/90 rounded-lg shadow-lg
             max-h-[60vh] overflow-auto
           "
         >
           {isLoading && (
-            <div className="p-3 text-center text-sm text-black/70">
+            <div className="p-3 text-center text-sm text-white/80">
               Chargement...
             </div>
           )}
@@ -117,7 +114,7 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
           )}
 
           {!isLoading && !error && searchResults.length === 0 && (
-            <div className="p-3 text-center text-sm text-black/60">
+            <div className="p-3 text-center text-sm text-white/70">
               Aucun résultat.
             </div>
           )}
@@ -130,8 +127,8 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
                 key={result._id}
                 className="
                   flex gap-4 items-center
-                  p-3 border-t border-black/10
-                  hover:bg-black/[.04] transition-colors
+                  p-3 border-t border-white/20
+                  hover:bg-white/10 transition-colors
                 "
                 onClick={() => setIsSearchOpen(false)}
               >
@@ -146,14 +143,14 @@ const Search: React.FC<SearchProps> = ({ search, setSearch }) => {
                   width={50}
                   height={50}
                 />
-                <div className="flex-1 text-black">
+                <div className="flex-1">
                   <h3 className="font-semibold leading-tight">
                     {result.title}
                   </h3>
-                  <p className="text-sm line-clamp-2 text-black/80">
+                  <p className="text-sm line-clamp-2 text-white/80">
                     {result.description}
                   </p>
-                  <p className="text-sm font-medium text-black/70">
+                  <p className="text-sm font-medium text-white/80">
                     Prix : {result.price}€
                   </p>
                 </div>

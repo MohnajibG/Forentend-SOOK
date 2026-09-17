@@ -7,7 +7,7 @@ import CheckoutForm from "../components/CheckoutForm";
 import axios from "axios";
 
 import Loading from "../assets/img/Loading.gif";
-import background from "../assets/img/backgroundCart.webp";
+import { API_URL } from "../settings/api";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY!);
 
@@ -20,15 +20,13 @@ const Payement: React.FC = () => {
   useEffect(() => {
     if (cart.length === 0 || !token) return;
 
-    const totalAmount = Math.round(
-      cart.reduce((sum, item) => sum + Number(item.price), 0) * 100
-    );
-
+    // Le montant est calculé et vérifié côté serveur à partir du panier
+    // de l'utilisateur authentifié : on ne l'envoie plus depuis le client.
     const createPaymentIntent = async () => {
       try {
         const { data } = await axios.post(
-          "https://site--sook--dnxhn8mdblq5.code.run/payment/create-payment-intent",
-          { amount: totalAmount },
+          `${API_URL}/payment/create-payment-intent`,
+          {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setClientSecret(data.clientSecret);
@@ -42,16 +40,11 @@ const Payement: React.FC = () => {
 
   if (!clientSecret) {
     return (
-      <div className="relative min-h-24 flex items-center justify-center">
-        <img
-          src={background}
-          alt="background"
-          className="fixed inset-0 -z-10 w-full h-full object-cover"
-        />
+      <div className="flex items-center justify-center py-6">
         <img
           src={Loading}
-          alt="Loading"
-          className="w-20 h-20 animate-pulse rounded-full"
+          alt="Chargement du paiement..."
+          className="w-14 h-14 animate-pulse rounded-full"
         />
       </div>
     );

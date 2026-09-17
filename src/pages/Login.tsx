@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 
 import loginBackground from "../assets/img/backgroudLogin.webp";
+import { API_URL } from "../settings/api";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -45,7 +46,7 @@ const Login: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "https://site--sook--dnxhn8mdblq5.code.run/user/login",
+        `${API_URL}/user/login`,
         { email, password }
       );
 
@@ -56,16 +57,7 @@ const Login: React.FC = () => {
           response.data.account.username
         );
 
-        const isProfileComplete =
-          response.data.account.sexe &&
-          response.data.account.address &&
-          response.data.account.phoneNumber;
-
-        if (isProfileComplete) {
-          navigate(`/profilePage/${response.data.userId}`);
-        } else {
-          navigate(`/profileUpdate/${response.data.userId}`);
-        }
+        navigate(`/profilePage/${response.data.userId}`);
       }
     } catch (error: any) {
       if (error.response && error.response.data) {
@@ -81,8 +73,8 @@ const Login: React.FC = () => {
   return (
     <main
       className="
-        relative min-h-screen pt-20 pb-24
-        text-white font-[Space Grotesk] flex flex-col justify-center items-center gap-20
+        relative min-h-screen page-shell
+        flex flex-col justify-center items-center
       "
     >
       {/* Image de fond plein écran, fixée */}
@@ -92,13 +84,14 @@ const Login: React.FC = () => {
         alt="image-background-signup"
       />
 
-      <h2 className="text-center text-2xl drop-shadow-[0_0_20px_rgba(252,124,124,0.8)]">
+      <div className="glass-rose w-full max-w-sm flex flex-col items-center gap-8 px-6 py-10 md:px-10">
+      <h2 className="text-center text-2xl drop-shadow-title">
         Connexion
       </h2>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col items-center justify-center gap-5 w-full max-w-sm"
+        className="flex flex-col items-center justify-center gap-5 w-full"
       >
         {/* Champ Email */}
         <div className="w-full">
@@ -157,7 +150,7 @@ const Login: React.FC = () => {
               try {
                 // envoyer le token Google à ton backend
                 const res = await axios.post(
-                  "https://site--sook--dnxhn8mdblq5.code.run/user/google-login",
+                  `${API_URL}/user/google-login`,
                   { token: credentialResponse.credential }
                 );
 
@@ -181,12 +174,7 @@ const Login: React.FC = () => {
 
         {/* Bouton de connexion */}
         <button
-          className="
-            w-40 h-12 text-white font-bold
-            bg-[#dfa080ec] hover:bg-[#cf8860]
-            text-base md:text-lg rounded
-            transition-colors disabled:opacity-60 disabled:cursor-not-allowed
-          "
+          className="btn-primary w-40 h-12 text-base md:text-lg"
           disabled={isLoading}
         >
           {isLoading ? "Connexion en cours..." : "Se connecter"}
@@ -197,7 +185,7 @@ const Login: React.FC = () => {
           Pas encore de compte ? Créez-en un dès maintenant en cliquant ici{" "}
           <Link
             to="/signup"
-            className="font-semibold no-underline text-[#dfa080bd] hover:text-[#d6390d]
+            className="font-semibold no-underline text-sook-accent hover:text-[#d6390d]
                        transition-colors [text-shadow:2px_2px_5px_rgb(17,2,2)]
                        hover:[text-shadow:2px_2px_10px_rgb(246,246,246)]"
           >
@@ -212,6 +200,7 @@ const Login: React.FC = () => {
           {errorMessage}
         </div>
       )}
+      </div>
     </main>
   );
 };

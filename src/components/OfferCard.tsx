@@ -8,71 +8,69 @@ interface OfferCardProps {
 }
 
 const OfferCard: React.FC<OfferCardProps> = ({ offer }) => {
+  const avatar = offer.userId?.account?.avatar || LOGO;
+  const username = offer.userId?.account?.username
+    ? offer.userId.account.username.charAt(0).toUpperCase() +
+      offer.userId.account.username.slice(1)
+    : "Utilisateur inconnu";
+
   return (
     <div className="flex flex-col w-full sm:w-[48%] lg:w-[30%] xl:w-[22%]">
-      <Link to={`/offer/${offer._id}`} className="group offer-link">
-        <div
-          className="
-            w-full
-             bg-[#fac3c38c] transition-colors duration-1000
-    hover:bg-[rgba(249,200,208,0.66)] rounded-xl
-            shadow-[0_0_13px_4px_rgba(255,255,255,0.75)]
-            hover:shadow-[0_8px_16px_rgba(0,0,0,0.2)]
-            group-hover:-translate-y-1
-            p-2 text-center
-          "
-        >
-          <div className="w-full flex items-center justify-between mb-2">
-            <p className="text-gray-900 text-base font-bold">
-              {offer.userId.account?.username
-                ? offer.userId.account.username.charAt(0).toUpperCase() +
-                  offer.userId.account.username.slice(1)
-                : "Utilisateur inconnu"}
-            </p>
-            {offer.userId.account?.avatar ? (
-              <img
-                src={offer.userId.account.avatar}
-                alt="Avatar"
-                className="w-10 h-10 rounded-full border-2 border-[#ffffff69] object-cover"
-              />
-            ) : (
-              <img
-                src={LOGO}
-                alt="avatar"
-                className="w-10 h-10 rounded-full border-2 border-[#ffffff69] object-cover"
-              />
-            )}
-          </div>
+      <Link to={`/offer/${offer._id}`} className="glass-card block">
+        {/* Photo(s) : carrousel scrollable, images centrées */}
+        <div className="relative aspect-square">
+          {offer.condition && (
+            <span className="glass-badge absolute top-3 left-3 z-10">
+              {offer.condition}
+            </span>
+          )}
 
-          <div className="mb-3">
-            <h2 className="text-[18px] mb-2 text-gray-800">{offer.title}</h2>
-            <p className="text-[14px] text-gray-600">{offer.price}€</p>
-          </div>
-
-          {offer.pictures && offer.pictures.length > 0 && (
-            <div className="relative w-full">
-              <div
-                className="
-                  w-full flex overflow-x-auto
-                  snap-x snap-mandatory
-                  scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent
-                "
-              >
-                {offer.pictures.map((picture, idx) => (
-                  <div
-                    key={idx}
-                    className="flex-shrink-0 w-full flex justify-center snap-center"
-                  >
-                    <img
-                      src={picture}
-                      alt={`Image de ${offer.title}`}
-                      className="w-64 h-64 object-cover rounded-lg shadow-md"
-                    />
-                  </div>
-                ))}
-              </div>
+          {offer.pictures && offer.pictures.length > 0 ? (
+            <div
+              className="
+                w-full h-full flex overflow-x-auto snap-x snap-mandatory
+                scrollbar-thin scrollbar-thumb-white/40 scrollbar-track-transparent
+              "
+            >
+              {offer.pictures.map((picture, idx) => (
+                <img
+                  key={idx}
+                  src={picture}
+                  alt={`${offer.title || "Offre"} — photo ${idx + 1}`}
+                  className="w-full h-full flex-shrink-0 object-cover snap-center"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-white/10 text-sm text-white/60">
+              Pas d'image
             </div>
           )}
+        </div>
+
+        {/* Infos */}
+        <div className="p-4 text-left">
+          {offer.brand && (
+            <p className="text-xs font-bold uppercase tracking-wide text-[#dfa080]">
+              {offer.brand}
+            </p>
+          )}
+          <h2 className="text-base font-semibold mt-1 mb-2 truncate">
+            {offer.title}
+          </h2>
+          <p className="text-lg font-bold">{offer.price}€</p>
+
+          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-white/25">
+            <img
+              src={avatar}
+              alt={username}
+              className="w-6 h-6 rounded-full object-cover"
+            />
+            <span className="text-sm text-white/80 truncate">
+              {username}
+              {offer.city ? ` · ${offer.city}` : ""}
+            </span>
+          </div>
         </div>
       </Link>
     </div>
