@@ -28,8 +28,8 @@ const Footer: React.FC = () => {
           </Link>
           <p className="text-sm text-white/60 max-w-xs leading-relaxed">
             Le marché de la seconde main entre particuliers : achetez et
-            revendez vêtements, chaussures et accessoires à petit prix, près
-            de chez vous.
+            revendez vêtements, chaussures et accessoires à petit prix, près de
+            chez vous.
           </p>
           <div className="flex items-center gap-4 mt-4">
             <a
@@ -58,17 +58,26 @@ const Footer: React.FC = () => {
           </h3>
           <ul className="space-y-3 text-sm">
             <li>
-              <Link to="/home" className="hover:text-sook-accent transition-colors">
+              <Link
+                to="/home"
+                className="hover:text-sook-accent transition-colors"
+              >
                 Accueil
               </Link>
             </li>
             <li>
-              <Link to="/offers" className="hover:text-sook-accent transition-colors">
+              <Link
+                to="/offers"
+                className="hover:text-sook-accent transition-colors"
+              >
                 Toutes les offres
               </Link>
             </li>
             <li>
-              <Link to="/publish" className="hover:text-sook-accent transition-colors">
+              <Link
+                to="/publish"
+                className="hover:text-sook-accent transition-colors"
+              >
                 Publier une annonce
               </Link>
             </li>
@@ -82,17 +91,26 @@ const Footer: React.FC = () => {
           </h3>
           <ul className="space-y-3 text-sm">
             <li>
-              <Link to="/mesoffres" className="hover:text-sook-accent transition-colors">
+              <Link
+                to="/mesoffres"
+                className="hover:text-sook-accent transition-colors"
+              >
                 Mes annonces
               </Link>
             </li>
             <li>
-              <Link to="/cart" className="hover:text-sook-accent transition-colors">
+              <Link
+                to="/cart"
+                className="hover:text-sook-accent transition-colors"
+              >
                 Mon panier
               </Link>
             </li>
             <li>
-              <Link to="/login" className="hover:text-sook-accent transition-colors">
+              <Link
+                to="/login"
+                className="hover:text-sook-accent transition-colors"
+              >
                 Se connecter
               </Link>
             </li>
@@ -106,11 +124,17 @@ const Footer: React.FC = () => {
           </h3>
           <ul className="space-y-3 text-sm">
             <li className="flex items-start gap-2">
-              <HiOutlineShieldCheck className="mt-0.5 shrink-0 text-sook-accent" size={18} />
+              <HiOutlineShieldCheck
+                className="mt-0.5 shrink-0 text-sook-accent"
+                size={18}
+              />
               Paiement sécurisé via Stripe
             </li>
             <li className="flex items-start gap-2">
-              <HiOutlineSparkles className="mt-0.5 shrink-0 text-sook-accent" size={18} />
+              <HiOutlineSparkles
+                className="mt-0.5 shrink-0 text-sook-accent"
+                size={18}
+              />
               Des articles vérifiés, entre particuliers
             </li>
           </ul>
