@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import ImageUpload from "../components/ImgUpload";
 import { useUser } from "../contexts/UserContext";
 import { API_URL } from "../settings/api";
+import usePageTitle from "../hooks/usePageTitle";
 
 import background from "../assets/img/background-publish.webp";
 
@@ -15,6 +16,7 @@ const inputClass =
 const labelClass = "text-white text-sm font-bold mb-1.5 block";
 
 const Publish: React.FC = () => {
+  usePageTitle("Publier une annonce");
   const navigate = useNavigate();
   const { token, userId } = useUser();
 

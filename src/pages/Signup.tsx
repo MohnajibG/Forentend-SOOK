@@ -9,8 +9,10 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import signupBackground from "../assets/img/backgroundsignup.jpg";
 import { API_URL } from "../settings/api";
+import usePageTitle from "../hooks/usePageTitle";
 
 const Signup: React.FC = () => {
+  usePageTitle("Inscription");
   const [formData, setFormData] = useState({
     username: "",
     email: "",

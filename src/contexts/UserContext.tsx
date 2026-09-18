@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 import Cookies from "js-cookie";
 
 import { UserContextType } from "../types/types";
@@ -14,10 +8,19 @@ const UserContext = createContext<UserContextType | null>(null);
 export const UserProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  // États pour l'utilisateur
-  const [userId, setUserId] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  // États pour l'utilisateur, initialisés directement depuis les cookies :
+  // une lecture différée (via useEffect) laissait les pages protégées
+  // s'exécuter une première fois avec userId/token à null et rediriger
+  // à tort vers /login avant que le contexte n'ait le temps de se remplir.
+  const [userId, setUserId] = useState<string | null>(
+    () => Cookies.get("userId") ?? null
+  );
+  const [username, setUsername] = useState<string | null>(
+    () => Cookies.get("username") ?? null
+  );
+  const [token, setToken] = useState<string | null>(
+    () => Cookies.get("token") ?? null
+  );
 
   // Fonction pour définir l'utilisateur
   const setUser = (id: string, newToken: string, name: string) => {
@@ -42,17 +45,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     Cookies.remove("username");
     Cookies.remove("token");
   };
-
-  // Récupérer les cookies lorsque le composant se charge
-  useEffect(() => {
-    const storedUserId = Cookies.get("userId");
-    const storedUsername = Cookies.get("username");
-    const storedToken = Cookies.get("token");
-
-    if (storedUserId && storedUsername && storedToken) {
-      setUser(storedUserId, storedToken, storedUsername);
-    }
-  }, []);
 
   return (
     <UserContext.Provider value={{ username, userId, token, setUser, logout }}>

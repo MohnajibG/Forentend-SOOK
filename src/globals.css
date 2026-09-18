@@ -10,6 +10,15 @@
   --font-sook: "Space Grotesk", sans-serif;
   --drop-shadow-title: 0 0 20px rgba(252, 124, 124, 0.8);
 
+  /* Palette de la marque : rose, rose clair, marron, doré — utilisée
+     partout à la place de teintes isolées (gris, noir...) */
+  --color-sook-rose: #e8a3b0;
+  --color-sook-rose-light: #f7dde1;
+  --color-sook-marron: #4a2c1d;
+  --color-sook-marron-dark: #2f1c12;
+  --color-sook-dore: #cf9a3f;
+  --color-sook-dore-light: #e6c27a;
+
   /* Les deux tons "verre dépoli" du site : rose et doré, déjà utilisés
      un peu partout avant, maintenant avec un flou et un hover uniformes. */
   --color-glass-rose: rgba(249, 200, 208, 0.55);
@@ -113,5 +122,23 @@
   .glass-badge {
     @apply text-xs font-bold px-2.5 py-1 rounded-full text-[#241118] backdrop-blur-md;
     background: rgba(255, 255, 255, 0.75);
+  }
+
+  /* Titre de page : même traitement partout (nom de la page + repère visuel doré) */
+  .page-title {
+    @apply relative text-2xl md:text-3xl font-bold pl-4 mb-1;
+  }
+  .page-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.15em;
+    bottom: 0.15em;
+    width: 4px;
+    border-radius: 999px;
+    background: var(--color-sook-dore);
+  }
+  .page-subtitle {
+    @apply text-sm text-white/70 pl-4;
   }
 }

@@ -8,7 +8,10 @@ const Footer: React.FC = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#1c0e17] text-white/70">
+    <footer
+      className="w-full text-white/70"
+      style={{ background: "var(--color-sook-marron-dark)" }}
+    >
       <div className="max-w-6xl mx-auto px-6 py-14 grid gap-10 sm:grid-cols-2 md:grid-cols-4">
         {/* Marque */}
         <div className="sm:col-span-2 md:col-span-1">

@@ -9,8 +9,10 @@ import { GoogleLogin } from "@react-oauth/google";
 
 import loginBackground from "../assets/img/backgroudLogin.webp";
 import { API_URL } from "../settings/api";
+import usePageTitle from "../hooks/usePageTitle";
 
 const Login: React.FC = () => {
+  usePageTitle("Connexion");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);

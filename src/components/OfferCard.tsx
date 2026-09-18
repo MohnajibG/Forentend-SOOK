@@ -51,7 +51,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer }) => {
         {/* Infos */}
         <div className="p-4 text-left">
           {offer.brand && (
-            <p className="text-xs font-bold uppercase tracking-wide text-[#dfa080]">
+            <p className="text-xs font-bold uppercase tracking-wide text-sook-dore">
               {offer.brand}
             </p>
           )}

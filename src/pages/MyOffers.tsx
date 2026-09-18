@@ -7,12 +7,14 @@ import { MoreVertical, Tag, Wallet, PlusCircle } from "lucide-react"; // icônes
 
 import { useUser } from "../contexts/UserContext";
 import { ProfilProps } from "../types/types";
+import usePageTitle from "../hooks/usePageTitle";
 import { API_URL } from "../settings/api";
 
 import background from "../assets/img/offerPage.webp";
 import LOGO from "../assets/img/LOGO.png";
 
 const MyOffers: React.FC = () => {
+  usePageTitle("Mes annonces");
   const { token } = useUser();
   const [myOffers, setMyOffers] = useState<ProfilProps[]>([]);
   const [loading, setLoading] = useState(false);
@@ -98,8 +100,8 @@ const MyOffers: React.FC = () => {
 
       <div className="mx-auto w-full max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
         <div>
-          <h2 className="text-2xl font-semibold">Mes annonces</h2>
-          <p className="text-sm text-white/70">
+          <h1 className="page-title">Mes annonces</h1>
+          <p className="page-subtitle">
             Gérez, modifiez ou retirez vos articles en vente.
           </p>
         </div>
@@ -111,7 +113,7 @@ const MyOffers: React.FC = () => {
       {myOffers.length > 0 && (
         <div className="mx-auto w-full max-w-6xl grid grid-cols-2 gap-4 mb-8">
           <div className="glass-rose flex items-center gap-3 px-5 py-4">
-            <Tag className="text-[#dfa080]" size={22} />
+            <Tag className="text-sook-dore" size={22} />
             <div>
               <p className="text-xl font-bold leading-none">{myOffers.length}</p>
               <p className="text-xs text-white/70 mt-1">
@@ -120,7 +122,7 @@ const MyOffers: React.FC = () => {
             </div>
           </div>
           <div className="glass-rose flex items-center gap-3 px-5 py-4">
-            <Wallet className="text-[#dfa080]" size={22} />
+            <Wallet className="text-sook-dore" size={22} />
             <div>
               <p className="text-xl font-bold leading-none">
                 {myOffers
@@ -136,7 +138,7 @@ const MyOffers: React.FC = () => {
 
       {myOffers.length === 0 ? (
         <div className="glass-rose mx-auto w-full max-w-md text-center px-8 py-12 flex flex-col items-center gap-4">
-          <PlusCircle className="text-[#dfa080]" size={40} />
+          <PlusCircle className="text-sook-dore" size={40} />
           <div>
             <h3 className="text-lg font-bold mb-1">Rien à vendre pour l'instant</h3>
             <p className="text-sm text-white/75">
@@ -173,22 +175,25 @@ const MyOffers: React.FC = () => {
 
                   {/* Menu dropdown */}
                   {openMenuId === id && (
-                    <div className="absolute right-0 mt-2 w-40 bg-gray-900 rounded-md shadow-lg overflow-hidden z-10">
+                    <div
+                      className="absolute right-0 mt-2 w-44 rounded-lg shadow-lg overflow-hidden z-10"
+                      style={{ background: "var(--color-sook-marron)" }}
+                    >
                       <button
                         onClick={() => navigate(`/offer/${id}`)}
-                        className="w-full text-left px-4 py-2 text-sm hover:bg-pink-300"
+                        className="w-full text-left px-4 py-2.5 text-sm text-white hover:bg-white/10"
                       >
-                        Voir l’annonce
+                        Voir l'annonce
                       </button>
                       <button
                         onClick={() => navigate(`/offer/update/${id}`)}
-                        className="w-full text-left px-4 py-2 text-sm hover:bg-pink-300"
+                        className="w-full text-left px-4 py-2.5 text-sm text-white hover:bg-white/10"
                       >
                         Modifier
                       </button>
                       <button
                         onClick={() => handleDeleteMyOffer(id)}
-                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                        className="w-full text-left px-4 py-2.5 text-sm text-[#ff8f8f] hover:bg-white/10"
                       >
                         Supprimer
                       </button>
@@ -223,7 +228,7 @@ const MyOffers: React.FC = () => {
                 {/* Contenu */}
                 <div className="p-4 flex flex-col gap-2">
                   {offer.brand && (
-                    <p className="text-xs font-bold uppercase tracking-wide text-[#dfa080]">
+                    <p className="text-xs font-bold uppercase tracking-wide text-sook-dore">
                       {offer.brand}
                     </p>
                   )}

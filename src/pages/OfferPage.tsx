@@ -12,6 +12,7 @@ import { IoArrowBack, IoExpandOutline } from "react-icons/io5";
 
 import AddToCartButton from "../components/AddToCartButton";
 import Modal from "../components/Modal";
+import usePageTitle from "../hooks/usePageTitle";
 import { API_URL } from "../settings/api";
 
 import background from "../assets/img/offerPage.webp";
@@ -19,6 +20,7 @@ import LOGO from "../assets/img/LOGO.png";
 
 const OfferPage: React.FC = () => {
   const [offer, setOffer] = useState<ProfilProps | null>(null);
+  usePageTitle(offer?.title || "Offre");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeImage, setActiveImage] = useState(0);
@@ -174,7 +176,7 @@ const OfferPage: React.FC = () => {
               <h1 className="text-2xl md:text-3xl font-bold mb-2">
                 {offer.title || "Titre non disponible"}
               </h1>
-              <p className="text-3xl font-bold text-[#dfa080]">
+              <p className="text-3xl font-bold text-sook-dore">
                 {offer.price ? `${offer.price} €` : "Prix non spécifié"}
               </p>
             </div>

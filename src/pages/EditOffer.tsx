@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ImageUpload from "../components/ImgUpload";
 import { useUser } from "../contexts/UserContext";
 import { API_URL } from "../settings/api";
+import usePageTitle from "../hooks/usePageTitle";
 
 import background from "../assets/img/backgroundEdit.png";
 
@@ -16,6 +17,7 @@ const inputClass =
 const labelClass = "text-white text-sm font-bold mb-1.5 block";
 
 const EditOffer: React.FC = () => {
+  usePageTitle("Modifier l'annonce");
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>(); // correspond à /offer/update/:id
   const { token, userId } = useUser();

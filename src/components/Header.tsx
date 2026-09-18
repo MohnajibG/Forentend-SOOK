@@ -8,6 +8,7 @@ import { CgProfile } from "react-icons/cg";
 import { BsFillBasket3Fill } from "react-icons/bs";
 import { FiHome, FiPlusCircle, FiList } from "react-icons/fi";
 import { BiLogOut } from "react-icons/bi";
+import { HiX } from "react-icons/hi";
 
 import logo from "../assets/img/LOGO2.png";
 import Search from "./Search";
@@ -16,8 +17,8 @@ import { HeaderProps } from "../types/types";
 
 function CartIcon({ count }: { count: number }) {
   return (
-    <span className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white/40 hover:bg-white/55 transition-colors">
-      <BsFillBasket3Fill className="text-[#241118]" size={18} />
+    <span className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white/45 hover:bg-white/65 transition-colors">
+      <BsFillBasket3Fill className="text-[#4a2c1d]" size={17} />
       {count > 0 && (
         <span className="absolute -top-1.5 -right-1.5 bg-[#e60000] text-white text-[11px] font-bold w-5 h-5 flex items-center justify-center rounded-full ring-2 ring-white/70">
           {count}
@@ -40,23 +41,33 @@ function Header({ search, setSearch }: HeaderProps) {
   };
 
   return (
-    <header className="glass-rose fixed lg:relative top-0 left-0 w-full flex flex-col gap-4 justify-center p-4 rounded-none z-40">
-      <div className="flex items-center gap-4">
+    <header className="glass-rose fixed lg:relative top-0 left-0 w-full p-4 rounded-none z-40">
+      <div className="flex items-center gap-3">
         {/* Logo */}
-        <Link to="/home" className="shrink-0 transition-transform hover:scale-105">
+        <Link
+          to="/home"
+          className="shrink-0 flex items-center gap-2 transition-transform hover:scale-[1.03]"
+        >
           <img
             src={logo}
-            alt="Sook logo"
-            className="h-11 w-11 rounded-full object-cover ring-2 ring-white/50"
+            alt="Logo SOOK"
+            className="h-11 w-11 rounded-full object-cover ring-2 ring-white/60"
           />
+          <span className="hidden sm:block font-bold text-lg text-[#4a2c1d] tracking-tight">
+            SOOK
+          </span>
         </Link>
 
         {/* Navigation desktop */}
-        {token && <Nav userId={userId || undefined} className="mr-auto" />}
-        {!token && <div className="mr-auto" />}
+        {token && <Nav userId={userId || undefined} />}
 
-        {/* Zone actions */}
-        <div className="flex items-center gap-3">
+        {/* Recherche : toujours au centre, entre le menu et le panier */}
+        <div className="flex-1 min-w-[90px] max-w-md mx-auto">
+          <Search search={search} setSearch={setSearch} />
+        </div>
+
+        {/* Zone actions (toujours à droite) */}
+        <div className="flex items-center gap-3 shrink-0">
           {token ? (
             <>
               <Link to="/cart" aria-label="Mon panier" className="hidden lg:block">
@@ -79,34 +90,40 @@ function Header({ search, setSearch }: HeaderProps) {
               {/* Menu burger mobile */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                aria-label="Menu"
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-white/40 hover:bg-white/55 transition-colors relative lg:hidden"
+                aria-label="Ouvrir le menu"
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-white/45 hover:bg-white/65 transition-colors relative lg:hidden"
               >
                 <motion.div
                   animate={isMenuOpen ? "open" : "closed"}
                   variants={{ closed: { rotate: 0 }, open: { rotate: 45 } }}
-                  className="absolute w-5 h-[2px] bg-[#241118]"
+                  className="absolute w-5 h-[2px] bg-[#4a2c1d]"
                   style={{ top: "16px" }}
                 />
                 <motion.div
                   animate={isMenuOpen ? "open" : "closed"}
                   variants={{ closed: { opacity: 1 }, open: { opacity: 0 } }}
-                  className="absolute w-5 h-[2px] bg-[#241118]"
+                  className="absolute w-5 h-[2px] bg-[#4a2c1d]"
                 />
                 <motion.div
                   animate={isMenuOpen ? "open" : "closed"}
                   variants={{ closed: { rotate: 0 }, open: { rotate: -45 } }}
-                  className="absolute w-5 h-[2px] bg-[#241118]"
+                  className="absolute w-5 h-[2px] bg-[#4a2c1d]"
                   style={{ bottom: "16px" }}
                 />
               </button>
             </>
           ) : (
-            <div className="flex gap-2">
-              <button onClick={() => navigate("/signup")} className="btn-primary">
+            <div className="flex gap-1.5 sm:gap-2">
+              <button
+                onClick={() => navigate("/signup")}
+                className="btn-primary px-2.5 py-1.5 text-xs whitespace-nowrap sm:px-4 sm:py-2 sm:text-sm"
+              >
                 S'inscrire
               </button>
-              <button onClick={() => navigate("/login")} className="btn-primary">
+              <button
+                onClick={() => navigate("/login")}
+                className="btn-primary px-2.5 py-1.5 text-xs whitespace-nowrap sm:px-4 sm:py-2 sm:text-sm"
+              >
                 Se connecter
               </button>
             </div>
@@ -114,79 +131,70 @@ function Header({ search, setSearch }: HeaderProps) {
         </div>
       </div>
 
-      {/* Menu mobile slide-in */}
+      {/* Menu mobile plein écran */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 lg:hidden bg-black/40"
             onClick={() => setIsMenuOpen(false)}
           >
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ duration: 0.3 }}
-              className="glass-gold fixed top-0 right-0 h-screen w-72 rounded-none flex flex-col"
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="fixed top-0 right-0 h-screen w-80 max-w-[85vw] flex flex-col"
+              style={{ background: "var(--color-sook-marron)" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <p className="px-5 pt-8 pb-2 text-white/80 text-sm">
-                Connecté en tant que <span className="font-bold text-white">{username}</span>
-              </p>
-              <ul className="flex flex-col divide-y divide-white/20 mt-4">
-                <li>
-                  <Link
-                    to={`/profilePage/${userId}`}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-5 py-4 text-white hover:bg-white/15 transition-colors"
-                  >
-                    <CgProfile /> Profil
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/home"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-5 py-4 text-white hover:bg-white/15 transition-colors"
-                  >
-                    <FiHome /> Accueil
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/offers"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-5 py-4 text-white hover:bg-white/15 transition-colors"
-                  >
-                    <FiList /> Offres
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/mesoffres"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-5 py-4 text-white hover:bg-white/15 transition-colors"
-                  >
-                    <FiList /> Mes Offres
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/publish"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-5 py-4 text-white hover:bg-white/15 transition-colors"
-                  >
-                    <FiPlusCircle /> Publier
-                  </Link>
-                </li>
+              <div className="flex items-center justify-between px-5 pt-6 pb-2">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={logo}
+                    alt="Logo SOOK"
+                    className="w-10 h-10 rounded-full object-cover ring-2 ring-[#cf9a3f]/60"
+                  />
+                  <div>
+                    <p className="text-white font-bold leading-tight">{username}</p>
+                    <p className="text-white/50 text-xs">Bienvenue sur SOOK</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  aria-label="Fermer le menu"
+                  className="w-9 h-9 grid place-items-center rounded-full text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+                >
+                  <HiX size={20} />
+                </button>
+              </div>
+
+              <ul className="flex flex-col mt-4 px-3 gap-1">
+                {[
+                  { to: `/profilePage/${userId}`, label: "Profil", icon: <CgProfile /> },
+                  { to: "/home", label: "Accueil", icon: <FiHome /> },
+                  { to: "/offers", label: "Offres", icon: <FiList /> },
+                  { to: "/mesoffres", label: "Mes annonces", icon: <FiList /> },
+                  { to: "/publish", label: "Publier", icon: <FiPlusCircle /> },
+                ].map((item) => (
+                  <li key={item.to}>
+                    <Link
+                      to={item.to}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/90 hover:bg-white/10 hover:text-[#e6c27a] transition-colors"
+                    >
+                      {item.icon} {item.label}
+                    </Link>
+                  </li>
+                ))}
                 <li>
                   <Link
                     to="/cart"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-5 py-4 text-white hover:bg-white/15 transition-colors relative"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/90 hover:bg-white/10 hover:text-[#e6c27a] transition-colors relative"
                   >
                     <BsFillBasket3Fill /> Panier
                     {cart.length > 0 && (
@@ -196,30 +204,26 @@ function Header({ search, setSearch }: HeaderProps) {
                     )}
                   </Link>
                 </li>
-                <li>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsMenuOpen(false);
-                    }}
-                    className="flex items-center gap-3 w-full px-5 py-4 text-white hover:bg-white/15 transition-colors"
-                  >
-                    <BiLogOut /> Déconnexion
-                  </button>
-                </li>
               </ul>
 
-              <div className="mt-auto flex items-center justify-center gap-2 pb-8 pt-4 text-xs text-white/70">
-                <img src={logo} alt="Logo SOOK" className="w-8 h-8 rounded-full object-cover" />
-                &copy; {new Date().getFullYear()} SOOK
+              <div className="mt-auto px-3 pb-6">
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-[#ff8f8f] hover:bg-white/10 transition-colors"
+                >
+                  <BiLogOut /> Déconnexion
+                </button>
+                <p className="text-center text-xs text-white/40 mt-4">
+                  © {new Date().getFullYear()} SOOK
+                </p>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Barre de recherche */}
-      <Search search={search} setSearch={setSearch} />
     </header>
   );
 }

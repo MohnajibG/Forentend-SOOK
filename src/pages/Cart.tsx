@@ -5,6 +5,7 @@ import { BsBagFill } from "react-icons/bs";
 
 import { useCart } from "../contexts/CartContext";
 import { useUser } from "../contexts/UserContext";
+import usePageTitle from "../hooks/usePageTitle";
 import { API_URL } from "../settings/api";
 
 import backgroundCart from "../assets/img/backgroundCart.webp";
@@ -14,6 +15,7 @@ import DeleteFromCartButton from "../components/DeleteFromCartButton";
 import Payement from "./payment"; // notre composant de paiement
 
 const Cart: React.FC = () => {
+  usePageTitle("Mon panier");
   const { cart, setCart } = useCart();
   const { userId, token } = useUser();
   const navigate = useNavigate();
@@ -66,7 +68,7 @@ const Cart: React.FC = () => {
       ) : cart.length === 0 ? (
         <div className="flex items-center justify-center h-screen px-4">
           <div className="glass-rose text-center px-8 py-12 max-w-sm flex flex-col items-center gap-4">
-            <BsBagFill className="text-[#dfa080]" size={36} />
+            <BsBagFill className="text-sook-dore" size={36} />
             <div>
               <h1 className="text-xl font-bold mb-1">Votre panier est vide</h1>
               <p className="text-sm text-white/75">
@@ -81,8 +83,8 @@ const Cart: React.FC = () => {
         </div>
       ) : (
         <div className="page-shell relative z-10 mx-auto max-w-5xl px-4">
-          <h1 className="text-3xl font-semibold mb-6">
-            Mon panier <span className="text-white/60 text-xl">({itemCount})</span>
+          <h1 className="page-title mb-6">
+            Mon panier <span className="text-white/60 text-xl font-normal">({itemCount})</span>
           </h1>
 
           {error && (
